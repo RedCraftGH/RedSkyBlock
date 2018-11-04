@@ -1,2 +1,2 @@
 # RedSkyBlock
-Red's (amazing) SkyBlock plugin :) Seriously, it's awesome and easy to use!
+Red's (amazing) SkyBlock plugin :) Seriously, it's awesome and easy to use!(Or at least...it will be...once it's finished)
