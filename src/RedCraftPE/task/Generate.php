@@ -2,7 +2,7 @@
 
 namespace RedCraftPE\task;
 
-use RedCraftPE\Skyblock;
+use RedCraftPE\SkyBlock;
 use pocketmine\scheduler\Task;
 
 class Generate extends Task {
