@@ -19,5 +19,4 @@ permissions:
       skyblock.bypass
       skyblock.kick
       skyblock.lock
-      
-      
+      skyblock.setworld
