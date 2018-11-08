@@ -12,6 +12,8 @@ use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\math\Random;
+use pocketmine\block\Block;
+use pocketmine\level\generator\object\Tree;
 use RedCraftPE\task\Generate;
 
 class SkyBlock extends PluginBase implements Listener {
