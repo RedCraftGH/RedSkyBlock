@@ -78,7 +78,7 @@ class SkyBlock extends PluginBase implements Listener {
     }
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
     $interval = $this->cfg->get("Interval");
-    $islands = $this-skyblock->get("Islands");
+    $islands = $this->skyblock->get("Islands");
   
     switch(strtolower($command->getName())) {
     
@@ -138,8 +138,8 @@ class SkyBlock extends PluginBase implements Listener {
           switch ($args[0]) {
 	  
 	    case "setworld":
-	      
-	        
+	    	
+	  	
 	    break;
           }
         }
