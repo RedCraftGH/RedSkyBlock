@@ -84,56 +84,65 @@ class SkyBlock extends PluginBase implements Listener {
     
       case "island":
         
-       if (!$args) {
+        if (!$args) {
          
-         if (array_key_exists(strtolower($sender->getName()))) {
+          if (array_key_exists(strtolower($sender->getName()))) {
          
-           if ($sender->hasPermission("skyblock.tp") || $sender->hasPermission("skyblock.*")) {
+            if ($sender->hasPermission("skyblock.tp") || $sender->hasPermission("skyblock.*")) {
              
-             //Because the array key exists, the $sender has an island, thus, this will be used for teleporting a player to their island.
-             $x = $skyblockArray[$sender->getName()]["Area"]["start"]["X"];
-             $z = $skyblockArray[$sender->getName()]["Area"]["start"]["Z"];
+              //Because the array key exists, the $sender has an island, thus, this will be used for teleporting a player to their island.
+              $x = $skyblockArray[$sender->getName()]["Area"]["start"]["X"];
+              $z = $skyblockArray[$sender->getName()]["Area"]["start"]["Z"];
 
-             $sender->teleport(new Position($x + 50, 27, $z + 50, $level));
-             $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
-             return true;
-           } else {
+              $sender->teleport(new Position($x + 50, 27, $z + 50, $level));
+              $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
+              return true;
+            } else {
            
-             $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
-             return true;
-           }
-         } else {
+              $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+              return true;
+            }
+          } else {
          
-           if ($sender->hasPermission("skyblock.create")) {
+            if ($sender->hasPermission("skyblock.create")) {
            
-             //Create a new island for $sender, teleport them to it, and create the data.
-             $sender->teleport(new Position($islands * $interval + 4, 26, $islands * $interval + 4, $level));
-             $sender->setSpawn(new Vector3($islands * $interval + 4, 27, $islands * $interval + 4));
-             $sender->setImmobile(true);
-             $this->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
-             $sender->getInventory()->addItem(Item::get(79, 0, 2)); //Gonna change all of the addItems eventually to be customizable
-             $sender->getInventory()->addItem(Item::get(325, 10, 1)); //by config.yml.
-             $sender->getInventory()->addItem(Item::get(287, 0, 12)); //For now, I am just going to use the standard SkyBlock items
-             $sender->getInventory()->addItem(Item::get(351, 15, 2));
-             $sender->getInventory()->addItem(Item::get(338, 0, 1));
-             $sender->getInventory()->addItem(Item::get(361, 0, 1));
-             $sender->getInventory()->addItem(Item::get(81, 0, 1));
-             $sender->getInventory()->addItem(Item::get(360, 0, 1));
-             $sender->getInventory()->addItem(Item::get(39, 0, 1));
-             $sender->getInventory()->addItem(Item::get(40, 0, 1));
+              //Create a new island for $sender, teleport them to it, and create the data.
+              $sender->teleport(new Position($islands * $interval + 4, 26, $islands * $interval + 4, $level));
+              $sender->setSpawn(new Vector3($islands * $interval + 4, 27, $islands * $interval + 4));
+              $sender->setImmobile(true);
+              $this->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
+              $sender->getInventory()->addItem(Item::get(79, 0, 2)); //Gonna change all of the addItems eventually to be customizable
+              $sender->getInventory()->addItem(Item::get(325, 10, 1)); //by config.yml.
+              $sender->getInventory()->addItem(Item::get(287, 0, 12)); //For now, I am just going to use the standard SkyBlock items
+              $sender->getInventory()->addItem(Item::get(351, 15, 2));
+              $sender->getInventory()->addItem(Item::get(338, 0, 1));
+              $sender->getInventory()->addItem(Item::get(361, 0, 1));
+              $sender->getInventory()->addItem(Item::get(81, 0, 1));
+              $sender->getInventory()->addItem(Item::get(360, 0, 1));
+              $sender->getInventory()->addItem(Item::get(39, 0, 1));
+              $sender->getInventory()->addItem(Item::get(40, 0, 1));
 
-             $this->skyblock->setNested("Islands", $islands + 1);
-             $skyblockArray[$sender->getName()] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 4) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 4) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
-             $this->skyblock->set("SkyBlock", $skyblockArray);
-             $this->skyblock->save();
-             return true;
-           } else {
+              $this->skyblock->setNested("Islands", $islands + 1);
+              $skyblockArray[$sender->getName()] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 4) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 4) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
+              $this->skyblock->set("SkyBlock", $skyblockArray);
+              $this->skyblock->save();
+              return true;
+            } else {
            
-             $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
-             return true;
-           }
-         }
-       }
+              $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+              return true;
+            }
+          }
+        } else {
+       
+          switch ($args[0]) {
+	  
+	    case "setworld":
+	      
+	        
+	    break;
+          }
+        }
       break;
     }
     return false;
