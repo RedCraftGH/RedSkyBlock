@@ -59,12 +59,6 @@ class SkyBlock extends PluginBase implements Listener {
     }
     //Should be all done now with the onEnable() :shrug:
   }
-  public function onDisable(): void {
-  
-    //Just gonna add a fail-safe bit here: to save any data that may not have been saved when the plugin is disabled
-    $this->skyblock->save();
-  
-  }
   public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
     
     $level = $this->cfg->get("SkyBlockWorld");
