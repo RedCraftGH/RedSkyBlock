@@ -104,7 +104,7 @@ class SkyBlock extends PluginBase implements Listener {
               $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
               $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
 
-              $sender->teleport(new Position($x + 50, 27, $z + 50, $level));
+              $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
               $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
               return true;
             } else {
@@ -133,7 +133,7 @@ class SkyBlock extends PluginBase implements Listener {
               $sender->getInventory()->addItem(Item::get(40, 0, 1));
 
               $this->skyblock->setNested("Islands", $islands + 1);
-              $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 4) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 4) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
+              $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 2) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 2) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
               $this->skyblock->set("SkyBlock", $skyblockArray);
               $this->skyblock->save();
               return true;
