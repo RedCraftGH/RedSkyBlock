@@ -132,7 +132,7 @@ class SkyBlock extends PluginBase implements Listener {
               $sender->getInventory()->addItem(Item::get(40, 0, 1));
 
               $this->skyblock->setNested("Islands", $islands + 1);
-              $skyblockArray[$sender->getName()] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 4) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 4) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
+              $skyblockArray[strtolower($sender->getName())] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 4) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 4) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
               $this->skyblock->set("SkyBlock", $skyblockArray);
               $this->skyblock->save();
               return true;
