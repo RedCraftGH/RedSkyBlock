@@ -11,6 +11,8 @@ use pocketmine\utils\Config;
 use pocketmine\level\Level;
 
 class SkyBlock extends PluginBase implements Listener {
+	
+  public static $instance;
 
   public function onEnable(): void {
     
@@ -25,6 +27,7 @@ class SkyBlock extends PluginBase implements Listener {
       $this->skyblock->set("SkyBlock", []);
       $this->skyblock->set("Islands", 0);
     } else {
+	    
       $this->skyblock = new Config($this->getDataFolder() . "skyblock.yml", Config::YAML);
     }
     
@@ -41,6 +44,7 @@ class SkyBlock extends PluginBase implements Listener {
       //How much/little islands are protected will be customizable soon, but for now it will be standard.
       //Many, many more things will be added to the config soon, but for now I am just building the basic SkyBlock plugin with little customization allowed.
     } else {
+	    
       $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     }
     
