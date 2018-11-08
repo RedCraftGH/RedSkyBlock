@@ -170,7 +170,7 @@ class SkyBlock extends PluginBase implements Listener {
     
       for ($y = 15; $y < 18; $y++) {
       
-        for ($z = $islands * $interval; $z < ($islands * $interval) + 5) {
+        for ($z = $islands * $interval; $z < ($islands * $interval) + 5; $z++) {
         
           if ($y < 17) {
           
