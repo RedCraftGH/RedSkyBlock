@@ -88,6 +88,7 @@ class SkyBlock extends PluginBase implements Listener {
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
     $interval = $this->cfg->get("Interval");
     $islands = $this->skyblock->get("Islands");
+    $senderName = strtolower($sender->getname());
   
     switch(strtolower($command->getName())) {
     
@@ -95,13 +96,13 @@ class SkyBlock extends PluginBase implements Listener {
         
         if (!$args) {
          
-          if (array_key_exists(strtolower($sender->getName()), $skyblockArray)) {
+          if (array_key_exists($senderName), $skyblockArray)) {
          
             if ($sender->hasPermission("skyblock.tp") || $sender->hasPermission("skyblock.*")) {
              
               //Because the array key exists, the $sender has an island, thus, this will be used for teleporting a player to their island.
-              $x = $skyblockArray[$sender->getName()]["Area"]["start"]["X"];
-              $z = $skyblockArray[$sender->getName()]["Area"]["start"]["Z"];
+              $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
+              $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
 
               $sender->teleport(new Position($x + 50, 27, $z + 50, $level));
               $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
@@ -116,8 +117,8 @@ class SkyBlock extends PluginBase implements Listener {
             if ($sender->hasPermission("skyblock.create")) {
            
               //Create a new island for $sender, teleport them to it, and create the data.
-              $sender->teleport(new Position($islands * $interval + 1, 18, $islands * $interval + 2, $level));
-              $sender->setSpawn(new Vector3($islands * $interval + 1, 18, $islands * $interval + 2));
+              $sender->teleport(new Position($islands * $interval + 2, 18, $islands * $interval + 4, $level));
+              $sender->setSpawn(new Vector3($islands * $interval + 2, 18, $islands * $interval + 4));
               $sender->setImmobile(true);
               $this->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
               $sender->getInventory()->addItem(Item::get(79, 0, 2)); //Gonna change all of the addItems eventually to be customizable
@@ -132,7 +133,7 @@ class SkyBlock extends PluginBase implements Listener {
               $sender->getInventory()->addItem(Item::get(40, 0, 1));
 
               $this->skyblock->setNested("Islands", $islands + 1);
-              $skyblockArray[strtolower($sender->getName())] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 4) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 4) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
+              $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Locked" => false, "Area" => Array( "start" => Array("X" => ($islands * $interval + 4) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 4) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
               $this->skyblock->set("SkyBlock", $skyblockArray);
               $this->skyblock->save();
               return true;
@@ -190,7 +191,7 @@ class SkyBlock extends PluginBase implements Listener {
     
       for ($y = 15; $y < 18; $y++) {
       
-        for ($z = $islands * $interval; $z < ($islands * $interval) + 5; $z++) {
+        for ($z = $islands * $interval; $z < ($islands * $interval) + 6; $z++) {
         
           if ($y < 17) {
           
@@ -206,6 +207,21 @@ class SkyBlock extends PluginBase implements Listener {
         }
       }
     }
+    for ($x = ($islands * $interval) - 2; $x < $islands * $interval; $x++) {
     
+      for ($y = 15; $y < 18; $y++) {
+      
+        for ($z = ($islands * $interval) + 3; $z < ($island * $interval) + 6) {
+	
+	  if ($y < 17) {
+          
+            $level->setBlock(new Vector3($x, $y, $z), Block::get(1));
+          } else {
+          
+            $level->setBlock(new Vector3($x, $y, $z), Block::get(2));
+          }
+	}
+      }
+    }
   }
 }
