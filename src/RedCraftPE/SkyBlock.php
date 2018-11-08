@@ -136,8 +136,19 @@ class SkyBlock extends PluginBase implements Listener {
           switch ($args[0]) {
 	  
 	    case "setworld":
-	    	
-	  	
+	      	
+	      if ($sender->hasPermission("skyblock.setworld") || $sender->hasPermission("skyblock.*")) {
+		      
+	        $SBWorld = $sender->getLevel()->getName();
+	        $this->skyblock->set("SkyBlockWorld", $SBWorld);
+	        $this->skyblock->save();
+	        $sender->sendMessage(TextFormat::GREEN . $SBWorld . " has been set as this server's SkyBlock world.");
+	        return true;
+	      } else {
+	      
+	      	$sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+              	return true;
+	      }
 	    break;
           }
         }
