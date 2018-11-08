@@ -9,6 +9,10 @@ use pocketmine\event\Listener;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Config;
 use pocketmine\level\Level;
+use pocketmine\level\Position;
+use pocketmine\math\Vector3;
+use pocketmine\math\Random;
+use RedCraftPE\task\Generate;
 
 class SkyBlock extends PluginBase implements Listener {
 	
