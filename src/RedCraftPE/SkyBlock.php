@@ -144,8 +144,8 @@ class SkyBlock extends PluginBase implements Listener {
 	      if ($sender->hasPermission("skyblock.setworld") || $sender->hasPermission("skyblock.*")) {
 		      
 	        $SBWorld = $sender->getLevel()->getName();
-	        $this->skyblock->set("SkyBlockWorld", $SBWorld);
-	        $this->skyblock->save();
+	        $this->cfg->set("SkyBlockWorld", $SBWorld);
+	        $this->cfg->save();
 	        $sender->sendMessage(TextFormat::GREEN . $SBWorld . " has been set as this server's SkyBlock world.");
 	        return true;
 	      } else {
