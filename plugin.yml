@@ -9,14 +9,14 @@ commands:
     aliases: [is, isle]
     usage: /is [argument/command]
 permissions:
-  skyblock.*
+  skyblock.*:
     default: op
     children:
-      skyblock.is
-      skyblock.create
-      skyblock.tp
-      skyblock.members
-      skyblock.bypass
-      skyblock.kick
-      skyblock.lock
-      skyblock.setworld
+      skyblock.is:
+      skyblock.create:
+      skyblock.tp:
+      skyblock.members:
+      skyblock.bypass:
+      skyblock.kick:
+      skyblock.lock:
+      skyblock.setworld:
