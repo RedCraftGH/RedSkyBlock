@@ -68,7 +68,7 @@ class SkyBlock extends PluginBase implements Listener {
     $level = $this->cfg->get("SkyBlockWorld");
     if (!$level) {
     
-      if ($args[0] !== "setworld") {
+      if ($args[0] !== "setworld" || !$args) {
       
         $sender->sendMessage(TextFormat::RED . "You need to set a SkyBlock world with '/is setworld' before any other commands will function!");
         return true;
