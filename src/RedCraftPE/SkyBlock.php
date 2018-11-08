@@ -96,7 +96,7 @@ class SkyBlock extends PluginBase implements Listener {
         
         if (!$args) {
          
-          if (array_key_exists($senderName), $skyblockArray)) {
+          if (array_key_exists($senderName, $skyblockArray)) {
          
             if ($sender->hasPermission("skyblock.tp") || $sender->hasPermission("skyblock.*")) {
              
