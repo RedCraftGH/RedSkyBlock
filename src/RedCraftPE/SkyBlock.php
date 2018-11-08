@@ -11,7 +11,7 @@ use pocketmine\utils\Config;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
-use pocketmine\math\Random;
+use pocketmine\utils\Random;
 use pocketmine\block\Block;
 use pocketmine\level\generator\object\Tree;
 use RedCraftPE\task\Generate;
@@ -115,8 +115,8 @@ class SkyBlock extends PluginBase implements Listener {
             if ($sender->hasPermission("skyblock.create")) {
            
               //Create a new island for $sender, teleport them to it, and create the data.
-              $sender->teleport(new Position($islands * $interval + 4, 26, $islands * $interval + 4, $level));
-              $sender->setSpawn(new Vector3($islands * $interval + 4, 27, $islands * $interval + 4));
+              $sender->teleport(new Position($islands * $interval + 1, 18, $islands * $interval + 2, $level));
+              $sender->setSpawn(new Vector3($islands * $interval + 1, 18, $islands * $interval + 2));
               $sender->setImmobile(true);
               $this->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
               $sender->getInventory()->addItem(Item::get(79, 0, 2)); //Gonna change all of the addItems eventually to be customizable
