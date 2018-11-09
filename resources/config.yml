@@ -14,7 +14,7 @@
 # It is not recommended to change this in the config.yml.
 # It is safer to change this by doing /is setworld in-game.
 # The plugin will not function if you manually change this to an incorrect value.
-SkyBlockWorld: Skyblock
+SkyBlockWorld: ""
 
 # The Interval is the distance between each Island.
 # A recommended Interval is between 200-500.
