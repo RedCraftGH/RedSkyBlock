@@ -230,7 +230,7 @@ class SkyBlock extends PluginBase implements Listener {
   //I am going to make customizable block spawns and spawn rates eventually, but for now it will be standard.
 	
   public function onUpdate(BlockUpdateEvent $event) {
-    var_dump($this->cfg->get("CobbleGen");
+    var_dump($this->cfg->get("CobbleGen"));
     if ($this->cfg->get("CobbleGen")) {
 	    
       $block = $event->getBlock();
