@@ -47,11 +47,15 @@ class SkyBlock extends PluginBase implements Listener {
     if(!file_exists($this->getDataFolder() . "config.yml")){
 
       @mkdir($this->getDataFolder());
-      $this->saveResource("config.yml");
+      $configFile = $this->getResource("config.yml");
+      $this->saveResource($configFile);
+      fclose($configFile);
       $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
-      $this->cfg->set("SkyBlockWorld", "");
-      $this->cfg->set("Interval", 300);
-      $this->cfg->set("CobbleGen", true);
+	    
+      //$this->cfg->set("SkyBlockWorld", "");
+      //$this->cfg->set("Interval", 300);
+      //$this->cfg->set("CobbleGen", true);
+	    
       //Island protection areas will be customizable, soon, in the future, but for now Island protections areas will be 100x100 standard.
       //Island starting Items will be customizable in the future, but for now standard starting items will be used.
       //How much/little islands are protected will be customizable soon, but for now it will be standard.
