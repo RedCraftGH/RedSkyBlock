@@ -1,0 +1,32 @@
+---
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#                                                                                                 #
+#  ██████╗ ███████╗██████╗  ███████╗██╗  ██╗██╗   ██╗ ██████╗ ██╗      ██████╗  ██████╗██╗  ██╗   #
+#  ██╔══██╗██╔════╝██╔══██╗ ██╔════╝██║ ██╔╝╚██╗ ██╔╝ ██╔══██╗██║     ██╔═══██╗██╔════╝██║ ██╔╝   #
+#  ██████╔╝█████╗  ██║  ██║ ███████╗█████╔╝  ╚████╔╝  ██████╔╝██║     ██║   ██║██║     █████╔╝    #
+#  ██╔══██╗██╔══╝  ██║  ██║ ╚════██║██╔═██╗   ╚██╔╝   ██╔══██╗██║     ██║   ██║██║     ██╔═██╗    #
+#  ██║  ██║███████╗██████╔╝ ███████║██║  ██╗   ██║    ██████╔╝███████╗╚██████╔╝╚██████╗██║  ██╗   #
+#  ╚═╝  ╚═╝╚══════╝╚═════╝  ╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝   #
+#                                                                                                 #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# You can set the SkyBlock world that the plugin will use in your server by changing this variable.
+# It is not recommended to change this in the config.yml.
+# It is safer to change this by doing /is setworld in-game.
+# The plugin will not function if you manually change this to an incorrect value.
+SkyBlockWorld: Skyblock
+
+# The Interval is the distance between each Island.
+# A recommended Interval is between 200-500.
+# Any farther is useless, and any less may be catastrophic in the plugins current state.
+Interval: 300
+
+# The magic cobblestone generator is automatically enabled when you first start up the plugin.
+# When enabled cobblestone generators will generate much more than just cobblestone.
+# When disabled cobblestone generators will function normally.
+# In the future, what the Magic cobblestone generator produces will be customizable.
+CobbleGen: true
+
+# Many more options/configurations will be added here in the near future.
+# Things like: Custom island protections, Island border customizations, Shops, Economy, Island teams, etc.
+...
