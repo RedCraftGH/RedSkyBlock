@@ -231,7 +231,7 @@ class SkyBlock extends PluginBase implements Listener {
 	
   public function onUpdate(BlockUpdateEvent $event) {
     var_dump($this->cfg->get("CobbleGen");
-    //if ($this->cfg->get("CobbleGen")) {
+    if ($this->cfg->get("CobbleGen")) {
 	    
       $block = $event->getBlock();
       $isTouchingLava = false;
@@ -280,6 +280,6 @@ class SkyBlock extends PluginBase implements Listener {
           return;
         }
       }
-    //}
+    }
   }
 }
