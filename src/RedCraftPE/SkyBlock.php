@@ -155,21 +155,72 @@ class SkyBlock extends PluginBase implements Listener {
        
           switch ($args[0]) {
 	  
-	    case "setworld":
+	   				case "setworld":
 	      	
-	      if ($sender->hasPermission("skyblock.setworld") || $sender->hasPermission("skyblock.*")) {
+	      			if ($sender->hasPermission("skyblock.setworld") || $sender->hasPermission("skyblock.*")) {
 		      
-	        $SBWorld = $sender->getLevel()->getName();
-	        $this->cfg->set("SkyBlockWorld", $SBWorld);
-	        $this->cfg->save();
-	        $sender->sendMessage(TextFormat::GREEN . $SBWorld . " has been set as this server's SkyBlock world.");
-	        return true;
-	      } else {
+	        			$SBWorld = $sender->getLevel()->getName();
+	        			$this->cfg->set("SkyBlockWorld", $SBWorld);
+	        			$this->cfg->save();
+	        			$sender->sendMessage(TextFormat::GREEN . $SBWorld . " has been set as this server's SkyBlock world.");
+	        			return true;
+	      			} else {
 	      
-	      	$sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+	      				$sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
               	return true;
-	      }
-	    break;
+	     		 		}
+	    			break;'
+						case "tp":
+						case "goto":
+						case "spawn":
+						case "teleport":
+						case "go":
+							
+							if ($sender->hasPermission("skyblock.tp") || $sender->hasPermission("skyblock.*")) {
+							
+								if (count($args) > 1) {
+								
+									//Teleport $sender to someone elses island:
+									$player = strtolower(implode(" ", array_slice($args, 1)));
+									$playerN
+									
+									if (array_key_exists($player, $skyblockArray)) {
+									
+										if ($skyblockArray[$player]["Locked"] === true) {
+										
+											$sender->sendMessage(TextFormat::RED . $playerN . "'s island is locked!");
+											return true;
+										} else {
+										
+											//island not locked:
+											$islandX = $skyblockArray[$player]["Area"]["start"]["X"] + 50;
+                  		$islandZ = $skyblockArray[$player]["Area"]["start"]["Z"] + 50;
+
+                  		$sender->teleport(new Position($islandX, 18, $islandZ, $level));
+                 			$sender->sendMessage(TextFormat::GREEN . "Welcome to " . $skyblockArray[$player]["Name"]);
+                 			return true;
+										}
+									} else {
+									
+										$sender->sendMessage(TextFormat::RED . $playerN . " does not have an island!");
+										return true;
+									}
+								} else {
+								
+									//Teleport $sender to their own island:
+									$x = $skyblockArray[$senderName]["Area"]["start"]["X"];
+              		$z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
+
+             		 	$sender->teleport(new Position($x + 50, 18, $z + 50, $level));
+             		 	$sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
+             		 	return true;
+								}
+							} else {
+							
+								$sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+              	return true;
+							}
+						break;
           }
         }
       break;
@@ -221,14 +272,14 @@ class SkyBlock extends PluginBase implements Listener {
       
         for ($z = ($islands * $interval) + 3; $z < ($islands * $interval) + 6; $z++) {
 	
-	  if ($y < 17) {
+	  			if ($y < 17) {
           
             $level->setBlock(new Vector3($x, $y, $z), Block::get(1));
           } else {
           
             $level->setBlock(new Vector3($x, $y, $z), Block::get(2));
           }
-	}
+				}
       }
     }
   }
