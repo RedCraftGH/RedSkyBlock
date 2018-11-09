@@ -16,6 +16,7 @@ use pocketmine\block\Block;
 use pocketmine\level\generator\object\Tree;
 use pocketmine\item\Item;
 use pocketmine\event\block\BlockUpdateEvent;
+use pocketmine\block\Water;
 use RedCraftPE\task\Generate;
 
 class SkyBlock extends PluginBase implements Listener {
@@ -230,7 +231,7 @@ class SkyBlock extends PluginBase implements Listener {
   //I am going to make customizable block spawns and spawn rates eventually, but for now it will be standard.
 	
   public function onUpdate(BlockUpdateEvent $event) {
-    var_dump($this->cfg->get("CobbleGen"));
+
     if ($this->cfg->get("CobbleGen")) {
 	    
       $block = $event->getBlock();
