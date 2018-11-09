@@ -15,6 +15,7 @@ use pocketmine\utils\Random;
 use pocketmine\block\Block;
 use pocketmine\level\generator\object\Tree;
 use pocketmine\item\Item;
+use pocketmine\event\block\BlockUpdateEvent;
 use RedCraftPE\task\Generate;
 
 class SkyBlock extends PluginBase implements Listener {
@@ -221,6 +222,63 @@ class SkyBlock extends PluginBase implements Listener {
             $level->setBlock(new Vector3($x, $y, $z), Block::get(2));
           }
 	}
+      }
+    }
+  }
+	
+  //The onUpdate will be used for creating the SkyBlock special CobbleGen. 
+  //I am going to make customizable block spawns and spawn rates eventually, but for now it will be standard.
+	
+  public function onUpdate(BlockUpdateEvent $event) {
+	  
+    if ($this->cfg->get("CobbleGen") === true) {
+	    
+      $block = $event->getBlock();
+      $isTouchingLava = false;
+
+      if ($block instanceof Water) {
+
+        for($side = 2; $side <= 5; $side++){
+
+          if($block->getSide($side)->getId() === 10){
+
+            $isTouchingLava = true;
+            break;
+          }
+        }
+      }
+      if ($isTouchingLava) {
+
+        $random = rand(0, 100);
+        if ($random <= 88) {
+
+          $block->getLevel()->setBlock($block, Block::get(4));
+          return;
+        } elseif ($random <= 91) {
+
+          $block->getLevel()->setBlock($block, Block::get(16));
+          return;
+        } elseif ($random <= 94) {
+
+          $block->getLevel()->setBlock($block, Block::get(21));
+          return;
+        } elseif ($random <= 96) {
+
+          $block->getLevel()->setBlock($block, Block::get(15));
+          return;
+        } elseif ($random <= 98) {
+
+          $block->getLevel()->setBlock($block, Block::get(14));
+          return;
+        } elseif ($random <= 99) {
+
+          $block->getLevel()->setBlock($block, Block::get(56));
+          return;
+        } elseif ($random <= 100) {
+
+          $block->getLevel()->setBlock($block, Block::get(57));
+          return;
+        }
       }
     }
   }
