@@ -16,6 +16,10 @@ use pocketmine\block\Block;
 use pocketmine\level\generator\object\Tree;
 use pocketmine\item\Item;
 use pocketmine\event\block\BlockUpdateEvent;
+use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\BlockPlaceEvent;
+use pocketmine\event\player\PlayerBucketEvent;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\block\Water;
 use RedCraftPE\task\Generate;
 
@@ -280,6 +284,193 @@ class SkyBlock extends PluginBase implements Listener {
           $block->getLevel()->setBlock($block, Block::get(57));
           return;
         }
+      }
+    }
+  }
+  public function onPlace(BlockPlaceEvent $event) {
+
+    $player = $event->getPlayer();
+    $block = $event->getBlock();
+    $level = $this->getServer()->getLevelByName("Skyblock");
+
+    if ($player->getLevel() === $level) {
+
+      $skyblockArray = $this->skyblock->get("SkyBlock", []);
+      $blockX = $block->getX();
+      $blockY = $block->getY();
+      $blockZ = $block->getZ();
+      $islandOwner = "";
+
+      foreach(array_keys($skyblockArray) as $skyblocks) {
+
+        $startX = $skyblockArray[$skyblocks]["Area"]["start"]["X"];
+        $startY = $skyblockArray[$skyblocks]["Area"]["start"]["Y"];
+        $startZ = $skyblockArray[$skyblocks]["Area"]["start"]["Z"];
+        $endX = $skyblockArray[$skyblocks]["Area"]["end"]["X"];
+        $endY = $skyblockArray[$skyblocks]["Area"]["end"]["Y"];
+        $endZ = $skyblockArray[$skyblocks]["Area"]["end"]["Z"];
+
+        if ($blockX > $startX && $blockY > $startY && $blockZ > $startZ && $blockX < $endX && $blockY < $endY && $blockZ < $endZ) {
+
+          $islandOwner = $skyblocks;
+          break;
+        }
+      }
+
+      if ($islandOwner === "") {
+
+        $event->setCancelled(true);
+        $player->sendMessage(TextFormat::RED . "You cannot build here!");
+        return;
+      } elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
+
+        return;
+      } else {
+
+        $event->setCancelled(true);
+        $player->sendMessage(TextFormat::RED . "You cannot build here!");
+        return;
+      }
+    }
+  }
+  public function onBreak(BlockBreakEvent $event) {
+
+    $player = $event->getPlayer();
+    $block = $event->getBlock();
+    $level = $this->getServer()->getLevelByName("Skyblock");
+
+    if ($player->getLevel() === $level) {
+
+      $skyblockArray = $this->skyblock->get("SkyBlock", []);
+      $blockX = $block->getX();
+      $blockY = $block->getY();
+      $blockZ = $block->getZ();
+      $islandOwner = "";
+
+      foreach(array_keys($skyblockArray) as $skyblocks) {
+
+        $startX = $skyblockArray[$skyblocks]["Area"]["start"]["X"];
+        $startY = $skyblockArray[$skyblocks]["Area"]["start"]["Y"];
+        $startZ = $skyblockArray[$skyblocks]["Area"]["start"]["Z"];
+        $endX = $skyblockArray[$skyblocks]["Area"]["end"]["X"];
+        $endY = $skyblockArray[$skyblocks]["Area"]["end"]["Y"];
+        $endZ = $skyblockArray[$skyblocks]["Area"]["end"]["Z"];
+
+        if ($blockX > $startX && $blockY > $startY && $blockZ > $startZ && $blockX < $endX && $blockY < $endY && $blockZ < $endZ) {
+
+          $islandOwner = $skyblocks;
+          break;
+        }
+      }
+
+      if ($islandOwner === "") {
+
+        $event->setCancelled(true);
+        $player->sendMessage(TextFormat::RED . "You cannot break blocks here!");
+        return;
+      } elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
+
+        return;
+      } else {
+
+        $event->setCancelled(true);
+        $player->sendMessage(TextFormat::RED . "You cannot break blocks here!");
+        return;
+      }
+    }
+  }
+  public function onInteract(PlayerInteractEvent $event) {
+
+    $player = $event->getPlayer();
+    $block = $event->getBlock();
+    $item = $event->getItem();
+    $level = $this->getServer()->getLevelByName("Skyblock");
+
+    if ($block->getID() === 54 || $block->getID() === 61 || $block->getID() === 62 || $block->getID() === 138 || $block->getID() === 130 || $item->getID() === 259) {
+
+      if ($player->getLevel() === $level) {
+
+        $skyblockArray = $this->skyblock->get("SkyBlock", []);
+        $playerX = $player->getX();
+        $playerY = $player->getY();
+        $playerZ = $player->getZ();
+        $islandOwner = "";
+
+        foreach(array_keys($skyblockArray) as $skyblocks) {
+
+          $startX = $skyblockArray[$skyblocks]["Area"]["start"]["X"];
+          $startY = $skyblockArray[$skyblocks]["Area"]["start"]["Y"];
+          $startZ = $skyblockArray[$skyblocks]["Area"]["start"]["Z"];
+          $endX = $skyblockArray[$skyblocks]["Area"]["end"]["X"];
+          $endY = $skyblockArray[$skyblocks]["Area"]["end"]["Y"];
+          $endZ = $skyblockArray[$skyblocks]["Area"]["end"]["Z"];
+
+          if ($playerX > $startX && $playerY > $startY && $playerZ > $startZ && $playerX < $endX && $playerY < $endY && $playerZ < $endZ) {
+
+            $islandOwner = $skyblocks;
+            break;
+          }
+        }
+
+        if ($islandOwner === "") {
+
+          $event->setCancelled(true);
+          $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+          return;
+        } elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
+
+          return;
+        } else {
+
+          $event->setCancelled(true);
+          $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+          return;
+        }
+      }
+    }
+  }
+  public function onBucketEvent(PlayerBucketEvent $event) {
+
+    $player = $event->getPlayer();
+    $level = $this->getServer()->getLevelByName("Skyblock");
+
+    if ($player->getLevel() === $level) {
+
+      $skyblockArray = $this->skyblock->get("SkyBlock", []);
+      $playerX = $player->getX();
+      $playerY = $player->getY();
+      $playerZ = $player->getZ();
+      $islandOwner = "";
+
+      foreach(array_keys($skyblockArray) as $skyblocks) {
+
+        $startX = $skyblockArray[$skyblocks]["Area"]["start"]["X"];
+        $startY = $skyblockArray[$skyblocks]["Area"]["start"]["Y"];
+        $startZ = $skyblockArray[$skyblocks]["Area"]["start"]["Z"];
+        $endX = $skyblockArray[$skyblocks]["Area"]["end"]["X"];
+        $endY = $skyblockArray[$skyblocks]["Area"]["end"]["Y"];
+        $endZ = $skyblockArray[$skyblocks]["Area"]["end"]["Z"];
+
+        if ($playerX > $startX && $playerY > $startY && $playerZ > $startZ && $playerX < $endX && $playerY < $endY && $playerZ < $endZ) {
+
+          $islandOwner = $skyblocks;
+          break;
+        }
+      }
+
+      if ($islandOwner === "") {
+
+        $event->setCancelled(true);
+        $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+        return;
+      } elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
+
+        return;
+      } else {
+
+        $event->setCancelled(true);
+        $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+        return;
       }
     }
   }
