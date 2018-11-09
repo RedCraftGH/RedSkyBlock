@@ -173,7 +173,8 @@ class SkyBlock extends PluginBase implements Listener {
                     if (count($args) > 1) {
                       //Teleport $sender to someone elses island:
                       $player = strtolower(implode(" ", array_slice($args, 1)));
-                      $playerNif(array_key_exists($player, $skyblockArray)) {
+                      $playerN
+                      if(array_key_exists($player, $skyblockArray)) {
                         if ($skyblockArray[$player]["Locked"] === true) {
                           $sender->sendMessage(TextFormat::RED . $playerN . "'sislandislocked!");
                           return true;
