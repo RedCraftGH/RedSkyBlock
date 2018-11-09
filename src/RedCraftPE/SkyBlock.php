@@ -47,9 +47,7 @@ class SkyBlock extends PluginBase implements Listener {
     if(!file_exists($this->getDataFolder() . "config.yml")){
 
       @mkdir($this->getDataFolder());
-      $configFile = $this->getResource("config.yml");
-      $this->saveResource($configFile);
-      fclose($configFile);
+      $this->saveResource("config.yml");
       $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
 	    
       //$this->cfg->set("SkyBlockWorld", "");
