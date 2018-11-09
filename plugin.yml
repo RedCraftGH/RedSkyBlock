@@ -1,6 +1,6 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 0.0.1
+version: 0.0.1-ALPHA
 api: 3.0.0, 4.0.0
 main: RedCraftPE\SkyBlock
 commands:
