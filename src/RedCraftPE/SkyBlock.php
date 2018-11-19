@@ -176,7 +176,7 @@ class SkyBlock extends PluginBase implements Listener {
                       $playerN = implode(" ", array_slice($args, 1));
                       if(array_key_exists($player, $skyblockArray)) {
                         if ($skyblockArray[$player]["Locked"] === true) {
-                          $sender->sendMessage(TextFormat::RED . $playerN . "'sislandislocked!");
+                          $sender->sendMessage(TextFormat::RED . $playerN . "'s island is locked!");
                           return true;
                         }
                         else {
@@ -184,12 +184,12 @@ class SkyBlock extends PluginBase implements Listener {
                           $islandX = $skyblockArray[$player]["Area"]["start"]["X"] + 50;
                           $islandZ = $skyblockArray[$player]["Area"]["start"]["Z"] + 50;
                           $sender->teleport(new Position($islandX, 18, $islandZ, $level));
-                          $sender->sendMessage(TextFormat::GREEN . "Welcometo" . $skyblockArray[$player]["Name"]);
+                          $sender->sendMessage(TextFormat::GREEN . "Welcome to" . $skyblockArray[$player]["Name"]);
                           return true;
                         }
                       }
                       else {
-                        $sender->sendMessage(TextFormat::RED . $playerN . "doesnothaveanisland!");
+                        $sender->sendMessage(TextFormat::RED . $playerN . "does not have an island!");
                         return true;
                       }
                     }
@@ -198,14 +198,60 @@ class SkyBlock extends PluginBase implements Listener {
                       $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
                       $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
                       $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
-                      $sender->sendMessage(TextFormat::GREEN . "Youhavebeenteleportedtoyourisland!");
+                      $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
                       return true;
                     }
                 }
                 else {
-                  $sender->sendMessage(TextFormat::RED . "Unfortunately, youdo nothaveaccesstothisSkyBlockcommand . ");
+                  $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
                   return true;
                 }
+                break;
+                case "lock":
+                case "close":
+                  if ($sender->hasPermission("skyblock.lock") || $sender->hasPermission("skyblock.*")) {
+                    if (array_key_exists($senderName, $skyblockArray)) {
+                      if ($skyblockArray[$senderName]["Locked"] === true) {
+                        $sender->sendMessage(TextFormat::RED . "Your island is already locked!");
+                        return true;
+                      } else {
+                        $skyblockArray[$senderName]["Locked"] = true;
+                        $this->skyblock->set("SkyBlock", $skyblockArray);
+                        $this->skyblock->save();
+                        $sender->sendMessage(TextFormat::GREEN . "Your island is now locked!");
+                        return true;
+                      }
+                    } else {
+                      $sender->sendMessage(TextFormat::RED . "You don't have an island yet!");
+                      return true;
+                    }
+                  } else {
+                    $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+                    return true;
+                  }
+                break;
+                case "open":
+                case "unlock":
+                  if ($sender->hasPermission("skyblock.lock") || $sender->hasPermission("skyblock.*")) {
+                    if (array_key_exists($senderName, $skyblockArray)) {
+                      if ($skyblockArray[$senderName]["Locked"] === false) {
+                        $sender->sendMessage(TextFormat::RED . "Your island is not locked!");
+                        return true;
+                      } else {
+                        $skyblockArray[$senderName]["Locked"] = false;
+                        $this->skyblock->set("SkyBlock", $skyblockArray);
+                        $this->skyblock->save();
+                        $sender->sendMessage(TextFormat::GREEN . "Your island is no longer locked!");
+                        return true;
+                      }
+                    } else {
+                      $sender->sendMessage(TextFormat::RED . "You don't have an island yet!");
+                      return true;
+                    }
+                  } else {
+                    $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+                    return true;
+                  }
                 break;
               }
           }
@@ -326,7 +372,7 @@ class SkyBlock extends PluginBase implements Listener {
             }
             if ($islandOwner === "") {
               $event->setCancelled(true);
-              $player->sendMessage(TextFormat::RED . "Youcannotbuildhere!");
+              $player->sendMessage(TextFormat::RED . "You cannot build here!");
               return;
             }
             elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
@@ -334,7 +380,7 @@ class SkyBlock extends PluginBase implements Listener {
             }
             else {
               $event->setCancelled(true);
-              $player->sendMessage(TextFormat::RED . "Youcannotbuildhere!");
+              $player->sendMessage(TextFormat::RED . "You cannot build here!");
               return;
             }
           }
@@ -363,7 +409,7 @@ class SkyBlock extends PluginBase implements Listener {
             }
             if ($islandOwner === "") {
               $event->setCancelled(true);
-              $player->sendMessage(TextFormat::RED . "Youcannotbreakblockshere!");
+              $player->sendMessage(TextFormat::RED . "You cannot break blocks here!");
               return;
             }
             elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
@@ -371,7 +417,7 @@ class SkyBlock extends PluginBase implements Listener {
             }
             else {
               $event->setCancelled(true);
-              $player->sendMessage(TextFormat::RED . "Youcannotbreakblockshere!");
+              $player->sendMessage(TextFormat::RED . "You cannot break blocks here!");
               return;
             }
           }
@@ -402,7 +448,7 @@ class SkyBlock extends PluginBase implements Listener {
               }
               if ($islandOwner === "") {
                 $event->setCancelled(true);
-                $player->sendMessage(TextFormat::RED . "Youcannotuse thishere!");
+                $player->sendMessage(TextFormat::RED . "You cannot use this here!");
                 return;
               }
               elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
@@ -410,7 +456,7 @@ class SkyBlock extends PluginBase implements Listener {
               }
               else {
                 $event->setCancelled(true);
-                $player->sendMessage(TextFormat::RED . "Youcannotuse thishere!");
+                $player->sendMessage(TextFormat::RED . "You cannot use this here!");
                 return;
               }
             }
@@ -439,7 +485,7 @@ class SkyBlock extends PluginBase implements Listener {
             }
             if ($islandOwner === "") {
               $event->setCancelled(true);
-              $player->sendMessage(TextFormat::RED . "Youcannotuse thishere!");
+              $player->sendMessage(TextFormat::RED . "You cannot use this here!");
               return;
             }
             elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
@@ -447,7 +493,7 @@ class SkyBlock extends PluginBase implements Listener {
             }
             else {
               $event->setCancelled(true);
-              $player->sendMessage(TextFormat::RED . "Youcannotuse thishere!");
+              $player->sendMessage(TextFormat::RED . "You cannot use this here!");
               return;
             }
           }
