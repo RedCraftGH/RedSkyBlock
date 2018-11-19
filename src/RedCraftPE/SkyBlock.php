@@ -90,7 +90,7 @@ class SkyBlock extends PluginBase implements Listener {
     }
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
         $level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld"));
-        if (!$level) {
+        if ($this->skyblock->get("SkyBlockWorld") === "") {
           if (!$args) {
             $sender->sendMessage(TextFormat::RED . "You need to set a SkyBlock world with '/is setworld' before any other commands will function!");
             return true;
