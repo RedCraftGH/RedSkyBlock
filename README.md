@@ -1,4 +1,4 @@
-> __*Quick Plugin Check:*__ The Plugin is now usable and functioning. Island generation, protections, and teleportations are finished. However it is not very configurable and has minimal features. It is not recommended that you use this plugin on a stable server yet, however, this plugin will cause no damage to your server.
+> __*Quick Plugin Check:*__ The Plugin is now usable and functioning. Island locking/unlocking is finished and compatible with island teleportation. There is now an island help menu accessable with /is help. This plugin is, as of right now, only recommended for servers that are not open to the public yet as the plugin has not been completely optomized for large servers yet.
 
 # RedSkyBlock
 RedSkyBlock aims to be a feature rich, user-friendly SkyBlock plugin. RedSkyBlock includes many useful, built-in features that can be edited in the config.yml and with the use of some commands in-game.
@@ -12,14 +12,14 @@ If you wish to request features, or notify me about an issue, please, make an is
 - Main Features
   - [x] SkyBlock infinite island generation
   - [x] Magic SkyBlock cobblestone generator (Spawn rates of ores, and what ores spawn will soon be customizable).
-  - [x] Island teleportation (Can only teleport to your own island at this time).
+  - [x] Island teleportation
+  - [x] Island locking/unlocking
   - [x] Island Area Protection (What is protected on Player's islands will be configurable).
   - [ ] Deep customization in config.yml (Right now only basic configuration is available).
   - [ ] Island Members (Will be an option to turn this on/off, or to limit amount of members per island soon).
   - [ ] Island Kick/Ban (Will be an option to disable/enable these commands).
   - [ ] Island Top (Will be multiple options for calculating top islands, when implemented it will be calculated by valuable blocks placed)
   - [x] Island Limits (This will be customizable in the future, when first implemented, all islands will have a 100x100 area).
-  - [ ] Open/close islands to other players (Will be optional in config.yml)
 - Mechanics
   - [x] Island generation intervals (customizable in config.yml)
   - [x] Starting SkyBlock items (Will be customizable later)
