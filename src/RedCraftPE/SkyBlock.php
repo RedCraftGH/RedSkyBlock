@@ -256,7 +256,7 @@ class SkyBlock extends PluginBase implements Listener {
                 break;
                 case "help":
                   if ($sender->hasPermission("skyblock.help") || $sender->hasPermission("skyblock.*")) {
-                    if (count($args) > 1) {
+                    if (!(count($args) > 1)) {
                       $this->sendHelp($sender, 1);
                       return true;
                     } else {
@@ -523,11 +523,11 @@ class SkyBlock extends PluginBase implements Listener {
           if ($pageNumber <= 2) {
             switch($pageNumber) {
               case "1":
-                $player->sendMessage(TextFormat::WHITE . "-=" . TextFormat::RED . "SkyBlock Help Menu " . TextFormat::GRAY . "({$pageNumber}, )" . TextFormat::WHITE . "=- \n" . TextFormat::GRAY . "Use /help [number] to open a specific help menu. \n" . TextFormat::BLUE . "/is:" . TextFormat::WHITE . "This is the main SkyBlock command. \n" . TextFormat::BLUE . "/is tp [player]:" . TextFormat::WHITE . "Use this to teleport to your island or another player's \n" . TextFormat::BLUE . "/is lock:" . TextFormat::WHITE . "This command will lock your island from visitors. \n" . TextFormat::BLUE . "/is unlock:" . TextFormat::WHITE . "This command opens your island to visitors.");
+                $player->sendMessage(TextFormat::WHITE . "-=" . TextFormat::RED . "SkyBlock Help Menu " . TextFormat::GRAY . "({$pageNumber}, 2)" . TextFormat::WHITE . "=- \n" . TextFormat::GRAY . "Use /help [number] to open a specific help menu. \n" . TextFormat::BLUE . "/is: " . TextFormat::WHITE . "This is the main SkyBlock command. \n" . TextFormat::BLUE . "/is tp [player]: " . TextFormat::WHITE . "Use this to teleport to your island or another player's \n" . TextFormat::BLUE . "/is lock: " . TextFormat::WHITE . "This command will lock your island from visitors. \n" . TextFormat::BLUE . "/is unlock: " . TextFormat::WHITE . "This command opens your island to visitors.");
                 return;
               break;
               case "2":
-                $player->sendMessage(TextFormat::WHITE . "-=" . TextFormat::RED . "SkyBlock Help Menu " . TextFormat::GRAY . "({$pageNumber}, )" . TextFormat::WHITE . "=- \n" . TextFormat::GRAY . "Use /help [number] to open a specific help menu. \n" . TextFormat::BLUE . "/is setworld:" . TextFormat::WHITE . "This admin command is used to set the current SkyBlock world.");
+                $player->sendMessage(TextFormat::WHITE . "-=" . TextFormat::RED . "SkyBlock Help Menu " . TextFormat::GRAY . "({$pageNumber}, 2)" . TextFormat::WHITE . "=- \n" . TextFormat::GRAY . "Use /help [number] to open a specific help menu. \n" . TextFormat::BLUE . "/is setworld: " . TextFormat::WHITE . "This admin command is used to set the current SkyBlock world.");
                 return;
               break;
             }
