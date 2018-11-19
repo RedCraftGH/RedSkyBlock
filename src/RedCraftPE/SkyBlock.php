@@ -253,11 +253,31 @@ class SkyBlock extends PluginBase implements Listener {
                     return true;
                   }
                 break;
+                case "help":
+                  if ($sender->hasPermission("skyblock.help") || $sender->hasPermission("skyblock.*")) {
+                    if (!$args[1]) {
+                      $this->sendHelp($sender, 1);
+                      return true;
+                    } else {
+                      if (!is_numeric($args[1])) {
+                        $sender->sendMessage(TextFormat::RED . $args[1] . " is not a valid page number.");
+                        return true;
+                      } else {
+                        $this->sendHelp($sender, $args[1]);
+                        return true;
+                      }
+                    }
+                  } else {
+                    $sender->sendMessage(TextFormat::RED . "Unfortunately, you do not have access to this SkyBlock command.");
+                    return true;
+                  }
+                break;
               }
           }
           break;
         }
-        return false;
+        $this->sendHelp($sender, 1);
+        return true;
       }
       //Gonna' have this here for the island generation delay task.
       public static function getInstance(): self {
@@ -496,6 +516,23 @@ class SkyBlock extends PluginBase implements Listener {
               $player->sendMessage(TextFormat::RED . "You cannot use this here!");
               return;
             }
+          }
+        }
+        public function sendHelp(Player $player, int $pageNumber) {
+          if ($pageNumber <= 2) {
+            switch($pageNumber) {
+              case "1":
+                $player->sendMessage(TextFormat::WHITE . "-=" . TextFormat::RED . "SkyBlock Help Menu " . TextFormat::GRAY . "({$pageNumber}, )" . TextFormat::WHITE . "=- \n" . TextFormat::GRAY . "Use /help [number] to open a specific help menu. \n" . TextFormat::BLUE . "/is:" . TextFormat::WHITE . "This is the main SkyBlock command. \n" . TextFormat::BLUE . "/is tp [player]:" . TextFormat::WHITE . "Use this to teleport to your island or another player's \n" . TextFormat::BLUE . "/is lock:" . TextFormat::WHITE . "This command will lock your island from visitors. \n" . TextFormat::BLUE . "/is unlock:" . TextFormat::WHITE . "This command opens your island to visitors.");
+                return;
+              break;
+              case "2":
+                $player->sendMessage(TextFormat::WHITE . "-=" . TextFormat::RED . "SkyBlock Help Menu " . TextFormat::GRAY . "({$pageNumber}, )" . TextFormat::WHITE . "=- \n" . TextFormat::GRAY . "Use /help [number] to open a specific help menu. \n" . TextFormat::BLUE . "/is setworld:" . TextFormat::WHITE . "This admin command is used to set the current SkyBlock world.");
+                return;
+              break;
+            }
+          } else {
+            $player->sendMessage(TextFormat::RED . $pageNumber . " is not a valid page number.");
+            return;
           }
         }
       }
