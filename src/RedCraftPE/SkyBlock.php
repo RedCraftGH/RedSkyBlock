@@ -37,6 +37,7 @@ use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerBucketEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\block\Water;
+use pocketmine\Player;
 use RedCraftPE\task\Generate;
 
 class SkyBlock extends PluginBase implements Listener {
@@ -184,12 +185,12 @@ class SkyBlock extends PluginBase implements Listener {
                           $islandX = $skyblockArray[$player]["Area"]["start"]["X"] + 50;
                           $islandZ = $skyblockArray[$player]["Area"]["start"]["Z"] + 50;
                           $sender->teleport(new Position($islandX, 18, $islandZ, $level));
-                          $sender->sendMessage(TextFormat::GREEN . "Welcome to" . $skyblockArray[$player]["Name"]);
+                          $sender->sendMessage(TextFormat::GREEN . "Welcome to " . $skyblockArray[$player]["Name"]);
                           return true;
                         }
                       }
                       else {
-                        $sender->sendMessage(TextFormat::RED . $playerN . "does not have an island!");
+                        $sender->sendMessage(TextFormat::RED . $playerN . " does not have an island!");
                         return true;
                       }
                     }
@@ -255,7 +256,7 @@ class SkyBlock extends PluginBase implements Listener {
                 break;
                 case "help":
                   if ($sender->hasPermission("skyblock.help") || $sender->hasPermission("skyblock.*")) {
-                    if (!$args[1]) {
+                    if (count($args) > 1) {
                       $this->sendHelp($sender, 1);
                       return true;
                     } else {
