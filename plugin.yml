@@ -20,3 +20,4 @@ permissions:
       skyblock.kick:
       skyblock.lock:
       skyblock.setworld:
+      skyblock.help:
