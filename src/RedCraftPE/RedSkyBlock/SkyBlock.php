@@ -16,7 +16,7 @@
 * - SkyBlock extends PluginBase
 */
 
-namespace RedCraftPE;
+namespace RedCraftPE\RedSkyBlock;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\CommandSender;
