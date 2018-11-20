@@ -1,6 +1,6 @@
 <?PHP
 
-namespace RedCraftPE\task;
+namespace RedCraftPE\RedSkyBlock\task;
 
 use RedCraftPE\SkyBlock;
 use pocketmine\scheduler\Task;
