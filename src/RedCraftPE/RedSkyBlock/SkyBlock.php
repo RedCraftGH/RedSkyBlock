@@ -38,7 +38,7 @@ use pocketmine\event\player\PlayerBucketEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\block\Water;
 use pocketmine\Player;
-use RedCraftPE\task\Generate;
+use RedCraftPE\RedSkyBlock\task\Generate;
 
 class SkyBlock extends PluginBase implements Listener {
 
