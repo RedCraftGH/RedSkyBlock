@@ -128,16 +128,14 @@ class SkyBlock extends PluginBase implements Listener {
                   $sender->setSpawn(new Vector3($islands * $interval + 2, 18, $islands * $interval + 4));
                   $sender->setImmobile(true);
                   $this->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
-                  $sender->getInventory()->addItem(Item::get(79, 0, 2)); //Gonna change all of the addItems eventually to be customizable
-                  $sender->getInventory()->addItem(Item::get(325, 10, 1)); //by config.yml.
-                  $sender->getInventory()->addItem(Item::get(287, 0, 12)); //For now, I am just going to use the standard SkyBlock items
-                  $sender->getInventory()->addItem(Item::get(351, 15, 2));
-                  $sender->getInventory()->addItem(Item::get(338, 0, 1));
-                  $sender->getInventory()->addItem(Item::get(361, 0, 1));
-                  $sender->getInventory()->addItem(Item::get(81, 0, 1));
-                  $sender->getInventory()->addItem(Item::get(360, 0, 1));
-                  $sender->getInventory()->addItem(Item::get(39, 0, 1));
-                  $sender->getInventory()->addItem(Item::get(40, 0, 1));
+                  $itemsArray = $this->cfg->get("Starting Items");
+                  foreach($itemsArray as $items) {
+                    $itemArray = implode(" ", $items);
+                    $id = $itemArray[0];
+                    $damage = $itemArray[1];
+                    $count = $itemArray[2];
+                    $sender->getInventory()->addItem(Item::get($id, $damage, $count));
+                  }
                   $this->skyblock->setNested("Islands", $islands + 1);
                   $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName() ], "Locked" => false, "Area" => Array("start" => Array("X" => ($islands * $interval + 2) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 2) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
                   $this->skyblock->set("SkyBlock", $skyblockArray);
