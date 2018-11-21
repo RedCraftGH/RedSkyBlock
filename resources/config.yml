@@ -27,6 +27,22 @@ Interval: 300
 # In the future, what the Magic cobblestone generator produces will be customizable.
 CobbleGen: true
 
+#The Starting Items are the items in SkyBlock that a player will recieve when they first generate their island.
+#These items can be edited in the config here. It is really simple and follows this format: "id, damage, count"
+#id is the item id for an item in Minecraft, for example: stone's id is 1
+#damage is the data value which cooresponds with each individual id. For example: Red would have the id 35 and the damage 14
+#count is pretty simple. It is the amount of each item that the player will recieve. It is NOT recommended to set this number super high.
+Starting Items:
+  - 79, 0, 2
+  - 325, 10, 1
+  - 287, 0, 12
+  - 351, 15, 2
+  - 338, 0, 1
+  - 361, 0, 1
+  - 81, 0, 1
+  - 360, 0, 1
+  - 39, 0, 1
+  - 40, 0, 1
 # Many more options/configurations will be added here in the near future.
 # Things like: Custom island protections, Island border customizations, Shops, Economy, Island teams, etc.
 ...
