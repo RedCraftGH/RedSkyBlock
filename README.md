@@ -1,3 +1,7 @@
+[![](https://poggit.pmmp.io/shield.state/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
+[![](https://poggit.pmmp.io/shield.api/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
+[![](https://poggit.pmmp.io/shield.dl.total/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
+
 > __*Quick Plugin Check:*__ The Plugin is now usable and functioning. Island locking/unlocking is finished and compatible with island teleportation. There is now an island help menu accessable with /is help. This plugin is, as of right now, only recommended for servers that are not open to the public yet as the plugin has not been completely optomized for large servers yet.
 
 <img src="https://github.com/RedCraftGH/RedSkyBlock/blob/master/icon.png" width="100" height="100" align="left"></img>
