@@ -78,18 +78,31 @@ class SkyBlock extends PluginBase implements Listener {
       $this->cfg->reload();
       $this->skyblock->save();
       $this->skyblock->reload();
-      $level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld"));
-      if (!$level) {
+      if ($this->cfg->get("SkyBlockWorld") === "") {
+      
         $this->getLogger()->info(TextFormat::RED . "In order for this plugin to function properly, you must set a SkyBlock world in your server.");
-      }
-      else {
-        $this->getServer()->loadLevel($level->getName());
+      } else {
+      
+        $this->level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld"));
+        if (!$this->level) {
+        
+          $this->getLogger()->info(TextFormat::RED . "The level currently set as the SkyBlock world does not exist.");
+        } else {
+        
+          if ($this->getServer()->isLevelLoaded($this->level->getFolderName())) {
+           
+             $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on level {$this->level->getFolderName()}");
+          } else {
+           
+            $this->getServer()->loadLevel($this->level->getFolderName());
+            $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on level {$this->level->getFolderName()}");
+          }
+        }
       }
       //Should be all done now with the onEnable() :shrug:
       
     }
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
-        $level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld"));
         if ($this->skyblock->get("SkyBlockWorld") === "") {
           if (!$args) {
             $sender->sendMessage(TextFormat::RED . "You need to set a SkyBlock world with '/is setworld' before any other commands will function!");
@@ -100,6 +113,7 @@ class SkyBlock extends PluginBase implements Listener {
             return true;
           }
         }
+        $level = $this->level;
         $skyblockArray = $this->skyblock->get("SkyBlock", []);
         $interval = $this->cfg->get("Interval");
         $islands = $this->skyblock->get("Islands");
@@ -112,7 +126,7 @@ class SkyBlock extends PluginBase implements Listener {
                   //Because the array key exists, the $sender has an island, thus, this will be used for teleporting a player to their island.
                   $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
                   $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
-                  $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
+                  $sender->teleport(new Position($x + 50, 18, $z + 50, $this->level));
                   $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
                   return true;
                 }
@@ -124,7 +138,7 @@ class SkyBlock extends PluginBase implements Listener {
               else {
                 if ($sender->hasPermission("skyblock.create")) {
                   //Create a new island for $sender, teleport them to it, and create the data.
-                  $sender->teleport(new Position($islands * $interval + 2, 18, $islands * $interval + 4, $level));
+                  $sender->teleport(new Position($islands * $interval + 2, 18, $islands * $interval + 4, $this->level));
                   $sender->setSpawn(new Vector3($islands * $interval + 2, 18, $islands * $interval + 4));
                   $sender->setImmobile(true);
                   $this->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
@@ -182,7 +196,7 @@ class SkyBlock extends PluginBase implements Listener {
                           //island not locked:
                           $islandX = $skyblockArray[$player]["Area"]["start"]["X"] + 50;
                           $islandZ = $skyblockArray[$player]["Area"]["start"]["Z"] + 50;
-                          $sender->teleport(new Position($islandX, 18, $islandZ, $level));
+                          $sender->teleport(new Position($islandX, 18, $islandZ, $this->level));
                           $sender->sendMessage(TextFormat::GREEN . "Welcome to " . $skyblockArray[$player]["Name"]);
                           return true;
                         }
@@ -196,7 +210,7 @@ class SkyBlock extends PluginBase implements Listener {
                       //Teleport $sender to their own island:
                       $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
                       $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
-                      $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
+                      $sender->teleport(new Position($x + 50, 18, $z + 50, $this->level));
                       $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
                       return true;
                     }
@@ -370,7 +384,7 @@ class SkyBlock extends PluginBase implements Listener {
         public function onPlace(BlockPlaceEvent $event) {
           $player = $event->getPlayer();
           $block = $event->getBlock();
-          $level = $this->getServer()->getLevelByName("Skyblock");
+          $level = $this->level;
           if ($player->getLevel() === $level) {
             $skyblockArray = $this->skyblock->get("SkyBlock", []);
             $blockX = $block->getX();
@@ -407,7 +421,7 @@ class SkyBlock extends PluginBase implements Listener {
         public function onBreak(BlockBreakEvent $event) {
           $player = $event->getPlayer();
           $block = $event->getBlock();
-          $level = $this->getServer()->getLevelByName("Skyblock");
+          $level = $this->level;
           if ($player->getLevel() === $level) {
             $skyblockArray = $this->skyblock->get("SkyBlock", []);
             $blockX = $block->getX();
@@ -445,7 +459,7 @@ class SkyBlock extends PluginBase implements Listener {
           $player = $event->getPlayer();
           $block = $event->getBlock();
           $item = $event->getItem();
-          $level = $this->getServer()->getLevelByName("Skyblock");
+          $level = $this->level;
           if ($block->getID() === 54 || $block->getID() === 61 || $block->getID() === 62 || $block->getID() === 138 || $block->getID() === 130 || $item->getID() === 259) {
             if ($player->getLevel() === $level) {
               $skyblockArray = $this->skyblock->get("SkyBlock", []);
@@ -483,7 +497,7 @@ class SkyBlock extends PluginBase implements Listener {
         }
         public function onBucketEvent(PlayerBucketEvent $event) {
           $player = $event->getPlayer();
-          $level = $this->getServer()->getLevelByName("Skyblock");
+          $level = $this->level;
           if ($player->getLevel() === $level) {
             $skyblockArray = $this->skyblock->get("SkyBlock", []);
             $playerX = $player->getX();
