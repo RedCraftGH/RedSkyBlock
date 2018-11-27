@@ -27,6 +27,22 @@ Interval: 300
 # In the future, what the Magic cobblestone generator produces will be customizable.
 CobbleGen: true
 
+# You can edit the below values to change what the magic cobblestone generator spawns.
+# To edit/add just put a block id into the list. If you want a higher chance of an ore to
+# then put it in the list more than one time.
+# For example, here is the format for an ore generator that has a 1/5 chance of spawning diamond blocks.
+# and a 4/5 chance of spawning cobblestone:
+# MagicCobbleGenOres:
+#  - 4
+#  - 4
+#  - 4
+#  - 4
+#  - 57
+MagicCobbleGen Ores:
+  - 4
+  - 4
+  - 21
+
 #The Starting Items are the items in SkyBlock that a player will recieve when they first generate their island.
 #These items can be edited in the config here. It is really simple and follows this format: "id, damage, count"
 #id is the item id for an item in Minecraft, for example: stone's id is 1
@@ -43,6 +59,20 @@ Starting Items:
   - 360, 0, 1
   - 39, 0, 1
   - 40, 0, 1
-# Many more options/configurations will be added here in the near future.
-# Things like: Custom island protections, Island border customizations, Shops, Economy, Island teams, etc.
+
+# There are two values for hunger: on and off. If hunger is off then players will no longer loose hunger
+# while they are in the SkyBlock world.
+Hunger: on
+
+# There are two values for void: on and off. If void is off then players who fall in the void will not die
+# while they are in the SkyBlock world.
+Void: on
+
+# There are two values for keep inventory: on and off. If it is on then players who die will not
+# lose the items in their inventory.
+KeepInventory: off
+
+# This limits the amount of members a player can have on their island. Set the number to 0 to disable
+# member limits. The default is a 3 member limit.
+MemberLimit: 3
 ...

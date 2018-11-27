@@ -13,11 +13,47 @@ permissions:
     default: op
     children:
       skyblock.is:
+        description: With this permission players can use the main SkyBlock command /is.
+        default: false
       skyblock.create:
+        description: With this permission players can create a SkyBlock island.
+        default: false
       skyblock.tp:
+        description: With this permission players can teleport to other player's islands.
+        default: false
       skyblock.members:
+        description: With this permission players can manage the members of their island.
+        default: false
       skyblock.bypass:
+        description: With this permission players can bypass island protections.
+        default: op
       skyblock.kick:
+        description: With this permission players can kick other players off of their island.
+        default: false
       skyblock.lock:
+        description: With this permission players can manager their islands locked status.
+        default: false
       skyblock.setworld:
+        description: With this permission players can set the SkyBlock world of a server.
+        default: op
       skyblock.help:
+        description: With this permission players can use the SkyBlock help command.
+        default: false
+      skyblock.void:
+        description: With this permission players can manage the void settings for SkyBlock.
+        default: op
+      skyblock.reset:
+        description: With this permission players can reset their islands.
+        default: false
+      skyblock.reload:
+        description: With this permission players can reload SkyBlock data.
+        default: op
+      skyblock.name:
+        description: With this permission players can change the name of their SkyBlock island.
+        default: false
+      skyblock.info:
+        description: With this permission players can look at other players SkyBlock information.
+        default: false
+      skyblock.createworld:
+        description: With this permission players can create and set a SkyBlock world for the server.
+        default: op
