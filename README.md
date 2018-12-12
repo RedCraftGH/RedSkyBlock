@@ -10,7 +10,7 @@
 RedSkyBlock aims to be a feature rich, user-friendly SkyBlock plugin. RedSkyBlock includes many useful, built-in features that can be edited in the config.yml and with the use of some commands in-game.
 
 # Installation and Support
-As of right now this plugin is not recommended to be used on any servers. However, if you wish to take a look, the .phar can be downloaded from poggit. By placing the .phar into your server's plugins folder you can enable this plugin. It should be noted: This plugin is under heavy development and SHOULD NOT be considered, in any way, stable, or ready for use. Any damage caused by this plugin to your server is strictly coincidental and I take no responsibility.
+Installing this plugin on your server is super easy to do! Just download the .phar file from poggit and plop it into your server's plugins folder.
 
 If you wish to request features, or notify me about an issue, please, make an issue. I will be sure to read it and reply quickly and appropriately. If you are reporting an issue with the plugin, be sure to include as many details as possible and steps to reproduce the issue. If you wish to suggest something for the plugin PLEASE be sure to include "suggestions" or "requests" in the title of the issue; make sure to be descriptive when asking for a feature, so I can be sure to know how to implement it, if I choose to do so.
 
