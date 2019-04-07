@@ -18,19 +18,18 @@ SkyBlockWorld: ""
 
 # The Interval is the distance between each Island.
 # A recommended Interval is between 200-500.
-# Any farther is useless, and any less may be catastrophic in the plugins current state.
+# Any farther is useless, and any less will result in a very crowded skyblock world.
 Interval: 300
 
 # The magic cobblestone generator is automatically enabled when you first start up the plugin.
 # When enabled cobblestone generators will generate much more than just cobblestone.
 # When disabled cobblestone generators will function normally.
-# In the future, what the Magic cobblestone generator produces will be customizable.
 CobbleGen: true
 
 # You can edit the below values to change what the magic cobblestone generator spawns.
-# To edit/add just put a block id into the list. If you want a higher chance of an ore to
+# To edit/add just put a block id into the list. If you want a higher chance of an ore
 # then put it in the list more than one time.
-# For example, here is the format for an ore generator that has a 1/5 chance of spawning diamond blocks.
+# For example, here is the format for an ore generator that has a 1/5 chance of spawning a diamond blocks.
 # and a 4/5 chance of spawning cobblestone:
 # MagicCobbleGenOres:
 #  - 4
@@ -46,7 +45,7 @@ MagicCobbleGen Ores:
 #The Starting Items are the items in SkyBlock that a player will recieve when they first generate their island.
 #These items can be edited in the config here. It is really simple and follows this format: "id, damage, count"
 #id is the item id for an item in Minecraft, for example: stone's id is 1
-#damage is the data value which cooresponds with each individual id. For example: Red would have the id 35 and the damage 14
+#damage is the data value which cooresponds with each individual id. For example: Red wool would have the id 35 and the damage 14
 #count is pretty simple. It is the amount of each item that the player will recieve. It is NOT recommended to set this number super high.
 Starting Items:
   - 79, 0, 2

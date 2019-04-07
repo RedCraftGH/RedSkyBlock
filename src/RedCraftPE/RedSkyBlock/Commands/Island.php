@@ -26,6 +26,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reset;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Teleport;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Top;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Unban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Unlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\VoidClass;
 
@@ -52,6 +53,7 @@ class Island {
   private $setWorld;
   private $teleport;
   private $top;
+  private $unban;
   private $unlock;
   private $void;
 
@@ -80,6 +82,7 @@ class Island {
     $this->setWorld = new SetWorld();
     $this->teleport = new Teleport();
     $this->top = new Top();
+    $this->unban = new Unban();
     $this->unlock = new Unlock();
     $this->void = new VoidClass();
   }
@@ -99,8 +102,9 @@ class Island {
             return $this->add->onAddCommand($sender, $args);
           break;
           case "ban":
+          case "expel":
 
-            return $this->ban->onBanCommand($sender);
+            return $this->ban->onBanCommand($sender, $args);
           break;
           case "create":
 
@@ -127,7 +131,6 @@ class Island {
 
             return $this->info->onInfoCommand($sender, $args);
           break;
-          case "expel":
           case "kick":
 
             return $this->kick->onKickCommand($sender, $args);
@@ -182,6 +185,11 @@ class Island {
           case "top":
 
             return $this->top->onTopCommand($sender);
+          break;
+          case "unban":
+          case "pardon":
+
+            return $this->unban->onUnbanCommand($sender, $args);
           break;
           case "open":
           case "unlock":

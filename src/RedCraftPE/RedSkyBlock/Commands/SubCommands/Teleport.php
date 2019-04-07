@@ -73,13 +73,19 @@ class Teleport {
 
           if (array_key_exists($name, $skyblockArray)) {
 
-            if ($skyblockArray[$name]["Locked"] === false || in_array($sender->getName, $skyblockArray[$name]["Members"])) {
+            if ($skyblockArray[$name]["Locked"] === false || in_array($sender->getName(), $skyblockArray[$name]["Members"])) {
 
-              $x = $skyblockArray[$name]["Area"]["start"]["X"];
-              $z = $skyblockArray[$name]["Area"]["start"]["Z"];
-              $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
-              $sender->sendMessage(TextFormat::GREEN . "Welcome to {$skyblockArray[$name]["Name"]}.");
-              return true;
+              if (!in_array($sender->getName(), $skyblockArray[$name]["Banned"])) {
+                $x = $skyblockArray[$name]["Area"]["start"]["X"];
+                $z = $skyblockArray[$name]["Area"]["start"]["Z"];
+                $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
+                $sender->sendMessage(TextFormat::GREEN . "Welcome to {$skyblockArray[$name]["Name"]}.");
+                return true;
+              } else {
+
+                $sender->sendMessage(TextFormat::WHITE . $sender->getName() . TextFormat::RED . " has banned you from their island.");
+                return true;
+              }
             } else {
 
               $sender->sendMessage(TextFormat::WHITE . implode(" ", array_slice($args, 1)) . "'s is locked.");

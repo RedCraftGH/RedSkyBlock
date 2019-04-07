@@ -37,7 +37,7 @@ class Add {
           return true;
         } else {
 
-          if (!array_key_exists($senderName, $skyblockArray)) {
+          if (array_key_exists($senderName, $skyblockArray)) {
 
             if (count($skyblockArray[$senderName]["Members"]) === $limit) {
 
@@ -51,11 +51,19 @@ class Add {
                 return true;
               } else {
 
-                $skyblockArray[$senderName]["Members"][] = $player->getName();
-                SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-                SkyBlock::getInstance()->skyblock->save();
-                $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::GREEN . " has been added to your island.");
-                return true;
+                if (!in_array($player->getName(), $skyblockArray[$senderName]["Banned"])) {
+
+                  $skyblockArray[$senderName]["Members"][] = $player->getName();
+                  SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
+                  SkyBlock::getInstance()->skyblock->save();
+                  $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::GREEN . " has been added to your island.");
+                  $player->sendMessage(TextFormat::WHITE . $sender-getName() . TextFormat::GREEN . " has added you to their island.");
+                  return true;
+                } else {
+
+                  $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::RED . " is banned from your island.");
+                  return true;
+                }
               }
             }
           } else {

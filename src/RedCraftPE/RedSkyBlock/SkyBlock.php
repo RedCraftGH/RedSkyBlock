@@ -34,7 +34,7 @@ class SkyBlock extends PluginBase {
 
           $this->getServer()->loadLevel($this->cfg->get("SkyBlockWorld"));
           $this->level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld"));
-          $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on level {$this->level->getFolderName()}");
+          $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on the world {$this->level->getFolderName()}");
         } else {
 
           $this->getLogger()->info(TextFormat::RED . "The level currently set as the SkyBlock world does not exist.");

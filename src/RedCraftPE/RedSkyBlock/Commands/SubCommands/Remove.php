@@ -36,7 +36,7 @@ class Remove {
           return true;
         } else {
 
-          if (!array_key_exists($senderName, $skyblockArray)) {
+          if (array_key_exists($senderName, $skyblockArray)) {
 
             if (in_array($player->getName(), $skyblockArray[$senderName]["Members"])) {
 

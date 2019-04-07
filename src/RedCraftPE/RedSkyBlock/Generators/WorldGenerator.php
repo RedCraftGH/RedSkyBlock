@@ -19,6 +19,6 @@ class WorldGenerator {
   public function generateWorld($levelName) {
 
     $plugin = $this->plugin;
-    $plugin->getServer()->generateLevel($levelName, null, 'pocketmine\level\generator\Flat', ["preset" => "3;;1"]);
+    $plugin->getServer()->generateLevel($levelName, null, 'pocketmine\level\generator\Flat', ["preset" => "3;minecraft:air;127;"]);
   }
 }
