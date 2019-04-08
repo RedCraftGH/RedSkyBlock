@@ -28,7 +28,7 @@ class Set {
       $level = $sender->getLevel();
       $blocksArray = [];
 
-      if (isset($x1, $x2)) {
+      if (SkyBlock::getInstance()->skyblock->get("Pos1") && SkyBlock::getInstance()->skyblock->get("Pos2")) {
 
         for ($x = min($x1, $x2); $x <= max($x1, $x2); $x++) {
 
@@ -51,7 +51,7 @@ class Set {
         return true;
       } else {
 
-        $sender->sendMessage(TextFormat::RED . "You must set position 1 and position 2 before using this command!");
+        $sender->sendMessage(TextFormat::RED . "You must set the custom island position 1 and position 2 before using this command!");
         return true;
       }
     } else {

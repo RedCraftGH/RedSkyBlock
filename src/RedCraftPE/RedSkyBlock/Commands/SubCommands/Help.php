@@ -39,7 +39,7 @@ class Help {
             return true;
           } else if ($page === 3) {
 
-            $sender->sendMessage(TextFormat::RED . "SkyBlock Help Menu (3/6): \n" . TextFormat::WHITE . "/is kick <player>: Use this command to kick another player off of your island. \n" . "/is lock: Use this command to prevent visitors. \n" . "/is members: Use this command to see the members of your island. \n" . "/is name: Use this command to change or see the name of your island.");
+            $sender->sendMessage(TextFormat::RED . "SkyBlock Help Menu (3/6): \n" . TextFormat::WHITE . "/is kick <player>: Use this command to kick another player off of your island. \n" . "/is lock: Use this command to prevent visitors. \n" . "/is makespawn: Use this command to create a custom island spawnpoint. \n" . "/is members: Use this command to see the members of your island. \n" . "/is name: Use this command to change or see the name of your island.");
             return true;
           } else if ($page === 4) {
 

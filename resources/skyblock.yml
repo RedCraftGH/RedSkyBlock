@@ -17,13 +17,17 @@ SkyBlock:
 
 Islands: 0
 
-custom: false
+Custom: false
 
 CustomX: 2
 
 CustomY: 3
 
 CustomZ: 4
+
+Pos1: false
+
+Pos2: false
 
 x1:
 

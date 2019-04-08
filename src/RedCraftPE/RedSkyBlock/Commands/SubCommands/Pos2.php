@@ -26,6 +26,7 @@ class Pos2 {
       SkyBlock::getInstance()->skyblock->set("x2", $xPos);
       SkyBlock::getInstance()->skyblock->set("y2", $yPos);
       SkyBlock::getInstance()->skyblock->set("z2", $zPos);
+      SkyBlock::getInstance()->skyblock->set("Pos2", true);
       SkyBlock::getInstance()->skyblock->save();
       $sender->sendMessage(TextFormat::GREEN . "Position 2 has been set at" . TextFormat::WHITE . " {$xPos}, {$yPos}, {$zPos}.");
       return true;

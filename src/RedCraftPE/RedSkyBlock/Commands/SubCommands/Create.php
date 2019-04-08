@@ -60,7 +60,13 @@ class Create {
         return true;
       } else {
 
-        $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $level));
+        if (SkyBlock::getInstance()->skyblock->get("Custom")) {
+
+          $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $level));
+        } else {
+
+          $sender->teleport(new Position($islands * $interval + 2, 15 + 3, $islands * $interval + 4, $level));
+        }
         $sender->setImmobile(true);
         SkyBlock::getInstance()->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
 

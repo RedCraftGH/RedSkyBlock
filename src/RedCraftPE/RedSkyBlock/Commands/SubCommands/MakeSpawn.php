@@ -30,11 +30,8 @@ class MakeSpawn {
         $z = min(0 + SkyBlock::getInstance()->skyblock->get("z1"), 0 + SkyBlock::getInstance()->skyblock->get("z2"));
 
         $distanceFromX1 = $xPos - $x;
-        var_dump($distanceFromX1);
         $distanceFromY1 = ($yPos - $y) + 1;
-        var_dump($distanceFromY1);
         $distanceFromZ1 = $zPos - $z;
-        var_dump($distanceFromZ1);
 
         SkyBlock::getInstance()->skyblock->set("CustomX", $distanceFromX1);
         SkyBlock::getInstance()->skyblock->set("CustomY", $distanceFromY1);
