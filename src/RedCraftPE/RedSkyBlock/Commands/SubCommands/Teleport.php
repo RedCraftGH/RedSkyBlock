@@ -57,7 +57,7 @@ class Teleport {
 
           $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
           $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
-          $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
+          $sender->teleport(new Position($x + 50, 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $z + 50, $level));
           $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
           return true;
         } else {
@@ -78,7 +78,7 @@ class Teleport {
               if (!in_array($sender->getName(), $skyblockArray[$name]["Banned"])) {
                 $x = $skyblockArray[$name]["Area"]["start"]["X"];
                 $z = $skyblockArray[$name]["Area"]["start"]["Z"];
-                $sender->teleport(new Position($x + 50, 18, $z + 50, $level));
+                $sender->teleport(new Position($x + 50, 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $z + 50, $level));
                 $sender->sendMessage(TextFormat::GREEN . "Welcome to {$skyblockArray[$name]["Name"]}.");
                 return true;
               } else {

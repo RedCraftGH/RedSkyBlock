@@ -64,7 +64,7 @@ class Reset {
         $sender->getInventory()->clearAll();
         $sender->sendMessage(TextFormat::GREEN . "Your island has been completely reset.");
 
-        $sender->teleport(new Position($islands * $interval + 2, 18, $islands * $interval + 4, $level));
+        $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $level));
         $sender->setImmobile(true);
         SkyBlock::getInstance()->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
 

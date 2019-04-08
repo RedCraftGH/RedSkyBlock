@@ -11,9 +11,31 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # IMPORTANT NOTICE: DO NOT EDIT ANYTHING INSIDE OF THIS FILE EVER! THIS FILE IS MAINTAINED BY THE PLUGIN
-# AND IF EDITED YOU WILL BREAK THE PLUGIN AND CAUSE DAMAGE TO YOUR SERVER!
+# AND IF EDITED YOU WILL BREAK THE PLUGIN AND POSSIBLY CAUSE DAMAGE TO YOUR SERVER!
 
 SkyBlock:
 
 Islands: 0
+
+custom: false
+
+CustomX: 2
+
+CustomY: 3
+
+CustomZ: 4
+
+x1:
+
+x2:
+
+y1:
+
+y2:
+
+z1:
+
+z2:
+
+blocks: []
 ...

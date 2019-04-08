@@ -60,7 +60,7 @@ class Create {
         return true;
       } else {
 
-        $sender->teleport(new Position($islands * $interval + 2, 18, $islands * $interval + 4, $level));
+        $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $level));
         $sender->setImmobile(true);
         SkyBlock::getInstance()->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
 
@@ -80,7 +80,7 @@ class Create {
         }
 
         SkyBlock::getInstance()->skyblock->setNested("Islands", $islands + 1);
-        $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Banned" => [], "Locked" => false, "Area" => Array("start" => Array("X" => ($islands * $interval + 2) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 2) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
+        $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Banned" => [], "Locked" => false, "Area" => Array("start" => Array("X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) - 50, "Y" => 0, "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) - 50), "end" => Array("X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) + 50, "Y" => 256, "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) + 50)));
         SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
         SkyBlock::getInstance()->skyblock->save();
         return true;
