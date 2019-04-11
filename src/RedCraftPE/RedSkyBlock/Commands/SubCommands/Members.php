@@ -23,10 +23,18 @@ class Members {
 
       $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
       $senderName = strtolower($sender->getName());
-      $memberArray = $skyblockArray[$senderName]["Members"];
-      $members = implode(", ", $memberArray);
-      $sender->sendMessage($members);
-      return true;
+
+      if (array_key_exists($senderName, $skyblockArray)) {
+
+        $memberArray = $skyblockArray[$senderName]["Members"];
+        $members = implode(", ", $memberArray);
+        $sender->sendMessage($members);
+        return true;
+      } else {
+
+        $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");
+        return true;
+      }
     } else {
 
       $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");

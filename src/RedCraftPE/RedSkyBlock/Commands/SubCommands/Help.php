@@ -47,7 +47,7 @@ class Help {
             return true;
           } else if ($page === 5) {
 
-            $sender->sendMessage(TextFormat::RED . "SkyBlock Help Menu (5/6): \n" . TextFormat::WHITE . "/is set: This command sets the custom island data for custom islands. \n" . "/is setworld: Use this command to set the SkyBlock world to the one your are in. \n" . "/is teleport [player]: Use this command to teleport to your island or another player's island. \n" . "/is top: This command is not yet implemented. \n" . "/is unlock: Use this command to open your island to visitors.");
+            $sender->sendMessage(TextFormat::RED . "SkyBlock Help Menu (5/6): \n" . TextFormat::WHITE . "/is set: This command sets the custom island data for custom islands. \n" . "/is setspawn: Use this command to set the spawn position of your island. \n" . "/is setworld: Use this command to set the SkyBlock world to the one your are in. \n" . "/is teleport [player]: Use this command to teleport to your island or another player's island. \n" . "/is top: This command is not yet implemented. \n" . "/is unlock: Use this command to open your island to visitors.");
             return true;
           } else if ($page === 6) {
 

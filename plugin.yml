@@ -56,6 +56,7 @@ permissions:
       default: op
     skyblock.ban:
       description: With this permission players can ban/unban other players from their island.
+      default: true
     skyblock.pos:
       description: With this permission players can change the custom island positions.
       default: op
@@ -68,3 +69,9 @@ permissions:
     skyblock.delete:
       description: With this permission players can delete user's islands.
       default: op
+    skyblock.makespawn:
+      description: With this permission players can set the custom island spawn positions.
+      default: op
+    skyblock.setspawn:
+      description: With this permission players can set the spawn position of their own island.
+      default: true

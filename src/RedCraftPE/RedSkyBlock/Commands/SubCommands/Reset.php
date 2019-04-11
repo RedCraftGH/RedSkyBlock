@@ -90,7 +90,7 @@ class Reset {
         }
 
         SkyBlock::getInstance()->skyblock->setNested("Islands", $islands + 1);
-        $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Banned" => [], "Locked" => false, "Area" => Array("start" => Array("X" => ($islands * $interval + 2) - 50, "Y" => 0, "Z" => ($islands * $interval + 4) - 50), "end" => Array("X" => ($islands * $interval + 2) + 50, "Y" => 256, "Z" => ($islands * $interval + 4) + 50)));
+        $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Banned" => [], "Locked" => false, "Spawn" => Array("X" => $sender->getX(), "Y" => $sender->getY(), "Z" => $sender->getZ()), "Area" => Array("start" => Array("X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) - 50, "Y" => 0, "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) - 50), "end" => Array("X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) + 50, "Y" => 256, "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) + 50)));
         SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
         SkyBlock::getInstance()->skyblock->save();
         return true;
