@@ -7,9 +7,11 @@ use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\block\BlockFactory;
 
 use RedCraftPE\RedSkyBlock\Commands\Island;
 use RedCraftPE\RedSkyBlock\Tasks\Generate;
+use RedCraftPE\RedSkyBlock\Blocks\Lava;
 
 class SkyBlock extends PluginBase {
 
@@ -58,6 +60,8 @@ class SkyBlock extends PluginBase {
   }
   public function onLoad(): void {
 
+		BlockFactory::registerBlock(new Lava(), true);
+
     if (!is_dir($this->getDataFolder())) {
 
       @mkdir($this->getDataFolder());
@@ -95,5 +99,21 @@ class SkyBlock extends PluginBase {
   public static function getInstance(): self {
 
     return self::$instance;
+  }
+  public function calcRank(string $name): int {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $userValue = $skyblockArray[$name]["Value"];
+    $rank = 1;
+
+    foreach(array_keys($skyblockArray) as $user) {
+
+      if ($skyblockArray[$user]["Value"] > $userValue) {
+
+        $rank++;
+      }
+    }
+
+    return $rank;
   }
 }

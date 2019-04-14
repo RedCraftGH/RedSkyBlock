@@ -85,7 +85,7 @@ class Teleport {
                 return true;
               } else {
 
-                $sender->sendMessage(TextFormat::WHITE . $sender->getName() . TextFormat::RED . " has banned you from their island.");
+                $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " has banned you from their island.");
                 return true;
               }
             } else {

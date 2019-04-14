@@ -30,6 +30,7 @@ class Create {
       $levelName = SkyBlock::getInstance()->cfg->get("SkyBlockWorld");
       $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
       $islands = SkyBlock::getInstance()->skyblock->get("Islands");
+      $initialSize = SkyBlock::getInstance()->cfg->get("Island Size");
       $senderName = strtolower($sender->getName());
       $level = null;
       if ($levelName === "") {
@@ -86,7 +87,30 @@ class Create {
         }
 
         SkyBlock::getInstance()->skyblock->setNested("Islands", $islands + 1);
-        $skyblockArray[$senderName] = Array("Name" => $sender->getName() . "'s Island", "Members" => [$sender->getName()], "Banned" => [], "Locked" => false, "Spawn" => Array("X" => $sender->getX(), "Y" => $sender->getY(), "Z" => $sender->getZ()), "Area" => Array("start" => Array("X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) - 50, "Y" => 0, "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) - 50), "end" => Array("X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) + 50, "Y" => 256, "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) + 50)));
+        $skyblockArray[$senderName] = Array(
+          "Name" => $sender->getName() . "'s Island",
+          "Members" => [$sender->getName()],
+          "Banned" => [],
+          "Locked" => false,
+          "Value" => 0,
+          "Spawn" => Array(
+            "X" => $sender->getX(),
+            "Y" => $sender->getY(),
+            "Z" => $sender->getZ()
+          ),
+          "Area" => Array(
+            "start" => Array(
+              "X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) - ($initialSize / 2),
+              "Y" => 0,
+              "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) - ($initialSize / 2)
+            ),
+            "end" => Array(
+              "X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) + ($initialSize / 2),
+              "Y" => 256,
+              "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) + ($initialSize / 2)
+            )
+          )
+        );
         SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
         SkyBlock::getInstance()->skyblock->save();
         return true;

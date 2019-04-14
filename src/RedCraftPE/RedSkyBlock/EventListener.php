@@ -2,7 +2,6 @@
 
 namespace RedCraftPE\RedSkyBlock;
 
-use pocketmine\event\block\BlockUpdateEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerBucketEvent;
@@ -10,8 +9,6 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\Listener;
-use pocketmine\block\Block;
-use pocketmine\block\Water;
 use pocketmine\utils\TextFormat;
 
 class EventListener implements Listener {
@@ -19,6 +16,8 @@ class EventListener implements Listener {
   private $plugin;
 
   private $level;
+
+  private $valuableBlocks = Array(57 => 5, 41 => 4, 42 => 3, 152 => 2, 22 => 2, 173 => 1);
 
   public function __construct($plugin, $level) {
 
@@ -69,6 +68,12 @@ class EventListener implements Listener {
         return;
       } else if (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
 
+        if (array_key_exists($block->getID(), $this->valuableBlocks)) {
+
+          $skyblockArray[$islandOwner]["Value"] += $this->valuableBlocks[$block->getID()];
+          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
+          SkyBlock::getInstance()->skyblock->save();
+        }
         return;
       } else {
 
@@ -119,6 +124,12 @@ class EventListener implements Listener {
         return;
       } elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
 
+        if (array_key_exists($block->getID(), $this->valuableBlocks)) {
+
+          $skyblockArray[$islandOwner]["Value"] -= $this->valuableBlocks[$block->getID()];
+          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
+          SkyBlock::getInstance()->skyblock->save();
+        }
         return;
       } else {
 
@@ -229,36 +240,6 @@ class EventListener implements Listener {
 
         $event->setCancelled(true);
         $player->sendMessage(TextFormat::RED . "You cannot use this here!");
-        return;
-      }
-    }
-  }
-  public function onUpdate(BlockUpdateEvent $event) {
-
-    $plugin = $this->plugin;
-
-    if ($plugin->cfg->get("CobbleGen")) {
-
-      $block = $event->getBlock();
-      $isTouchingLava = false;
-
-      if ($block instanceof Water) {
-
-        for ($side = 2;$side <= 5;$side++) {
-
-          if ($block->getSide($side)->getId() === 10) {
-
-            $isTouchingLava = true;
-            break;
-          }
-        }
-      }
-      if ($isTouchingLava) {
-
-        $oresArray = SkyBlock::getInstance()->cfg->get("MagicCobbleGen Ores", []);
-        $blockID = intval($oresArray[array_rand($oresArray)]);
-
-        $block->getLevel()->setBlock($block, Block::get($blockID));
         return;
       }
     }

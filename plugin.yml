@@ -75,3 +75,12 @@ permissions:
     skyblock.setspawn:
       description: With this permission players can set the spawn position of their own island.
       default: true
+    skyblock.size:
+      description: With this permission players can change the island boundaries of users.
+      default: op
+    skyblock.rank:
+      description: With this permission players can view their island's rank.
+      default: true
+    skyblock.top:
+      description: With this permission players can view the top island on the server.
+      default: true

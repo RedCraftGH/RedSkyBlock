@@ -40,6 +40,8 @@ class Info {
           $bannedArray = $skyblockArray[$name]["Banned"];
           $bannedCount = count($skyblockArray[$name]["Banned"]);
           $banned = implode(", ", $bannedArray);
+          $rank = SkyBlock::getInstance()->calcRank($name);
+          $value = $skyblockArray[$name]["Value"];
           if ($skyblockArray[$name]["Locked"] === true) {
 
             $isLocked = "Yes";
@@ -48,7 +50,7 @@ class Info {
             $isLocked = "No";
           }
 
-          $sender->sendMessage(TextFormat::RED . $owner . "'s Island Info: \n" . TextFormat::GRAY . "Owner: {$owner} \n" . "Island Name: {$islandName} \n" . "Total Members: {$memberCount} \n" . "Members: {$members} \n" . "Total Banned Players: {$bannedCount} \n" . "Banned: {$banned} \n" . "Locked: {$isLocked}");
+          $sender->sendMessage(TextFormat::RED . $owner . "'s Island Info: \n" . TextFormat::GRAY . "Owner: {$owner} \n" . "Island Name: {$islandName} \n" . "Island Rank: #{$rank} \n" . "Island Value: {$value} \n" . "Total Members: {$memberCount} \n" . "Members: {$members} \n" . "Total Banned Players: {$bannedCount} \n" . "Banned: {$banned} \n" . "Locked: {$isLocked}");
           return true;
         } else {
 

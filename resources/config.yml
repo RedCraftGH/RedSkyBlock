@@ -74,4 +74,9 @@ KeepInventory: off
 # This limits the amount of members a player can have on their island. Set the number to 0 to disable
 # member limits. The default is a 3 member limit.
 MemberLimit: 3
+
+# This is the initial island size for a player when they first generate their island. This amount is
+# equal to the length and width of a player's available island space.
+# For example: Making this number 100 would give each new player 100x100 available space for their island.
+Island Size: 100
 ...

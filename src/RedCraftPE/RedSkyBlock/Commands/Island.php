@@ -12,9 +12,11 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Ban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Custom;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Decrease;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Delete;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Help;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Hunger;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Increase;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Info;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Kick;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
@@ -45,9 +47,11 @@ class Island {
   private $create;
   private $createWorld;
   private $custom;
+  private $decrease;
   private $delete;
   private $help;
   private $hunger;
+  private $increase;
   private $info;
   private $kick;
   private $lock;
@@ -80,9 +84,11 @@ class Island {
     $this->create = new Create();
     $this->createWorld = new CreateWorld($this->plugin);
     $this->custom = new Custom();
+    $this->decrease = new Decrease();
     $this->delete = new Delete();
     $this->help = new Help();
     $this->hunger = new Hunger();
+    $this->increase = new Increase();
     $this->info = new Info();
     $this->kick = new Kick();
     $this->lock = new Lock();
@@ -137,6 +143,10 @@ class Island {
 
             return $this->custom->onCustomCommand($sender, $args);
           break;
+          case "decrease":
+
+            return $this->decrease->onDecreaseCommand($sender, $args);
+          break;
           case "delete":
 
             return $this->delete->onDeleteCommand($sender, $args);
@@ -148,6 +158,10 @@ class Island {
           case "hunger":
 
             return $this->hunger->onHungerCommand($sender, $args);
+          break;
+          case "increase":
+
+            return $this->increase->onIncreaseCommand($sender, $args);
           break;
           case "info":
 
