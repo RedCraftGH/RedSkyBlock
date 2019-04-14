@@ -2,12 +2,15 @@
 [![](https://poggit.pmmp.io/shield.api/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 [![](https://poggit.pmmp.io/shield.dl.total/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 
-> __*Quick Plugin Check:*__ The Plugin is now usable and functioning and ready for use.
+> __*Quick Plugin Check:*__ RedSkyBlock is currently in Alpha! Be wary that bugs may appear, but I am actively looking for and fixing new bugs. The plugin is ready for use.
 
 <img src="https://github.com/RedCraftGH/RedSkyBlock/blob/master/icon.png" width="100" height="100" align="left"></img>
 
 # RedSkyBlock
 RedSkyBlock aims to be a feature rich, user-friendly SkyBlock plugin. RedSkyBlock includes many useful, built-in features that can be edited in the config.yml and with the use of some commands in-game.
+
+# Discord
+Join the [Red Development](https://discord.gg/8s2sbvr) Discord for support and more.
 
 # Installation and Support
 Installing this plugin on your server is super easy to do! Just download the RedSkyBlock.phar file from poggit and plop it into your server's plugins folder.
@@ -24,8 +27,8 @@ If you wish to request features, or notify me about an issue, please, make an is
   - [x] Deep customization in config.yml
   - [x] Island Members (Configurable in the config.yml)
   - [x] Island Kick/Ban
-  - [ ] Island Top (Implemented in the next update)
-  - [x] Island Limits (Customizable in the next update)
+  - [x] Island Top
+  - [x] Island Limits
 - Mechanics
   - [x] Island generation intervals (customizable in the config.yml)
   - [x] Starting SkyBlock items (Customizable in the config.yml)
