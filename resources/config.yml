@@ -79,4 +79,17 @@ MemberLimit: 3
 # equal to the length and width of a player's available island space.
 # For example: Making this number 100 would give each new player 100x100 available space for their island.
 Island Size: 100
+
+# These are the blocks that increase island value when placed. It follows this format: "id: value"
+# Id is the item id for an item in Minecraft, for example: stone's id is 1.
+# Value is the amount by which a player's island worth increases each time they place a block in this array.
+# For reference, by default, when a player places a diamond block on their island, their island's value increase by 5
+# You can have add as many block-value pairs to this array, just follow the format as shown below.
+Valuable Blocks:
+  57: 5
+  41: 4
+  42: 3
+  152: 2
+  22: 2
+  173: 1
 ...

@@ -3,6 +3,7 @@
 namespace RedCraftPE\RedSkyBlock\Generators;
 
 use pocketmine\block\Block;
+use pocketmine\block\BlockFactory;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 use pocketmine\level\generator\object\Tree;
@@ -30,10 +31,10 @@ class IslandGenerator {
 
             if ($y < 17) {
 
-              $level->setBlock(new Vector3($x, $y, $z), Block::get(1));
+              $level->setBlock(new Vector3($x, $y, $z), BlockFactory::get(Block::STONE));
             } else {
 
-              $level->setBlock(new Vector3($x, $y, $z), Block::get(2));
+              $level->setBlock(new Vector3($x, $y, $z), BlockFactory::get(Block::GRASS));
             }
             if ($x === ($islands * $interval) + 1 && $z === $islands * $interval && $y === 17) {
 
@@ -50,10 +51,10 @@ class IslandGenerator {
 
             if ($y < 17) {
 
-              $level->setBlock(new Vector3($x, $y, $z), Block::get(1));
+              $level->setBlock(new Vector3($x, $y, $z), BlockFactory::get(Block::STONE));
             } else {
 
-              $level->setBlock(new Vector3($x, $y, $z), Block::get(2));
+              $level->setBlock(new Vector3($x, $y, $z), BlockFactory::get(Block::GRASS));
             }
           }
         }

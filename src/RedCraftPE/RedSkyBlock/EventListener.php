@@ -11,13 +11,13 @@ use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\Listener;
 use pocketmine\utils\TextFormat;
 
+use RedCraftPE\RedSkyBlock\SkyBlock;
+
 class EventListener implements Listener {
 
   private $plugin;
 
   private $level;
-
-  private $valuableBlocks = Array(57 => 5, 41 => 4, 42 => 3, 152 => 2, 22 => 2, 173 => 1);
 
   public function __construct($plugin, $level) {
 
@@ -32,11 +32,7 @@ class EventListener implements Listener {
     $block = $event->getBlock();
     $level = $this->level;
     $plugin = $this->plugin;
-
-    if ($player->hasPermission("skyblock.bypass")) {
-
-      return;
-    }
+    $valuableBlocks = $plugin->cfg->get("Valuable Blocks", []);
 
     if ($player->getLevel() === $level) {
 
@@ -63,19 +59,29 @@ class EventListener implements Listener {
       }
       if ($islandOwner === "") {
 
+        if ($player->hasPermission("skyblock.bypass")) {
+
+          return;
+        }
+
         $event->setCancelled(true);
         $player->sendMessage(TextFormat::RED . "You cannot build here!");
         return;
       } else if (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
 
-        if (array_key_exists($block->getID(), $this->valuableBlocks)) {
+        if (array_key_exists($block->getID(), $valuableBlocks)) {
 
-          $skyblockArray[$islandOwner]["Value"] += $this->valuableBlocks[$block->getID()];
-          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-          SkyBlock::getInstance()->skyblock->save();
+          $skyblockArray[$islandOwner]["Value"] += $valuableBlocks[$block->getID()];
+          $plugin->skyblock->set("SkyBlock", $skyblockArray);
+          $plugin->skyblock->save();
         }
         return;
       } else {
+
+        if ($player->hasPermission("skyblock.bypass")) {
+
+          return;
+        }
 
         $event->setCancelled(true);
         $player->sendMessage(TextFormat::RED . "You cannot build here!");
@@ -88,14 +94,11 @@ class EventListener implements Listener {
     $player = $event->getPlayer();
     $block = $event->getBlock();
     $level = $this->level;
+    $plugin = $this->plugin;
+    $valuableBlocks = $plugin->cfg->get("Valuable Blocks", []);
 
-    if ($player->hasPermission("skyblock.bypass")) {
-
-      return;
-    }
     if ($player->getLevel() === $level) {
 
-      $plugin = $this->plugin;
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
       $blockX = $block->getX();
       $blockY = $block->getY();
@@ -119,19 +122,29 @@ class EventListener implements Listener {
       }
       if ($islandOwner === "") {
 
+        if ($player->hasPermission("skyblock.bypass")) {
+
+          return;
+        }
+
         $event->setCancelled(true);
         $player->sendMessage(TextFormat::RED . "You cannot break blocks here!");
         return;
       } elseif (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
 
-        if (array_key_exists($block->getID(), $this->valuableBlocks)) {
+        if (array_key_exists($block->getID(), $valuableBlocks)) {
 
-          $skyblockArray[$islandOwner]["Value"] -= $this->valuableBlocks[$block->getID()];
-          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-          SkyBlock::getInstance()->skyblock->save();
+          $skyblockArray[$islandOwner]["Value"] -= $valuableBlocks[$block->getID()];
+          $plugin->skyblock->set("SkyBlock", $skyblockArray);
+          $plugin->skyblock->save();
         }
         return;
       } else {
+
+        if ($player->hasPermission("skyblock.bypass")) {
+
+          return;
+        }
 
         $event->setCancelled(true);
         $player->sendMessage(TextFormat::RED . "You cannot break blocks here!");
