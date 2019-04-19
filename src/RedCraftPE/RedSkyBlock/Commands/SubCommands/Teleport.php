@@ -85,12 +85,12 @@ class Teleport {
                 return true;
               } else {
 
-                $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " has banned you from their island.");
+                $sender->sendMessage(TextFormat::WHITE . $skyblockArray[$name]["Members"][0] . TextFormat::RED . " has banned you from their island.");
                 return true;
               }
             } else {
 
-              $sender->sendMessage(TextFormat::WHITE . implode(" ", array_slice($args, 1)) . "'s is locked.");
+              $sender->sendMessage(TextFormat::WHITE . $skyblockArray[$name]["Members"][0] . "'s is locked.");
               return true;
             }
           } else {

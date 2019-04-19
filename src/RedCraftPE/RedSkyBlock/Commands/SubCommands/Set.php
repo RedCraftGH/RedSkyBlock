@@ -4,6 +4,8 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
+use pocketmine\block\BlockFactory;
+use pocketmine\block\Block;
 
 use RedCraftPE\RedSkyBlock\SkyBlock;
 
@@ -39,6 +41,23 @@ class Set {
               $block = $level->getBlockAt($x, $y, $z, true, false);
               $blockID = $block->getID();
               $blockDamage = $block->getDamage();
+
+              if ($blockID === BlockFactory::get(Block::LEAVES)->getID() || $blockID === BlockFactory::get(Block::LEAVES2)->getID()) {
+
+                $oakNoDecay = [0, 4, 12];
+                $spruceNoDecay = [1, 5, 13];
+                $birchNoDecay = [2, 6, 14];
+                $jungleNoDecay = [3, 7, 15];
+                $acaciaNoDecay = [0, 4, 12];
+                $darkNoDecay = [1, 5, 13];
+
+                if (in_array($blockDamage, $oakNoDecay) && $blockID === BlockFactory::get(Block::LEAVES)->getID()) $blockDamage = 8;
+                if (in_array($blockDamage, $spruceNoDecay) && $blockID === BlockFactory::get(Block::LEAVES)->getID()) $blockDamage = 9;
+                if (in_array($blockDamage, $birchNoDecay) && $blockID === BlockFactory::get(Block::LEAVES)->getID()) $blockDamage = 10;
+                if (in_array($blockDamage, $jungleNoDecay) && $blockID === BlockFactory::get(Block::LEAVES)->getID()) $blockDamage = 11;
+                if (in_array($blockDamage, $acaciaNoDecay) && $blockID === BlockFactory::get(Block::LEAVES2)->getID()) $blockDamage = 8;
+                if (in_array($blockDamage, $darkNoDecay) && $blockID === BlockFactory::get(Block::LEAVES2)->getID()) $blockDamage = 9;
+              }
 
               array_push($blocksArray, $blockID . " " . $blockDamage);
             }

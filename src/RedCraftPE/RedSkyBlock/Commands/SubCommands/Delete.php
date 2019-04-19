@@ -38,11 +38,11 @@ class Delete {
 
         if (array_key_exists($playerName, $skyblockArray)) {
 
+          $sender->sendMessage(TextFormat::GREEN . "You have successfully deleted " . TextFormat::WHITE . $skyblockArray[$playerName]["Members"][0] . "'s " . TextFormat::GREEN . "island.");
           unset($skyblockArray[$playerName]);
 
           SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
           SkyBlock::getInstance()->skyblock->save();
-          $sender->sendMessage(TextFormat::GREEN . "You have successfully deleted " . TextFormat::WHITE . implode(" ", array_slice($args, 1)) . "'s " . TextFormat::GREEN . "island.");
           return true;
         } else {
 

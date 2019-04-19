@@ -35,7 +35,7 @@ class Help {
             return true;
           } else if ($page === 2) {
 
-            $sender->sendMessage(TextFormat::RED . "SkyBlock Help Menu (2/6): \n" . TextFormat::WHITE . "/is custom <on/off>: This command enables/disabled custom SkyBlock islands. \n" . "/is decrease <amount> <player>: This command is used to decrease the size of a player's island. \n" . "/is delete <player>: This command is used to delete a player's island. \n" . "/is help [page#]: Use this command to open the SkyBlock help menu. \n" . "/is hunger <on/off>: Use this command to control player's hunger in the SkyBlock world.");
+            $sender->sendMessage(TextFormat::RED . "SkyBlock Help Menu (2/6): \n" . TextFormat::WHITE . "/is custom <on/off>: This command enables/disabled custom SkyBlock islands. \n" . "/is decrease <amount> <player>: This command is used to decrease the size of a player's island. \n" . "/is delete <player>: This command is used to delete a player's island. \n" . "/is fly: Use this command to enable flight in the SkyBlock world. \n" . "/is help [page#]: Use this command to open the SkyBlock help menu. \n" . "/is hunger <on/off>: Use this command to control player's hunger in the SkyBlock world.");
             return true;
           } else if ($page === 3) {
 

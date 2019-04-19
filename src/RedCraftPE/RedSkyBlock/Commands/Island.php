@@ -14,6 +14,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Custom;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Decrease;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Delete;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Fly;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Help;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Hunger;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Increase;
@@ -49,6 +50,7 @@ class Island {
   private $custom;
   private $decrease;
   private $delete;
+  private $fly;
   private $help;
   private $hunger;
   private $increase;
@@ -86,6 +88,7 @@ class Island {
     $this->custom = new Custom();
     $this->decrease = new Decrease();
     $this->delete = new Delete();
+    $this->fly = new Fly();
     $this->help = new Help();
     $this->hunger = new Hunger();
     $this->increase = new Increase();
@@ -150,6 +153,10 @@ class Island {
           case "delete":
 
             return $this->delete->onDeleteCommand($sender, $args);
+          break;
+          case "fly":
+
+            return $this->fly->onFlyCommand($sender);
           break;
           case "help":
 

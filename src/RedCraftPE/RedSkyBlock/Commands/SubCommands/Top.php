@@ -32,31 +32,38 @@ class Top {
       $fourthValue = 0;
       $fifth = "N/A";
       $fifthValue = 0;
+      $values = [];
+      $copyOfArray = $skyblockArray;
 
       foreach(array_keys($skyblockArray) as $user) {
 
         $value = $skyblockArray[$user]["Value"];
-        if ($value > $firstValue || ($value >= $firstValue && $first === "N/A")) {
+        $values[] = $value;
+        rsort($values);
+      }
 
-          $first = $user;
-          $firstValue = $value;
-        } else if ($value > $secondValue || ($value >= $secondValue && $second === "N/A")) {
+      $counter = count($skyblockArray);
+      if ($counter > 5) {
 
-          $second = $user;
-          $secondValue = $value;
-        } else if ($value > $thirdValue || ($value >= $thirdValue && $third === "N/A")) {
+        $counter = 5;
+      }
 
-          $third = $user;
-          $thirdValue = $value;
-        } else if ($value > $fourthValue || ($value >= $fourthValue && $fourth === "N/A")) {
+      for ($i = 1; $i <= count($skyblockArray); $i++) {
 
-          $fourth = $user;
-          $fourthValue = $value;
-        } else if ($value > $fifthValue || ($value >= $fifthValue && $fifth === "N/A")) {
+        $value = $values[$i - 1];
 
-          $fifth = $user;
-          $fifthValue = $value;
-        }
+        $NameIndex = array_search($value, array_column($copyOfArray, "Value"));
+        $keys = array_keys($copyOfArray);
+        $NameValue = $copyOfArray[$keys[$NameIndex]];
+        $Name = array_search($NameValue, $copyOfArray);
+
+        if ($i === 1) {$first = $NameValue["Members"][0]; $firstValue = $value;}
+        if ($i === 2) {$second = $NameValue["Members"][0]; $secondValue = $value;}
+        if ($i === 3) {$third = $NameValue["Members"][0]; $thirdValue = $value;}
+        if ($i === 4) {$fourth = $NameValue["Members"][0]; $fourthValue = $value;}
+        if ($i === 5) {$fifth = $NameValue["Members"][0]; $fifthValue = $value;}
+
+        unset($copyOfArray[$Name]);
       }
 
       $sender->sendMessage(TextFormat::GREEN . "The Top 5 Islands on this Server: \n" . TextFormat::WHITE . "#1: " . TextFormat::GRAY . "{$first} " . TextFormat::WHITE . "Worth: " . TextFormat::GRAY . "{$firstValue} \n" . TextFormat::WHITE . "#2: " . TextFormat::GRAY . "{$second}  " . TextFormat::WHITE . "Worth: " . TextFormat::GRAY . "{$secondValue} \n" . TextFormat::WHITE . "#3: " . TextFormat::GRAY . "{$third} " . TextFormat::WHITE . "Worth: " . TextFormat::GRAY . "{$thirdValue} \n" . TextFormat::WHITE . "#4: " . TextFormat::GRAY . "{$fourth}  " . TextFormat::WHITE . "Worth: " . TextFormat::GRAY . "{$fourthValue} \n" . TextFormat::WHITE . "#5: " . TextFormat::GRAY . "{$fifth} " . TextFormat::WHITE . "Worth: " . TextFormat::GRAY . "{$fifthValue}");

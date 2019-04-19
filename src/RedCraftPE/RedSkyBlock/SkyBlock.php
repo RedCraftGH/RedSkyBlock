@@ -103,16 +103,16 @@ class SkyBlock extends PluginBase {
   public function calcRank(string $name): int {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $userValue = $skyblockArray[$name]["Value"];
-    $rank = 1;
+    $users = [];
 
     foreach(array_keys($skyblockArray) as $user) {
 
-      if ($skyblockArray[$user]["Value"] > $userValue) {
-
-        $rank++;
-      }
+      $userValue = $skyblockArray[$user]["Value"];
+      $users[$user] = $userValue;
     }
+
+    arsort($users);
+    $rank = array_search($name, array_keys($users)) + 1;
 
     return $rank;
   }

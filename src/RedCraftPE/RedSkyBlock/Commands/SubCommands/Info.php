@@ -33,7 +33,7 @@ class Info {
         if (array_key_exists($name, $skyblockArray)) {
 
           $islandName = $skyblockArray[$name]["Name"];
-          $owner = implode(" ", array_slice($args, 1));
+          $owner = $skyblockArray[$name]["Members"][0];
           $membersArray = $skyblockArray[$name]["Members"];
           $members = implode(", ", $membersArray);
           $memberCount = count($skyblockArray[$name]["Members"]);

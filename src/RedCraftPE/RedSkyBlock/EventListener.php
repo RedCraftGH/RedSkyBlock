@@ -10,6 +10,8 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\Listener;
 use pocketmine\utils\TextFormat;
+use pocketmine\Player;
+use pocketmine\event\entity\EntityLevelChangeEvent;
 
 use RedCraftPE\RedSkyBlock\SkyBlock;
 
@@ -294,6 +296,30 @@ class EventListener implements Listener {
     if ($keepInventory === "on") {
 
       $event->setKeepInventory(true);
+    }
+  }
+  public function onLevelChange(EntityLevelChangeEvent $event) {
+
+    $entity = $event->getEntity();
+    $target = $event->getTarget();
+    $plugin = $this->plugin;
+
+    if ($entity instanceof Player) {
+
+      if ($target->getFolderName() !== $plugin->cfg->get("SkyBlockWorld")) {
+
+        if ($entity->getAllowFlight()) {
+
+          if ($entity->getGamemode() !== 1) {
+
+            if ($entity->isFlying()) {
+
+              $entity->setFlying(false);
+            }
+            $entity->setAllowFlight(false);
+          }
+        }
+      }
     }
   }
 }
