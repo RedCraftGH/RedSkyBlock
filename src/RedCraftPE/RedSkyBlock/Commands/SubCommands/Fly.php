@@ -22,6 +22,12 @@ class Fly {
 
       if ($sender->getLevel()->getFolderName() === SkyBlock::getInstance()->cfg->get("SkyBlockWorld")) {
 
+        $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
+        $playerX = $sender->getX();
+        $playerY = $sender->getY();
+        $playerZ = $sender->getZ();
+        $islandOwner = "";
+
         if ($sender->getAllowFlight()) {
 
           $sender->setFlying(false);
@@ -30,9 +36,44 @@ class Fly {
           return true;
         } else {
 
-          $sender->setAllowFlight(true);
-          $sender->sendMessage(TextFormat::GREEN . "Flight has been enabled.");
-          return true;
+          foreach (array_keys($skyblockArray) as $skyblocks) {
+
+            $startX = $skyblockArray[$skyblocks]["Area"]["start"]["X"];
+            $startY = $skyblockArray[$skyblocks]["Area"]["start"]["Y"];
+            $startZ = $skyblockArray[$skyblocks]["Area"]["start"]["Z"];
+            $endX = $skyblockArray[$skyblocks]["Area"]["end"]["X"];
+            $endY = $skyblockArray[$skyblocks]["Area"]["end"]["Y"];
+            $endZ = $skyblockArray[$skyblocks]["Area"]["end"]["Z"];
+
+            if ($playerX > $startX && $playerY > $startY && $playerZ > $startZ && $playerX < $endX && $playerY < $endY && $playerZ < $endZ) {
+
+              $islandOwner = $skyblocks;
+              break;
+            }
+          }
+          if ($islandOwner === "") {
+
+            $sender->setAllowFlight(true);
+            $sender->sendMessage(TextFormat::GREEN . "Flight has been enabled.");
+            return true;
+          } else if (in_array($sender->getName(), $skyblockArray[$islandOwner]["Members"])) {
+
+            $sender->setAllowFlight(true);
+            $sender->sendMessage(TextFormat::GREEN . "Flight has been enabled.");
+            return true;
+          } else {
+
+            if ($skyblockArray[$islandOwner]["Settings"]["Fly"] === "on") {
+
+              $sender->setAllowFlight(true);
+              $sender->sendMessage(TextFormat::GREEN . "Flight has been enabled.");
+              return true;
+            } else {
+
+              $sender->sendMessage(TextFormat::RED . "The owner of this island has disabled flight here.");
+              return true;
+            }
+          }
         }
       } else {
 

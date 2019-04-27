@@ -1,6 +1,6 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 3.0.3
+version: 3.1.0
 api: 3.0.0, 4.0.0
 main: RedCraftPE\RedSkyBlock\SkyBlock
 commands:
@@ -87,3 +87,6 @@ permissions:
     skyblock.fly:
       description: With this permission players can fly in the SkyBlock world.
       default: false
+    skyblock.island.settings:
+      description: With this permission players can change their island settings.
+      default: true

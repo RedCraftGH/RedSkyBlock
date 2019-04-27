@@ -67,6 +67,10 @@ Hunger: on
 # while they are in the SkyBlock world.
 Void: on
 
+# There are two values for PVP: on and off. If PVP is off then players will not be able to PVP
+# while they are in the SkyBlock world.
+PVP: off
+
 # There are two values for keep inventory: on and off. If it is on then players who die will not
 # lose the items in their inventory.
 KeepInventory: off

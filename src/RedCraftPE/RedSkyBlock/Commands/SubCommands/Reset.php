@@ -113,6 +113,23 @@ class Reset {
               "Y" => 256,
               "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) + ($initialSize / 2)
             )
+          ),
+          "Settings" => Array(
+            "Build" => "on",
+            "Break" => "on",
+            "Pickup" => "on",
+            "Anvil" => "on",
+            "Chest" => "on",
+            "CraftingTable" => "off",
+            "Fly" => "on",
+            "Hopper" => "on",
+            "Brewing" => "off",
+            "Beacon" => "on",
+            "Buckets" => "off",
+            "PVP" => "on",
+            "FlintAndSteel" => "off",
+            "Furnace" => "on",
+            "EnderChest" => "on"
           )
         );
         SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);

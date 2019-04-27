@@ -23,19 +23,26 @@ class Name {
 
       $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
       $senderName = strtolower($sender->getName());
-      $name = $skyblockArray[$senderName]["Name"];
+      if (array_key_exists($senderName, $skyblockArray)) {
 
-      if (count($args) < 2) {
+        $name = $skyblockArray[$senderName]["Name"];
 
-        $sender->sendMessage(TextFormat::GREEN . "Your island's name is " . TextFormat::WHITE . $name);
-        return true;
+        if (count($args) < 2) {
+
+          $sender->sendMessage(TextFormat::GREEN . "Your island's name is " . TextFormat::WHITE . $name);
+          return true;
+        } else {
+
+          $name = (string) implode(" ", array_slice($args, 1));
+          $skyblockArray[$senderName]["Name"] = $name;
+          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
+          SkyBlock::getInstance()->skyblock->save();
+          $sender->sendMessage(TextFormat::GREEN . "Your island's name is now " . TextFormat::WHITE . $name);
+          return true;
+        }
       } else {
 
-        $name = (string) implode(" ", array_slice($args, 1));
-        $skyblockArray[$senderName]["Name"] = $name;
-        SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-        SkyBlock::getInstance()->skyblock->save();
-        $sender->sendMessage(TextFormat::GREEN . "Your island's name is now " . TextFormat::WHITE . $name);
+        $sender->sendMessage(TextFormat::RED . "You have not created an island yet.");
         return true;
       }
     } else {

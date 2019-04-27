@@ -34,18 +34,18 @@ class CreateWorld {
           return true;
         } else {
 
-          $levelName = (string) implode(" ", array_slice($args, 1));
+          $world = (string) implode(" ", array_slice($args, 1));
 
-          if (SkyBlock::getInstance()->getServer()->isLevelLoaded($levelName)) {
+          if (SkyBlock::getInstance()->getServer()->isLevelLoaded($world)) {
 
             $sender->sendMessage(TextFormat::RED . "The world you are trying to create already exists.");
             return true;
           } else {
 
-            $this->worldGenerator->generateWorld($levelName);
-            SkyBlock::getInstance()->cfg->set("SkyBlockWorld", $levelName);
+            $this->worldGenerator->generateWorld($world);
+            SkyBlock::getInstance()->cfg->set("SkyBlockWorld", $world);
             SkyBlock::getInstance()->cfg->save();
-            $sender->sendMessage(TextFormat::WHITE . $levelName . TextFormat::GREEN . " has been created and set as the SkyBlock world in this server.");
+            $sender->sendMessage(TextFormat::WHITE . $world . TextFormat::GREEN . " has been created and set as the SkyBlock world in this server.");
             return true;
           }
         }

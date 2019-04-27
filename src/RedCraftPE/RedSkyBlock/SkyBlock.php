@@ -8,6 +8,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\block\BlockFactory;
+use pocketmine\Player;
 
 use RedCraftPE\RedSkyBlock\Commands\Island;
 use RedCraftPE\RedSkyBlock\Tasks\Generate;
@@ -82,6 +83,13 @@ class SkyBlock extends PluginBase {
 
       $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     }
+
+    if (!$this->cfg->exists("PVP")) {
+
+      $this->cfg->set("PVP", "off");
+      $this->cfg->save();
+    }
+
     $this->cfg->reload();
     $this->skyblock->reload();
   }
@@ -96,14 +104,21 @@ class SkyBlock extends PluginBase {
     }
     return false;
   }
+
+  //API FUNCTIONS:
   public static function getInstance(): self {
 
     return self::$instance;
   }
-  public function calcRank(string $name): int {
+  public function calcRank(string $name): string {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
     $users = [];
+
+    if (!array_key_exists($name, $skyblockArray)) {
+
+      return "N/A";
+    }
 
     foreach(array_keys($skyblockArray) as $user) {
 
@@ -114,6 +129,92 @@ class SkyBlock extends PluginBase {
     arsort($users);
     $rank = array_search($name, array_keys($users)) + 1;
 
-    return $rank;
+    return strval($rank);
+  }
+  public function getIslandName(Player $player): string {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $name = strtolower($player->getName());
+
+    if (!array_key_exists($name, $skyblockArray)) {
+
+      return "N/A";
+    }
+
+    return $skyblockArray[$name]["Name"];
+  }
+  public function getMembers(Player $player): string {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $name = strtolower($player->getName());
+
+    if (!array_key_exists($name, $skyblockArray)) {
+
+      return "N/A";
+    }
+
+    return implode(", ", $skyblockArray[$name]["Members"]);
+  }
+  public function getValue(Player $player): string {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $name = strtolower($player->getName());
+
+    if (!array_key_exists($name, $skyblockArray)) {
+
+      return "N/A";
+    }
+
+    return strval($skyblockArray[$name]["Value"]);
+  }
+  public function getBanned(Player $player): string {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $name = strtolower($player->getName());
+
+    if (!array_key_exists($name, $skyblockArray)) {
+
+      return "N/A";
+    }
+
+    return implode(", ", $skyblockArray[$name]["Banned"]);
+  }
+  public function getLockedStatus(Player $player): string {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $name = strtolower($player->getName());
+
+    if (!array_key_exists($name, $skyblockArray)) {
+
+      return "N/A";
+    }
+
+    if ($skyblockArray[$name]["Locked"]) {
+
+      return "Yes";
+    } else {
+
+      return "No";
+    }
+  }
+  public function getSize(Player $player): string {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $name = strtolower($player->getName());
+
+    if (!array_key_exists($name, $skyblockArray)) {
+
+      return "N/A";
+    }
+
+    $startX = intval($skyblockArray[$name]["Area"]["start"]["X"]);
+    $startZ = intval($skyblockArray[$name]["Area"]["start"]["Z"]);
+    $endX = intval($skyblockArray[$name]["Area"]["end"]["X"]);
+    $endZ = intval($skyblockArray[$name]["Area"]["end"]["Z"]);
+
+    $length = $endX - $startX;
+    $width = $endZ - $startZ;
+
+    return "{$length} x {$width}";
   }
 }

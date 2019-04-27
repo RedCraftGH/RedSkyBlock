@@ -32,6 +32,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Remove;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reset;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Set;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSpawn;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Settings;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Teleport;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Top;
@@ -68,6 +69,7 @@ class Island {
   private $reset;
   private $set;
   private $setSpawn;
+  private $settings;
   private $setWorld;
   private $teleport;
   private $top;
@@ -106,6 +108,7 @@ class Island {
     $this->reset = new Reset();
     $this->set = new Set();
     $this->setSpawn = new SetSpawn();
+    $this->settings = new Settings();
     $this->setWorld = new SetWorld();
     $this->teleport = new Teleport();
     $this->top = new Top();
@@ -227,6 +230,10 @@ class Island {
           case "setworld":
 
             return $this->setWorld->onSetWorldCommand($sender);
+          break;
+          case "settings":
+
+            return $this->settings->onSettingsCommand($sender);
           break;
           case "set":
 

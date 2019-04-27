@@ -81,6 +81,8 @@ class Teleport {
                 $z = $skyblockArray[$name]["Area"]["start"]["Z"];
 
                 $sender->teleport(new Position($skyblockArray[$name]["Spawn"]["X"], $skyblockArray[$name]["Spawn"]["Y"], $skyblockArray[$name]["Spawn"]["Z"], $level));
+                $sender->setFlying(false);
+                $sender->setAllowFlight(false);
                 $sender->sendMessage(TextFormat::GREEN . "Welcome to {$skyblockArray[$name]["Name"]}.");
                 return true;
               } else {

@@ -40,7 +40,7 @@ class Unlock {
         }
       } else {
 
-        $sender->sendMessage(TextFormat::RED . "You have not created an island yet.");
+        $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");
         return true;
       }
     } else {
