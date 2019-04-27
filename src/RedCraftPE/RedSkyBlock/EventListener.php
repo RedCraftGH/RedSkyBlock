@@ -453,7 +453,7 @@ class EventListener implements Listener {
         if ($islandOwner === "") {
 
           return;
-        } else if (in_array($player->getName(), $skyblockArray[$islandOwner]["Members"])) {
+        } else if (in_array($entity->getName(), $skyblockArray[$islandOwner]["Members"])) {
 
           return;
         } else {
