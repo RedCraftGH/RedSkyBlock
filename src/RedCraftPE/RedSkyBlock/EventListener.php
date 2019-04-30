@@ -334,14 +334,16 @@ class EventListener implements Listener {
     }
   }
   public function onDeath(PlayerDeathEvent $event) {
-
+    
+    $player = $this->getPlayer();
     $plugin = $this->plugin;
     $keepInventory = $plugin->cfg->get("KeepInventory");
 
     if ($keepInventory === "on") {
 
       $event->setKeepInventory(true);
-    }
+    }else if($keepInventory === "off" && $player->hasPermission("skyblock.keepinv")){
+      $event->setKeepInventory(true);
   }
   public function onLevelChange(EntityLevelChangeEvent $event) {
 
