@@ -2,7 +2,7 @@
 [![](https://poggit.pmmp.io/shield.api/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 [![](https://poggit.pmmp.io/shield.dl.total/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 
-> __*Quick Plugin Check:*__ RedSkyBlock is no longer in ALPHA! No bugs found in current tests: still looking. Ready for use.
+> __*Quick Plugin Check:*__ RedSkyBlock is no longer in ALPHA! Lots and lots of bugs in the current release, use with caution.
 
 <img src="https://github.com/RedCraftGH/RedSkyBlock/blob/master/icon.png" width="100" height="100" align="left"></img>
 
