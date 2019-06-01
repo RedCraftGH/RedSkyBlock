@@ -31,14 +31,14 @@ class VoidClass {
 
         if ($args[1] === "on") {
 
-          $void = "on";
+          $void = true;
           SkyBlock::getInstance()->cfg->set("Void", $void);
           SkyBlock::getInstance()->cfg->save();
           $sender->sendMessage(TextFormat::GREEN . "The void has been enabled.");
           return true;
         } else if ($args[1] === "off") {
 
-          $void = "off";
+          $void = false;
           SkyBlock::getInstance()->cfg->set("Void", $void);
           SkyBlock::getInstance()->cfg->save();
           $sender->sendMessage(TextFormat::GREEN . "The void has been disabled.");

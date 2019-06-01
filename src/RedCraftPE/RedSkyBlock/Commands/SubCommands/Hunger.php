@@ -31,14 +31,14 @@ class Hunger {
 
         if ($args[1] === "on") {
 
-          $hunger = "on";
+          $hunger = true;
           SkyBlock::getInstance()->cfg->set("Hunger", $hunger);
           SkyBlock::getInstance()->cfg->save();
           $sender->sendMessage(TextFormat::GREEN . "Hunger has been enabled.");
           return true;
         } else if ($args[1] === "off") {
 
-          $hunger = "off";
+          $hunger = false;
           SkyBlock::getInstance()->cfg->set("Hunger", $hunger);
           SkyBlock::getInstance()->cfg->save();
           $sender->sendMessage(TextFormat::GREEN . "Hunger has been disabled.");

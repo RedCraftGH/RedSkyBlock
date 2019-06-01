@@ -19,8 +19,9 @@ class Fly {
   public function onFlyCommand(CommandSender $sender): bool {
 
     if ($sender->hasPermission("skyblock.fly")) {
+      $worldsArray = SkyBlock::getInstance()->cfg->get("SkyBlockWorlds", []);
 
-      if ($sender->getLevel()->getFolderName() === SkyBlock::getInstance()->cfg->get("SkyBlockWorld")) {
+      if (in_array($sender->getLevel()->getFolderName(), $worldsArray)) {
 
         $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
         $playerX = $sender->getX();

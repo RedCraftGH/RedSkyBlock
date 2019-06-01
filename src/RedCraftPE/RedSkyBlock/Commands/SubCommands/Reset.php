@@ -11,13 +11,15 @@ use pocketmine\item\Item;
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\Island;
 use RedCraftPE\RedSkyBlock\Tasks\Generate;
+use RedCraftPE\RedSkyBlock\Generators\WorldGenerator;
 
 class Reset {
 
   private static $instance;
 
-  public function __construct() {
+  public function __construct($plugin) {
 
+    $this->worldGenerator = new WorldGenerator($plugin);
     self::$instance = $this;
   }
 
@@ -32,109 +34,132 @@ class Reset {
       $islands = SkyBlock::getInstance()->skyblock->get("Islands");
       $initialSize = SkyBlock::getInstance()->cfg->get("Island Size");
       $senderName = strtolower($sender->getName());
-      $level = null;
+      $worldsArray = SkyBlock::getInstance()->cfg->get("SkyBlockWorlds", []);
+      $worldCount = (int) SkyBlock::getInstance()->skyblock->get("worlds");
+      $baseName = SkyBlock::getInstance()->cfg->get("SkyBlockWorld Base Name");
+      $cooldown = (int) SkyBlock::getInstance()->cfg->get("Reset Cooldown");
 
-      if ($levelName === "") {
+      if ($baseName === false) {
 
         $sender->sendMessage(TextFormat::RED . "You must set a SkyBlock world in order for this plugin to function properly.");
         return true;
-      } else {
+      }
+      $level = SkyBlock::getInstance()->getServer()->getLevelByName($baseName);
+      if (!$level) {
 
-        if (SkyBlock::getInstance()->getServer()->isLevelLoaded($levelName)) {
-
-          $level = SkyBlock::getInstance()->getServer()->getLevelByName($levelName);
-        } else {
-
-          if (SkyBlock::getInstance()->getServer()->loadLevel($levelName)) {
-
-            SkyBlock::getInstance()->getServer()->loadLevel($levelName);
-            $level = SkyBlock::getInstance()->getServer()->getLevelByName($levelName);
-          } else {
-
-            $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
-            return true;
-          }
-        }
+        $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
+        return true;
       }
 
       if (array_key_exists($senderName, $skyblockArray)) {
 
-        unset($skyblockArray[$senderName]);
-        SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-        SkyBlock::getInstance()->skyblock->save();
-        $sender->getInventory()->clearAll();
-        $sender->sendMessage(TextFormat::GREEN . "Your island has been completely reset.");
+        if (Time() >= (int) $skyblockArray[$senderName]["Reset Cooldown"]) {
 
-        if (SkyBlock::getInstance()->skyblock->get("Custom")) {
+          if ($islands >= SkyBlock::getInstance()->cfg->get("World Island Limit")) {
 
-          $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $level));
-        } else {
+            $worldCount++;
+            $this->worldGenerator->generateWorld($baseName . $worldCount);
+            $world = SkyBlock::getInstance()->getServer()->getLevelByName($baseName . $worldCount);
+            array_push($worldsArray, $baseName . $worldCount);
+            $islands = 0;
+            SkyBlock::getInstance()->cfg->set("SkyBlockWorlds", $worldsArray);
+            SkyBlock::getInstance()->cfg->save();
+            SkyBlock::getInstance()->skyblock->set("Islands", $islands);
+            SkyBlock::getInstance()->skyblock->set("worlds", $worldCount);
+          } else {
 
-          $sender->teleport(new Position($islands * $interval + 2, 15 + 3, $islands * $interval + 4, $level));
-        }
-        $sender->setImmobile(true);
-        SkyBlock::getInstance()->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
+            $world = SkyBlock::getInstance()->getServer()->getLevelByName(end($worldsArray));
+            if (!$world) {
 
-        foreach($itemsArray as $items) {
-
-          if (count($itemsArray) > 0) {
-
-            $itemArray = explode(" ", $items);
-            if (count($itemArray) === 3) {
-
-              $id = intval($itemArray[0]);
-              $damage = intval($itemArray[1]);
-              $count = intval($itemArray[2]);
-              $sender->getInventory()->addItem(Item::get($id, $damage, $count));
+              $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
+              return true;
             }
           }
-        }
 
-        SkyBlock::getInstance()->skyblock->setNested("Islands", $islands + 1);
-        $skyblockArray[$senderName] = Array(
-          "Name" => $sender->getName() . "'s Island",
-          "Members" => [$sender->getName()],
-          "Banned" => [],
-          "Locked" => false,
-          "Value" => 0,
-          "Spawn" => Array(
-            "X" => $sender->getX(),
-            "Y" => $sender->getY(),
-            "Z" => $sender->getZ()
-          ),
-          "Area" => Array(
-            "start" => Array(
-              "X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) - ($initialSize / 2),
-              "Y" => 0,
-              "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) - ($initialSize / 2)
+          unset($skyblockArray[$senderName]);
+          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
+          SkyBlock::getInstance()->skyblock->save();
+          $sender->getInventory()->clearAll();
+          $sender->sendMessage(TextFormat::GREEN . "Your island has been completely reset.");
+
+          if (SkyBlock::getInstance()->skyblock->get("Custom")) {
+
+            $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $world));
+          } else {
+
+            $sender->teleport(new Position($islands * $interval + 2, 15 + 3, $islands * $interval + 4, $world));
+          }
+          $sender->setImmobile(true);
+          SkyBlock::getInstance()->getScheduler()->scheduleDelayedTask(new Generate($islands, $world, $interval, $sender), 30);
+
+          foreach($itemsArray as $items) {
+
+            if (count($itemsArray) > 0) {
+
+              $itemArray = explode(" ", $items);
+              if (count($itemArray) === 3) {
+
+                $id = intval($itemArray[0]);
+                $damage = intval($itemArray[1]);
+                $count = intval($itemArray[2]);
+                $sender->getInventory()->addItem(Item::get($id, $damage, $count));
+              }
+            }
+          }
+
+          SkyBlock::getInstance()->skyblock->setNested("Islands", $islands + 1);
+          $skyblockArray[$senderName] = Array(
+            "Name" => $sender->getName() . "'s Island",
+            "Members" => [$sender->getName()],
+            "Banned" => [],
+            "Locked" => false,
+            "Value" => 0,
+            "World" => $world->getFolderName(),
+            "Reset Cooldown" => Time() + $cooldown,
+            "Challenges" => [],
+            "Spawn" => Array(
+              "X" => $sender->getX(),
+              "Y" => $sender->getY(),
+              "Z" => $sender->getZ()
             ),
-            "end" => Array(
-              "X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) + ($initialSize / 2),
-              "Y" => 256,
-              "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) + ($initialSize / 2)
+            "Area" => Array(
+              "start" => Array(
+                "X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) - ($initialSize / 2),
+                "Y" => 0,
+                "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) - ($initialSize / 2)
+              ),
+              "end" => Array(
+                "X" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX")) + ($initialSize / 2),
+                "Y" => 256,
+                "Z" => ($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ")) + ($initialSize / 2)
+              )
+            ),
+            "Settings" => Array(
+              "Build" => "on",
+              "Break" => "on",
+              "Pickup" => "on",
+              "Anvil" => "on",
+              "Chest" => "on",
+              "CraftingTable" => "off",
+              "Fly" => "off",
+              "Hopper" => "on",
+              "Brewing" => "off",
+              "Beacon" => "on",
+              "Buckets" => "on",
+              "PVP" => "off",
+              "FlintAndSteel" => "on",
+              "Furnace" => "on",
+              "EnderChest" => "off"
             )
-          ),
-          "Settings" => Array(
-            "Build" => "on",
-            "Break" => "on",
-            "Pickup" => "on",
-            "Anvil" => "on",
-            "Chest" => "on",
-            "CraftingTable" => "off",
-            "Fly" => "on",
-            "Hopper" => "on",
-            "Brewing" => "off",
-            "Beacon" => "on",
-            "Buckets" => "off",
-            "PVP" => "on",
-            "FlintAndSteel" => "off",
-            "Furnace" => "on",
-            "EnderChest" => "on"
-          )
-        );
-        SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-        SkyBlock::getInstance()->skyblock->save();
-        return true;
+          );
+          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
+          SkyBlock::getInstance()->skyblock->save();
+          return true;
+        } else {
+
+          $sender->sendMessage(TextFormat::RED . "You must wait " . TextFormat::WHITE . gmdate("H:i:s", $skyblockArray[$senderName]["Reset Cooldown"] - Time()) . TextFormat::RED . " before you are able to reset again.");
+          return true;
+        }
       } else {
 
         $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");

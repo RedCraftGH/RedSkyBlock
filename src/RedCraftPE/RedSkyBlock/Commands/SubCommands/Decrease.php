@@ -31,10 +31,10 @@ class Decrease {
 
           $name = strtolower(implode(" ", array_slice($args, 2)));
           $player = SkyBlock::getInstance()->getServer()->getPlayerExact(implode(" ", array_slice($args, 2)));
-          $amount = intval($args[1]);
+          $amount = round(intval($args[1]) / 2);
           if ($player) {
 
-            $player->sendMessage(TextFormat::GREEN . "Your island's limits have been decreased by {$amount}");
+            $player->sendMessage(TextFormat::GREEN . "Your island's limits have been decreased by {$args[1]}");
           }
           $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
 
@@ -63,7 +63,7 @@ class Decrease {
 
             SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
             SkyBlock::getInstance()->skyblock->save();
-            $sender->sendMessage(TextFormat::WHITE . $name . "'s" . TextFormat::GREEN . " island limits have been decreased by {$amount}");
+            $sender->sendMessage(TextFormat::WHITE . $name . "'s" . TextFormat::GREEN . " island limits have been decreased by {$args[1]}");
             return true;
           } else {
 

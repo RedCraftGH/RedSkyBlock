@@ -9,6 +9,8 @@ use pocketmine\utils\TextFormat;
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Add;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Ban;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Challenges;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Claim;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Custom;
@@ -20,10 +22,12 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Hunger;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Increase;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Info;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Kick;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Leave;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\MakeSpawn;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Members;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Name;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\On;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Pos1;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Pos2;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Rank;
@@ -46,6 +50,8 @@ class Island {
 
   private $add;
   private $ban;
+  private $challenges;
+  private $claim;
   private $create;
   private $createWorld;
   private $custom;
@@ -57,10 +63,12 @@ class Island {
   private $increase;
   private $info;
   private $kick;
+  private $leave;
   private $lock;
   private $makeSpawn;
   private $members;
   private $name;
+  private $on;
   private $pos1;
   private $pos2;
   private $rank;
@@ -85,7 +93,9 @@ class Island {
 
     $this->add = new Add();
     $this->ban = new Ban();
-    $this->create = new Create();
+    $this->challenges = new Challenges();
+    $this->claim = new Claim();
+    $this->create = new Create($this->plugin);
     $this->createWorld = new CreateWorld($this->plugin);
     $this->custom = new Custom();
     $this->decrease = new Decrease();
@@ -96,16 +106,18 @@ class Island {
     $this->increase = new Increase();
     $this->info = new Info();
     $this->kick = new Kick();
+    $this->leave = new Leave();
     $this->lock = new Lock();
     $this->makeSpawn = new MakeSpawn();
     $this->members = new Members();
     $this->name = new Name();
+    $this->on = new On();
     $this->pos1 = new Pos1();
     $this->pos2 = new Pos2();
     $this->rank = new Rank();
     $this->reload = new Reload();
     $this->remove = new Remove();
-    $this->reset = new Reset();
+    $this->reset = new Reset($this->plugin);
     $this->set = new Set();
     $this->setSpawn = new SetSpawn();
     $this->settings = new Settings();
@@ -135,6 +147,16 @@ class Island {
           case "expel":
 
             return $this->ban->onBanCommand($sender, $args);
+          break;
+          case "challenges":
+          case "challenge":
+
+            return $this->challenges->onChallengeCommand($sender, $args);
+          break;
+          case "claim":
+          case "complete":
+
+            return $this->claim->onClaimCommand($sender, $args);
           break;
           case "create":
 
@@ -181,6 +203,10 @@ class Island {
 
             return $this->kick->onKickCommand($sender, $args);
           break;
+          case "leave":
+
+            return $this->leave->onLeaveCommand($sender, $args);
+          break;
           case "close":
           case "lock":
 
@@ -199,6 +225,10 @@ class Island {
           case "name":
 
             return $this->name->onNameCommand($sender, $args);
+          break;
+          case "on":
+
+            return $this->on->onOnCommand($sender);
           break;
           case "pos1":
 
@@ -233,7 +263,7 @@ class Island {
           break;
           case "settings":
 
-            return $this->settings->onSettingsCommand($sender);
+            return $this->settings->onSettingsCommand($sender, $args);
           break;
           case "set":
 

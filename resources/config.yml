@@ -1,4 +1,8 @@
 ---
+# Do not change!
+Version: 1
+# Do not change!
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                                                                                                 #
 #  ██████╗ ███████╗██████╗  ███████╗██╗  ██╗██╗   ██╗ ██████╗ ██╗      ██████╗  ██████╗██╗  ██╗   #
@@ -10,16 +14,20 @@
 #                                                                                                 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# You can set the SkyBlock world that the plugin will use in your server by changing this variable.
+# It is not recommended that you manually edit this. Leave this to the plugin!
+# Changing this could stop the plugin from working correctly.
+SkyBlockWorld Base Name: false
+
+# You can set the SkyBlock worlds that the plugin will use in your server by changing this variable.
 # It is not recommended to change this in the config.yml.
 # It is safer to change this by doing /is setworld in-game.
 # The plugin will not function if you manually change this to an incorrect value.
-SkyBlockWorld: ""
+SkyBlockWorlds: []
 
 # The Interval is the distance between each Island.
-# A recommended Interval is between 200-500.
+# A recommended Interval is between 200-700. 500 is standard SkyBlock.
 # Any farther is useless, and any less will result in a very crowded skyblock world.
-Interval: 300
+Interval: 500
 
 # The magic cobblestone generator is automatically enabled when you first start up the plugin.
 # When enabled cobblestone generators will generate much more than just cobblestone.
@@ -27,20 +35,13 @@ Interval: 300
 CobbleGen: true
 
 # You can edit the below values to change what the magic cobblestone generator spawns.
-# To edit/add just put a block id into the list. If you want a higher chance of an ore
-# then put it in the list more than one time.
-# For example, here is the format for an ore generator that has a 1/5 chance of spawning a diamond blocks.
-# and a 4/5 chance of spawning cobblestone:
-# MagicCobbleGenOres:
-#  - 4
-#  - 4
-#  - 4
-#  - 4
-#  - 57
+# Just follow the format shown below: id:percent
+# id is the id of the block you would like to appear
+# percent is the percent chance out of 100 that the item will appear.
+# The percents MUST have a sum of 100, otherwise the spawner will only spawn cobblestone.
 MagicCobbleGen Ores:
-  - 4
-  - 4
-  - 21
+  4: 66
+  21: 34
 
 #The Starting Items are the items in SkyBlock that a player will recieve when they first generate their island.
 #These items can be edited in the config here. It is really simple and follows this format: "id, damage, count"
@@ -61,19 +62,19 @@ Starting Items:
 
 # There are two values for hunger: on and off. If hunger is off then players will no longer loose hunger
 # while they are in the SkyBlock world.
-Hunger: on
+Hunger: true
 
 # There are two values for void: on and off. If void is off then players who fall in the void will not die
 # while they are in the SkyBlock world.
-Void: on
+Void: true
 
 # There are two values for PVP: on and off. If PVP is off then players will not be able to PVP
 # while they are in the SkyBlock world.
-PVP: off
+PVP: false
 
 # There are two values for keep inventory: on and off. If it is on then players who die will not
 # lose the items in their inventory.
-KeepInventory: off
+KeepInventory: false
 
 # This limits the amount of members a player can have on their island. Set the number to 0 to disable
 # member limits. The default is a 3 member limit.
@@ -96,4 +97,77 @@ Valuable Blocks:
   152: 2
   22: 2
   173: 1
+
+# This is the amount of islands that can be generated in a world before a new world is created.
+# The amount of islands allowed in a world should be inverse to your interval.
+# So, if you have a high interval then you should make this number smaller.
+# And if you have a low interval make this number bigger.
+# Recommended world island limit is 80.
+World Island Limit: 80
+
+# This is the cooldown (in seconds) that a player must wait before using the /is reset command again.
+# You can disable the reset cooldown by setting this value to 0. 86400 is one day.
+Reset Cooldown: 86400
+
+# If void is disabled and this is true then players who fall in the void will be teleported back
+# To their island spawn points. If this is false then they will be teleported to the server spawn.
+Island Spawn: true
+
+# If this is true players who are visiting other islands can not take damage.
+# If this is false players who are visiting will take damage normally.
+Invincible Visitors: false
+
+# This is the maximum amount of characters allowed in a player's island name.
+Name Char Limit: 20
+
+# Set this to false if you would like to disable the built-in RedSkyBlock challenges feature.
+# Leave this enabled if you would like to use the built-in RedSkyBlock challenges feature.
+Enable Challenges: true
+
+# RedSkyBlock comes with a few built-in challenges AND it allows you to create some of your
+# own challenges for players. For an in-depth tutorial on all the types of challenges
+# you can create and how to create them visit the RedSkyBlock wiki here: https://github.com/RedCraftGH/RedSkyBlock/wiki
+Challenges:
+  easy:collect:4:0:64:Cobble Generator:
+    repeating: false
+    rewards:
+      - 5 value
+  easy:collect:173:0:5:Coal Collector:
+    repeating: false
+    rewards:
+      - 5 value
+      - "173:0:5"
+  easy:collect:17:0:5:Lumberjack:
+    repeating: false
+    rewards:
+      - 10 value
+  easy:add:1:0:0:Team Player:
+    repeating: false
+    rewards:
+      - 10 value
+      - "264:0:1"
+  intermediate:collect:296:0:32:Farmer:
+    repeating: false
+    rewards:
+      - 20 value
+  intermediate:place:57:0:5:Diamonds!!!:
+    repeating: false
+    rewards:
+      - 30 value
+  advanced:collect:12:0:10:Sand Man:
+    repeating: false
+    rewards:
+      - 40 value
+  advanced:collect:52:20:1:Golem Maker:
+    repeating: false
+    rewards:
+      - 75 value
+  advanced:collect:81:0:64:Cactus Farmer:
+    repeating: false
+    rewards:
+      - 40 value
+  advanced:collect:4:0:2000:Cobble Champion:
+    repeating: false
+    rewards:
+      - 35 value
 ...

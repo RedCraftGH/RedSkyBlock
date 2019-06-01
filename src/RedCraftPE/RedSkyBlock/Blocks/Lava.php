@@ -88,11 +88,28 @@ class Lava extends \pocketmine\block\Lava {
 				if (SkyBlock::getInstance()->cfg->get("CobbleGen")) {
 
 	        $oresArray = SkyBlock::getInstance()->cfg->get("MagicCobbleGen Ores", []);
-	        $blockID = intval($oresArray[array_rand($oresArray)]);
+	        if (array_sum($oresArray) > 100 || array_sum($oresArray) < 100) {
 
-	        $this->liquidCollide($colliding, Block::get($blockID));
+						$this->liquidCollide($colliding, BlockFactory::get(Block::COBBLESTONE));
+						return;
+					} else {
+
+						$chance = rand(1, 100);
+						$pChance = 0;
+						foreach($oresArray as $ore) {
+
+							$pChance += $ore;
+							if ($chance <= $pChance) {
+
+								$blockID = key($oresArray);
+								break;
+							}
+							next($oresArray);
+						}
+
+						$this->liquidCollide($colliding, Block::get($blockID));
+					}
 	      } else {
-
 	        $this->liquidCollide($colliding, BlockFactory::get(BlockIds::COBBLESTONE));
 	      }
 			}

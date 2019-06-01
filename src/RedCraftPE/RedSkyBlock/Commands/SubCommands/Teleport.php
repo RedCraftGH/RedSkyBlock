@@ -22,38 +22,28 @@ class Teleport {
 
     if ($sender->hasPermission("skyblock.create")) {
 
-      $levelName = SkyBlock::getInstance()->cfg->get("SkyBlockWorld");
+      $baseName = SkyBlock::getInstance()->cfg->get("SkyBlockWorld Base Name");
 
-      if ($levelName === "") {
+      if ($baseName === false) {
 
         $sender->sendMessage(TextFormat::RED . "You must set a SkyBlock world in order for this plugin to function properly.");
         return true;
-      } else {
+      }
+      $level = SkyBlock::getInstance()->getServer()->getLevelByName($baseName);
+      if (!$level) {
 
-        if (SkyBlock::getInstance()->getServer()->isLevelLoaded($levelName)) {
-
-          $level = SkyBlock::getInstance()->getServer()->getLevelByName($levelName);
-        } else {
-
-          if (SkyBlock::getInstance()->getServer()->loadLevel($levelName)) {
-
-            SkyBlock::getInstance()->getServer()->loadLevel($levelName);
-            $level = SkyBlock::getInstance()->getServer()->getLevelByName($levelName);
-          } else {
-
-            $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
-            return true;
-          }
-        }
+        $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
+        return true;
       }
 
-      $level = SkyBlock::getInstance()->getServer()->getLevelByName($levelName);
       $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
       $senderName = strtolower($sender->getName());
 
       if (count($args) < 2) {
 
         if (array_key_exists($senderName, $skyblockArray)) {
+
+          $level = SkyBlock::getInstance()->getServer()->getLevelByName($skyblockArray[$senderName]["World"]);
 
           $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
           $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
@@ -73,6 +63,8 @@ class Teleport {
           $name = strtolower(implode(" ", array_slice($args, 1)));
 
           if (array_key_exists($name, $skyblockArray)) {
+
+            $level = SkyBlock::getInstance()->getServer()->getLevelByName($skyblockArray[$name]["World"]);
 
             if ($skyblockArray[$name]["Locked"] === false || in_array($sender->getName(), $skyblockArray[$name]["Members"])) {
 

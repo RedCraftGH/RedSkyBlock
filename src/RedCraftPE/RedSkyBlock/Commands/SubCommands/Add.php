@@ -39,7 +39,7 @@ class Add {
 
           if (array_key_exists($senderName, $skyblockArray)) {
 
-            if (count($skyblockArray[$senderName]["Members"]) === $limit) {
+            if (count($skyblockArray[$senderName]["Members"]) === $limit && !$sender->hasPermission("skyblock.umembers")) {
 
               $sender->sendMessage(TextFormat::RED . "Your island has reached the maximum number of members.");
               return true;

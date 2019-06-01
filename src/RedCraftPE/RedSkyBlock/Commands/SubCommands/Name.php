@@ -23,6 +23,7 @@ class Name {
 
       $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
       $senderName = strtolower($sender->getName());
+      $nameLimit = SkyBlock::getInstance()->cfg->get("Name Char Limit");
       if (array_key_exists($senderName, $skyblockArray)) {
 
         $name = $skyblockArray[$senderName]["Name"];
@@ -34,11 +35,18 @@ class Name {
         } else {
 
           $name = (string) implode(" ", array_slice($args, 1));
-          $skyblockArray[$senderName]["Name"] = $name;
-          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-          SkyBlock::getInstance()->skyblock->save();
-          $sender->sendMessage(TextFormat::GREEN . "Your island's name is now " . TextFormat::WHITE . $name);
-          return true;
+          if (strlen($name) > $nameLimit) {
+
+            $sender->sendMessage(TextFormat::RED . "That name is too long! Island names can be {$nameLimit} characters maximum.");
+            return true;
+          } else {
+
+            $skyblockArray[$senderName]["Name"] = $name;
+            SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
+            SkyBlock::getInstance()->skyblock->save();
+            $sender->sendMessage(TextFormat::GREEN . "Your island's name is now " . TextFormat::WHITE . $name);
+            return true;
+          }
         }
       } else {
 

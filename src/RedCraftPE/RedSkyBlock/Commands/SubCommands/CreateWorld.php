@@ -21,7 +21,7 @@ class CreateWorld {
 
     $this->plugin = $plugin;
 
-    $this->worldGenerator = new WorldGenerator($this->plugin);
+    $this->worldGenerator = new WorldGenerator($plugin);
   }
 
   public function onCreateWorldCommand(CommandSender $sender, array $args): bool {
@@ -43,9 +43,12 @@ class CreateWorld {
           } else {
 
             $this->worldGenerator->generateWorld($world);
-            SkyBlock::getInstance()->cfg->set("SkyBlockWorld", $world);
+            $worldsArray = SkyBlock::getInstance()->skyblock->get("SkyBlockWorlds", []);
+            array_push($worldsArray, $world);
+            SkyBlock::getInstance()->cfg->set("SkyBlockWorld Base Name", $world);
+            SkyBlock::getInstance()->cfg->set("SkyBlockWorlds", $worldsArray);
             SkyBlock::getInstance()->cfg->save();
-            $sender->sendMessage(TextFormat::WHITE . $world . TextFormat::GREEN . " has been created and set as the SkyBlock world in this server.");
+            $sender->sendMessage(TextFormat::WHITE . $world . TextFormat::GREEN . " has been created and set as the SkyBlock base world in this server.");
             return true;
           }
         }

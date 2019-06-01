@@ -7,17 +7,20 @@ use pocketmine\command\CommandSender;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\item\Item;
+use pocketmine\block\Block;
 
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Tasks\Generate;
 use RedCraftPE\RedSkyBlock\Commands\Island;
+use RedCraftPE\RedSkyBlock\Generators\WorldGenerator;
 
 class Create {
 
   private static $instance;
 
-  public function __construct() {
+  public function __construct($plugin) {
 
+    $this->worldGenerator = new WorldGenerator($plugin);
     self::$instance = $this;
   }
 
@@ -32,44 +35,59 @@ class Create {
       $islands = SkyBlock::getInstance()->skyblock->get("Islands");
       $initialSize = SkyBlock::getInstance()->cfg->get("Island Size");
       $senderName = strtolower($sender->getName());
-      $level = null;
-      if ($levelName === "") {
+      $worldsArray = SkyBlock::getInstance()->cfg->get("SkyBlockWorlds", []);
+      $worldCount = SkyBlock::getInstance()->skyblock->get("worlds");
+      $baseName = SkyBlock::getInstance()->cfg->get("SkyBlockWorld Base Name");
+
+      if ($baseName === false) {
 
         $sender->sendMessage(TextFormat::RED . "You must set a SkyBlock world in order for this plugin to function properly.");
         return true;
-      } else {
-
-        if (SkyBlock::getInstance()->getServer()->isLevelLoaded($levelName)) {
-
-          $level = SkyBlock::getInstance()->getServer()->getLevelByName($levelName);
-        } else {
-
-          if (SkyBlock::getInstance()->getServer()->loadLevel($levelName)) {
-
-            SkyBlock::getInstance()->getServer()->loadLevel($levelName);
-            $level = SkyBlock::getInstance()->getServer()->getLevelByName($levelName);
-          } else {
-
-            $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
-            return true;
-          }
-        }
       }
+      $level = SkyBlock::getInstance()->getServer()->getLevelByName($baseName);
+      if (!$level) {
+
+        $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
+        return true;
+      }
+
       if (array_key_exists($senderName, $skyblockArray)) {
 
         $sender->sendMessage(TextFormat::RED . "You already have an island.");
         return true;
       } else {
 
-        if (SkyBlock::getInstance()->skyblock->get("Custom")) {
+        if ($islands >= SkyBlock::getInstance()->cfg->get("World Island Limit")) {
 
-          $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $level));
+          $worldCount++;
+          $this->worldGenerator->generateWorld($baseName . $worldCount);
+          $world = SkyBlock::getInstance()->getServer()->getLevelByName($baseName . $worldCount);
+          array_push($worldsArray, $baseName . $worldCount);
+          $islands = 0;
+          SkyBlock::getInstance()->cfg->set("SkyBlockWorlds", $worldsArray);
+          SkyBlock::getInstance()->cfg->save();
+          SkyBlock::getInstance()->skyblock->set("Islands", $islands);
+          SkyBlock::getInstance()->skyblock->set("worlds", $worldCount);
         } else {
 
-          $sender->teleport(new Position($islands * $interval + 2, 15 + 3, $islands * $interval + 4, $level));
+          $world = SkyBlock::getInstance()->getServer()->getLevelByName(end($worldsArray));
+          if (!$world) {
+
+            $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
+            return true;
+          }
+        }
+
+        if (SkyBlock::getInstance()->skyblock->get("Custom")) {
+
+          $sender->teleport(new Position($islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomX"), 15 + SkyBlock::getInstance()->skyblock->get("CustomY"), $islands * $interval + SkyBlock::getInstance()->skyblock->get("CustomZ"), $world));
+        } else {
+
+          $sender->teleport(new Position($islands * $interval + 2, 15 + 3, $islands * $interval + 4, $world));
         }
         $sender->setImmobile(true);
-        SkyBlock::getInstance()->getScheduler()->scheduleDelayedTask(new Generate($islands, $level, $interval, $sender), 10);
+        $world->setBlock(new Vector3((int) $sender->getX(), (int) $sender->getY() - 1, (int) $sender->getZ()), Block::get(Block::STONE), false);
+        SkyBlock::getInstance()->getScheduler()->scheduleDelayedTask(new Generate($islands, $world, $interval, $sender), 30);
 
         foreach($itemsArray as $items) {
 
@@ -93,6 +111,9 @@ class Create {
           "Banned" => [],
           "Locked" => false,
           "Value" => 0,
+          "World" => $world->getFolderName(),
+          "Reset Cooldown" => 0,
+          "Challenges" => [],
           "Spawn" => Array(
             "X" => $sender->getX(),
             "Y" => $sender->getY(),
@@ -116,16 +137,16 @@ class Create {
             "Pickup" => "on",
             "Anvil" => "on",
             "Chest" => "on",
-            "CraftingTable" => "on",
-            "Fly" => "on",
+            "CraftingTable" => "off",
+            "Fly" => "off",
             "Hopper" => "on",
-            "Brewing" => "on",
+            "Brewing" => "off",
             "Beacon" => "on",
             "Buckets" => "on",
-            "PVP" => "on",
+            "PVP" => "off",
             "FlintAndSteel" => "on",
             "Furnace" => "on",
-            "EnderChest" => "on"
+            "EnderChest" => "off"
           )
         );
         SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);

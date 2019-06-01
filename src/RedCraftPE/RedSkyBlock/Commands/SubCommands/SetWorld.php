@@ -22,10 +22,23 @@ class SetWorld {
     if ($sender->hasPermission("skyblock.setworld")) {
 
       $world = $sender->getLevel()->getFolderName();
-      SkyBlock::getInstance()->cfg->set("SkyBlockWorld", $world);
-      SkyBlock::getInstance()->cfg->save();
-      $sender->sendMessage(TextFormat::GREEN . $world . " has been set as the SkyBlock world on this server.");
-      return true;
+      $worldsArray = SkyBlock::getInstance()->cfg->get("SkyBlockWorlds", []);
+
+      if (in_array($world, $worldsArray)) {
+
+        $sender->sendMessage(TextFormat::RED . "This world is already set as the SkyBlock base world.");
+        return true;
+      } else {
+
+        $worldsArray = SkyBlock::getInstance()->cfg->get("SkyBlockWorlds", []);
+        array_push($worldsArray, $world);
+        SkyBlock::getInstance()->skyblock->set("Islands", 0);
+        SkyBlock::getInstance()->cfg->set("SkyBlockWorld Base Name", $world);
+        SkyBlock::getInstance()->cfg->set("SkyBlockWorlds", $worldsArray);
+        SkyBlock::getInstance()->cfg->save();
+        $sender->sendMessage(TextFormat::GREEN . $world . " has been set as the SkyBlock base world on this server.");
+        return true;
+      }
     } else {
 
       $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");

@@ -24,44 +24,40 @@ class SkyBlock extends PluginBase {
 
   public function onEnable(): void {
 
-    if ($this->cfg->get("SkyBlockWorld") === "") {
+    foreach($this->cfg->get("SkyBlockWorlds", []) as $world) {
+
+      if (!$this->getServer()->isLevelLoaded($world)) {
+
+        if ($this->getServer()->loadLevel($world)) {
+
+          $this->getServer()->loadLevel($world);
+        }
+      }
+    }
+
+    if ($this->cfg->get("SkyBlockWorld Base Name") === false) {
 
       $this->getLogger()->info(TextFormat::RED . "In order for this plugin to function properly, you must set a SkyBlock world in your server.");
       $this->level = null;
     } else {
 
-      $this->level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld"));
-      if (!($this->getServer()->isLevelLoaded($this->cfg->get("SkyBlockWorld")))) {
+      $this->level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld Base Name"));
+      if (!$this->level) {
 
-        if ($this->getServer()->loadLevel($this->cfg->get("SkyBlockWorld"))) {
-
-          $this->getServer()->loadLevel($this->cfg->get("SkyBlockWorld"));
-          $this->level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld"));
-          $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on the world {$this->level->getFolderName()}");
-        } else {
-
-          $this->getLogger()->info(TextFormat::RED . "The level currently set as the SkyBlock world does not exist.");
-          $this->level = null;
-        }
+        $this->getLogger()->info(TextFormat::RED . "The level currently set as the SkyBlock base world does not exist.");
+        $this->level = null;
       } else {
 
-        if ($this->getServer()->isLevelLoaded($this->level->getFolderName())) {
-
-           $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on level {$this->level->getFolderName()}");
-        } else {
-
-          $this->getServer()->loadLevel($this->level->getFolderName());
-          $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on level {$this->level->getFolderName()}");
-        }
+        $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on the base world {$this->level->getFolderName()}");
       }
     }
+
     $this->eventListener = new EventListener($this, $this->level);
     $this->island = new Island($this);
     self::$instance = $this;
+    BlockFactory::registerBlock(new Lava(), true);
   }
   public function onLoad(): void {
-
-		BlockFactory::registerBlock(new Lava(), true);
 
     if (!is_dir($this->getDataFolder())) {
 
@@ -216,5 +212,52 @@ class SkyBlock extends PluginBase {
     $width = $endZ - $startZ;
 
     return "{$length} x {$width}";
+  }
+  public function getIslandAt(Player $player) {
+
+    $worldsArray = $this->cfg->get("SkyBlockWorlds", []);
+
+    if (in_array($player->getLevel()->getFolderName(), $worldsArray)) {
+
+      $skyblockArray = $this->skyblock->get("SkyBlock", []);
+      $islandOwner = false;
+      foreach(array_keys($skyblockArray) as $skyblock) {
+
+        if (((int) $player->getX() >= $skyblockArray[$skyblock]["Area"]["start"]["X"] - 5 && (int) $player->getZ() >= $skyblockArray[$skyblock]["Area"]["start"]["Z"] - 5 && (int) $player->getX() <= $skyblockArray[$skyblock]["Area"]["end"]["X"] + 5 && (int) $player->getZ() <= $skyblockArray[$skyblock]["Area"]["end"]["Z"] + 5) && ($player->getLevel()->getFolderName() === $skyblockArray[$skyblock]["World"])) {
+
+          $islandOwner = $skyblock;
+          break;
+        }
+      }
+
+      return $islandOwner;
+    } else {
+
+      return false;
+    }
+  }
+  public function getPlayersOnIsland(Player $player): array {
+
+    $name = strtolower($player->getName());
+    $onlinePlayers = $this->getServer()->getOnlinePlayers();
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $onIsland = [];
+
+    foreach($onlinePlayers as $p) {
+
+      $pX = (int) $p->getX();
+      $pZ = (int) $p->getZ();
+      $pWorld = $p->getLevel();
+
+      if ($pWorld->getFolderName() === $skyblockArray[$name]["World"]) {
+
+        if ($pX >= $skyblockArray[$name]["Area"]["start"]["X"] && $pX <= $skyblockArray[$name]["Area"]["end"]["X"] && $pZ >= $skyblockArray[$name]["Area"]["start"]["Z"] && $pZ <= $skyblockArray[$name]["Area"]["end"]["Z"]) {
+
+          array_push($onIsland, $p->getName());
+        }
+      }
+    }
+
+    return $onIsland;
   }
 }
