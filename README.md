@@ -12,6 +12,9 @@ RedSkyBlock aims to be a feature rich, user-friendly SkyBlock plugin. RedSkyBloc
 # Discord
 Join the [Red Development](https://discord.gg/8s2sbvr) Discord for support and more.
 
+# Donations
+Donations are, of course, very appreciated! If you like RedSkyBlock please consider [donating](https://www.paypal.me/acidraincr).
+
 # Installation and Support
 Installing this plugin on your server is super easy to do! Just download the RedSkyBlock.phar file from poggit and plop it into your server's plugins folder.
 
