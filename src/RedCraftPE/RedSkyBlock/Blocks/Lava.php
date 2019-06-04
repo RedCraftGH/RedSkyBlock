@@ -110,7 +110,7 @@ class Lava extends \pocketmine\block\Lava {
 						$this->liquidCollide($colliding, Block::get($blockID));
 					}
 	      } else {
-	        $this->liquidCollide($colliding, BlockFactory::get(BlockIds::COBBLESTONE));
+	        $this->liquidCollide($colliding, BlockFactory::get(Block::COBBLESTONE));
 	      }
 			}
 		}
