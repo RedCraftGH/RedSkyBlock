@@ -21,15 +21,22 @@ class On {
 
     if ($sender->hasPermission("skyblock.onisland")) {
 
-      $playerArray = SkyBlock::getInstance()->getPlayersOnIsland($sender);
+      if (array_key_exists(strtolower($sender->getName()), SkyBlock::getInstance()->skyblock->get("SkyBlock", []))) {
 
-      if (count($playerArray) <= 0) {
+        $playerArray = SkyBlock::getInstance()->getPlayersOnIsland($sender);
 
-        $sender->sendMessage(TextFormat::RED . "No players are on your island.");
-        return true;
+        if (count($playerArray) <= 0) {
+
+          $sender->sendMessage(TextFormat::RED . "No players are on your island.");
+          return true;
+        } else {
+
+          $sender->sendMessage(TextFormat::GREEN . implode(", ", $playerArray));
+          return true;
+        }
       } else {
 
-        $sender->sendMessage(TextFormat::GREEN . implode(", ", $playerArray));
+        $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");
         return true;
       }
     } else {

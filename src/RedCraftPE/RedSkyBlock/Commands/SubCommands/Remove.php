@@ -29,7 +29,10 @@ class Remove {
 
         $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
         $senderName = strtolower($sender->getName());
-        $player = SkyBlock::getInstance()->getServer()->getPlayerExact(implode(" ", array_slice($args, 1)));
+        $playerName = str_replace("\"", "", implode(" ", array_slice($args, 1)));
+        $playerName = str_replace("'", "", $playerName);
+        $playerName = str_replace("`", "", $playerName);
+        $player = SkyBlock::getInstance()->getServer()->getPlayerExact($playerName);
         if (!$player) {
 
           $sender->sendMessage(TextFormat::WHITE . implode(" ", array_slice($args, 1)) . TextFormat::RED . " does not exist or is not online.");
