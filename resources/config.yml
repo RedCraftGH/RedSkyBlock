@@ -150,7 +150,7 @@ Challenges:
     repeating: false
     rewards:
       - 20 value
-  intermediate:place:57:0:5:Diamonds!!!:
+  intermediate:collect:57:0:5:Diamonds!!!:
     repeating: false
     rewards:
       - 30 value
