@@ -291,7 +291,7 @@ class EventListener implements Listener {
         return;
       } else {
 
-        if ($player->hasPermission("skyblock.bypass") || $skyblockArray[$islandOwner]["Settings"]["Buckets"] === "on") {
+        if ($player->hasPermission("skyblock.bypass") || $skyblockArray[$islandOwner]["Settings"]["Buckets"] === "off") {
 
           return;
         }
