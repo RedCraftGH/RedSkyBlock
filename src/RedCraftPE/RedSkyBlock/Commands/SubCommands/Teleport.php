@@ -39,6 +39,7 @@ class Teleport {
       }
 
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+      $islandSpawnY = $plugin->cfg->get("Island Spawn Y");
       $senderName = strtolower($sender->getName());
 
       if (count($args) < 2) {
@@ -60,7 +61,7 @@ class Teleport {
             $x = $skyblockArray[$senderName][0];
             $z = $skyblockArray[$senderName][1];
 
-            $sender->teleport(new Position($x, 26, $z, $level));
+            $sender->teleport(new Position($x, $islandSpawnY, $z, $level));
           }
           $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
           return true;
@@ -91,7 +92,7 @@ class Teleport {
 
               $x = $skyblockArray[$name][0];
               $z = $skyblockArray[$name][1];
-              $sender->teleport(new Position($x, 26, $z, $level));
+              $sender->teleport(new Position($x, $islandSpawnY, $z, $level));
             }
             $sender->setFlying(false);
             $sender->setAllowFlight(false);

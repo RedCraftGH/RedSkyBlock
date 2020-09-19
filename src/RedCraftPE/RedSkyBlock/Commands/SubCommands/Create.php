@@ -25,11 +25,12 @@ class Create {
      if ($sender->hasPermission("skyblock.create")) {
 
       $plugin = $this->plugin;
-      $interval = 600;
       $itemsArray = $plugin->cfg->get("Starting Items", []);
+      $interval = $plugin->cfg->get("Island Interval");
+      $initialSize = $plugin->cfg->get("Island Size");
+      $islandSpawnY = $plugin->cfg->get("Island Spawn Y");
       $levelName = $plugin->skyblock->get("Master World");
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $initialSize = 100;
       $senderName = strtolower($sender->getName());
 
       if ($levelName === false) {
@@ -98,7 +99,7 @@ class Create {
             }
           }
 
-          $sender->teleport(new Position($lastX + 4, 26, $lastZ + 2, $world));
+          $sender->teleport(new Position($lastX + 4, $islandSpawnY, $lastZ + 2, $world));
           $sender->setImmobile(true);
 
           $plugin->getScheduler()->scheduleDelayedTask(new Generate($plugin, $sender, $lastX, $lastZ, $world), 50);

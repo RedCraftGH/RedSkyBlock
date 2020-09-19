@@ -43,4 +43,9 @@ Island Zone:
   5: 275
 
 Zone World: world
-...
+
+Island Interval: 600
+
+Island Size: 100
+
+Island Spawn Y: 26

@@ -95,6 +95,7 @@ class SkyBlock extends PluginBase {
   public function getIslandAtPlayer(Player $player) {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $islandSize = $this->cfg->get("Island Size");
 
     foreach ($skyblockArray as $owner => $spawnArray) {
 
@@ -104,7 +105,7 @@ class SkyBlock extends PluginBase {
       $ownerX = $spawnArray[0];
       $ownerZ = $spawnArray[1];
 
-      if (($x > $ownerX - 50 && $z > $ownerZ - 50) && ($x < $ownerX + 50 && $z < $ownerZ + 50)) {
+      if (($x > $ownerX - ($islandSize / 2) && $z > $ownerZ - ($islandSize / 2)) && ($x < $ownerX + ($islandSize / 2) && $z < $ownerZ + ($islandSize / 2))) {
 
         return $owner;
       }
@@ -115,6 +116,7 @@ class SkyBlock extends PluginBase {
   public function getIslandAtBlock(Block $block) {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $islandSize = $this->cfg->get("Island Size");
 
     foreach ($skyblockArray as $owner => $spawnArray) {
 
@@ -124,7 +126,7 @@ class SkyBlock extends PluginBase {
       $ownerX = $spawnArray[0];
       $ownerZ = $spawnArray[1];
 
-      if (($x > $ownerX - 50 && $z > $ownerZ - 50) && ($x < $ownerX + 50 && $z < $ownerZ + 50)) {
+      if (($x > $ownerX - ($islandSize / 2) && $z > $ownerZ - ($islandSize / 2)) && ($x < $ownerX + ($islandSize / 2) && $z < $ownerZ + ($islandSize / 2))) {
 
         return $owner;
       }
