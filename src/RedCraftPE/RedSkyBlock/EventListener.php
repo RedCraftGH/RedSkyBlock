@@ -44,7 +44,7 @@ class EventListener implements Listener {
     if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-      $playerData;
+      $playerData = null;
 
       if (file_exists($filePath)) {
 
@@ -71,7 +71,7 @@ class EventListener implements Listener {
     if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-      $playerData;
+      $playerData = null;
 
       if (file_exists($filePath)) {
 
@@ -102,7 +102,7 @@ class EventListener implements Listener {
         $owner = $plugin->getIslandAtBlock($block);
 
         $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-        $playerData;
+        $playerData = null;
 
         if (file_exists($filePath)) {
 
@@ -132,7 +132,7 @@ class EventListener implements Listener {
       $owner = $plugin->getIslandAtPlayer($player);
 
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-      $playerData;
+      $playerData = null;
 
       if (file_exists($filePath)) {
 
@@ -179,7 +179,7 @@ class EventListener implements Listener {
       if ($entity->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
         $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-        $playerData;
+        $playerData = null;
 
         if (file_exists($filePath)) {
 
