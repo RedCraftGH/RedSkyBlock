@@ -13,94 +13,104 @@ class Teleport {
 
   private static $instance;
 
-  public function __construct() {
+  public function __construct($plugin) {
 
     self::$instance = $this;
+    $this->plugin = $plugin;
   }
 
   public function onTeleportCommand(CommandSender $sender, array $args): bool {
 
     if ($sender->hasPermission("skyblock.create")) {
 
-      $baseName = SkyBlock::getInstance()->cfg->get("SkyBlockWorld Base Name");
+      $plugin = $this->plugin;
+      $masterWorld = $plugin->skyblock->get("Master World");
 
-      if ($baseName === false) {
+      if ($masterWorld === false) {
 
         $sender->sendMessage(TextFormat::RED . "You must set a SkyBlock world in order for this plugin to function properly.");
         return true;
       }
-      $level = SkyBlock::getInstance()->getServer()->getLevelByName($baseName);
+      $level = $plugin->getServer()->getLevelByName($masterWorld);
       if (!$level) {
 
         $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
         return true;
       }
 
-      $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
+      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
       $senderName = strtolower($sender->getName());
 
       if (count($args) < 2) {
 
-        if (array_key_exists($senderName, $skyblockArray)) {
+        if (file_exists($plugin->getDataFolder() . "Players/" . $senderName . ".json")) {
 
-          $level = SkyBlock::getInstance()->getServer()->getLevelByName($skyblockArray[$senderName]["World"]);
+          $playerDataEncoded = file_get_contents($plugin->getDataFolder() . "Players/" . $senderName . ".json");
+          $playerData = (array) json_decode($playerDataEncoded);
 
-          $x = $skyblockArray[$senderName]["Area"]["start"]["X"];
-          $z = $skyblockArray[$senderName]["Area"]["start"]["Z"];
+          if ($playerData["Island Spawn"] !== []) {
 
-          $sender->teleport(new Position($skyblockArray[$senderName]["Spawn"]["X"], $skyblockArray[$senderName]["Spawn"]["Y"], $skyblockArray[$senderName]["Spawn"]["Z"], $level));
+            $x = $playerData["Island Spawn"][0];
+            $y = $playerData["Island Spawn"][1];
+            $z = $playerData["Island Spawn"][2];
+
+            $sender->teleport(new Position($x, $y, $z, $level));
+          } else {
+
+            $x = $skyblockArray[$senderName][0];
+            $z = $skyblockArray[$senderName][1];
+
+            $sender->teleport(new Position($x, 26, $z, $level));
+          }
           $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
           return true;
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");
+          $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
           return true;
         }
       } else {
 
-        if ($sender->hasPermission("skyblock.tp")) {
+        $name = strtolower(implode(" ", array_slice($args, 1)));
 
-          $name = strtolower(implode(" ", array_slice($args, 1)));
+        if (file_exists($plugin->getDataFolder() . "Players/" . $name . ".json")) {
 
-          if (array_key_exists($name, $skyblockArray)) {
+          $playerDataEncoded = file_get_contents($plugin->getDataFolder() . "Players/" . $name . ".json");
+          $playerData = (array) json_decode($playerDataEncoded);
 
-            $level = SkyBlock::getInstance()->getServer()->getLevelByName($skyblockArray[$name]["World"]);
+          if ($playerData["Island Locked"] === false || $senderName === $name || in_array($senderName, $playerData["Island Members"])) {
 
-            if ($skyblockArray[$name]["Locked"] === false || in_array($sender->getName(), $skyblockArray[$name]["Members"])) {
+            if ($playerData["Island Spawn"] !== []) {
 
-              if (!in_array($sender->getName(), $skyblockArray[$name]["Banned"])) {
-                $x = $skyblockArray[$name]["Area"]["start"]["X"];
-                $z = $skyblockArray[$name]["Area"]["start"]["Z"];
+              $x = $playerData["Island Spawn"][0];
+              $y = $playerData["Island Spawn"][1];
+              $z = $playerData["Island Spawn"][2];
 
-                $sender->teleport(new Position($skyblockArray[$name]["Spawn"]["X"], $skyblockArray[$name]["Spawn"]["Y"], $skyblockArray[$name]["Spawn"]["Z"], $level));
-                $sender->setFlying(false);
-                $sender->setAllowFlight(false);
-                $sender->sendMessage(TextFormat::GREEN . "Welcome to {$skyblockArray[$name]["Name"]}.");
-                return true;
-              } else {
-
-                $sender->sendMessage(TextFormat::WHITE . $skyblockArray[$name]["Members"][0] . TextFormat::RED . " has banned you from their island.");
-                return true;
-              }
+              $sender->teleport(new Position($x, $y, $z, $level));
             } else {
 
-              $sender->sendMessage(TextFormat::WHITE . $skyblockArray[$name]["Members"][0] . "'s is locked.");
-              return true;
+              $x = $skyblockArray[$name][0];
+              $z = $skyblockArray[$name][1];
+              $sender->teleport(new Position($x, 26, $z, $level));
             }
+            $sender->setFlying(false);
+            $sender->setAllowFlight(false);
+            $sender->sendMessage(TextFormat::GREEN . "You have been teleported to " . TextFormat::WHITE . $name . TextFormat::GREEN . "'s island.");
+            return true;
           } else {
 
-            $sender->sendMessage(TextFormat::WHITE . implode(" ", array_slice($args, 1)) . TextFormat::RED . " does not have an island.");
+            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " has locked their island.");
             return true;
           }
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");
+          $sender->sendMessage(TextFormat::WHITE . implode(" ", array_slice($args, 1)) . TextFormat::RED . " does not have an island.");
           return true;
         }
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");
+      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
       return true;
     }
   }

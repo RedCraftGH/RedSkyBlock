@@ -5,23 +5,16 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
 
-use RedCraftPE\RedSkyBlock\Generators\WorldGenerator;
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\Island;
 
 class CreateWorld {
 
-  private static $instance;
-
   private $worldGenerator;
 
   public function __construct($plugin) {
 
-    self::$instance = $this;
-
     $this->plugin = $plugin;
-
-    $this->worldGenerator = new WorldGenerator($plugin);
   }
 
   public function onCreateWorldCommand(CommandSender $sender, array $args): bool {
@@ -34,21 +27,18 @@ class CreateWorld {
           return true;
         } else {
 
+          $plugin = $this->plugin;
+
           $world = (string) implode(" ", array_slice($args, 1));
 
-          if (SkyBlock::getInstance()->getServer()->isLevelLoaded($world)) {
+          if ($plugin->getServer()->loadLevel($world)) {
 
             $sender->sendMessage(TextFormat::RED . "The world you are trying to create already exists.");
             return true;
           } else {
 
-            $this->worldGenerator->generateWorld($world);
-            $worldsArray = SkyBlock::getInstance()->skyblock->get("SkyBlockWorlds", []);
-            array_push($worldsArray, $world);
-            SkyBlock::getInstance()->cfg->set("SkyBlockWorld Base Name", $world);
-            SkyBlock::getInstance()->cfg->set("SkyBlockWorlds", $worldsArray);
-            SkyBlock::getInstance()->cfg->save();
-            $sender->sendMessage(TextFormat::WHITE . $world . TextFormat::GREEN . " has been created and set as the SkyBlock base world in this server.");
+            $plugin->getServer()->generateLevel($world, null, 'pocketmine\level\generator\Flat', ["preset" => "3;minecraft:air;127;"]);
+            $sender->sendMessage(TextFormat::GREEN . "The empty world " . TextFormat::WHITE . $world . TextFormat::GREEN . " has been created for SkyBlock.");
             return true;
           }
         }

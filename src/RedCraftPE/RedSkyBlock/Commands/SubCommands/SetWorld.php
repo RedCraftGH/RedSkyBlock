@@ -12,32 +12,37 @@ class SetWorld {
 
   private static $instance;
 
-  public function __construct() {
+  public function __construct($plugin) {
 
     self::$instance = $this;
+    $this->plugin = $plugin;
   }
 
-  public function onSetWorldCommand(CommandSender $sender): bool {
+  public function onSetWorldCommand(CommandSender $sender, array $args): bool {
 
     if ($sender->hasPermission("skyblock.setworld")) {
 
-      $world = $sender->getLevel()->getFolderName();
-      $worldsArray = SkyBlock::getInstance()->cfg->get("SkyBlockWorlds", []);
+      if (count($args) < 2) {
 
-      if (in_array($world, $worldsArray)) {
-
-        $sender->sendMessage(TextFormat::RED . "This world is already set as the SkyBlock base world.");
+        $sender->sendMessage(TextFormat::WHITE . "Usage: /island setworld <world name>");
         return true;
       } else {
 
-        $worldsArray = SkyBlock::getInstance()->cfg->get("SkyBlockWorlds", []);
-        array_push($worldsArray, $world);
-        SkyBlock::getInstance()->skyblock->set("Islands", 0);
-        SkyBlock::getInstance()->cfg->set("SkyBlockWorld Base Name", $world);
-        SkyBlock::getInstance()->cfg->set("SkyBlockWorlds", $worldsArray);
-        SkyBlock::getInstance()->cfg->save();
-        $sender->sendMessage(TextFormat::GREEN . $world . " has been set as the SkyBlock base world on this server.");
-        return true;
+        $plugin = $this->plugin;
+        $world = implode(" ", array_splice($args, 1));
+
+        if ($plugin->skyblock->get("Master World") === $world) {
+
+          $sender->sendMessage(TextFormat::RED . "This world is already set as the SkyBlock base world.");
+          return true;
+        } else {
+
+          $plugin->skyblock->set("Islands", 0);
+          $plugin->skyblock->set("Master World", $world);
+          $plugin->skyblock->save();
+          $sender->sendMessage(TextFormat::GREEN . $world . " has been set as the SkyBlock Master world on this server.");
+          return true;
+        }
       }
     } else {
 

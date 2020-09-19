@@ -2,50 +2,78 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
-use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
-
-use RedCraftPE\RedSkyBlock\SkyBlock;
-use RedCraftPE\RedSkyBlock\Commands\Island;
+use pocketmine\utils\TextFormat;
 
 class Lock {
 
-  private static $instance;
+  public function __construct($plugin) {
 
-  public function __construct() {
-
-    self::$instance = $this;
+    $this->plugin = $plugin;
   }
 
-  public function onLockCommand(CommandSender $sender): bool {
+  public function onLockCommand(CommandSender $sender, array $args): bool {
 
     if ($sender->hasPermission("skyblock.lock")) {
 
+      $plugin = $this->plugin;
       $senderName = strtolower($sender->getName());
-      $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
+      $playerFilePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
 
-      if (array_key_exists($senderName, $skyblockArray)) {
+      if (file_exists($plugin->getDataFolder() . "Players/" . strtolower($sender->getName()) . ".json")) {
 
-        if ($skyblockArray[$senderName]["Locked"] === true) {
+        $jsonPlayerData = file_get_contents($playerFilePath);
+        $playerData = (array) json_decode($jsonPlayerData);
 
-          $sender->sendMessage(TextFormat::RED . "Your island is already locked.");
+        if (count($args) < 2) {
+
+          $sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
           return true;
         } else {
 
-          $skyblockArray[$senderName]["Locked"] = true;
-          SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-          SkyBlock::getInstance()->skyblock->save();
-          $sender->sendMessage(TextFormat::GREEN . "Your island is now locked.");
-          return true;
+          if ($args[1] === "on") {
+
+            if ($playerData["Island Locked"] === false) {
+
+              $playerData["Island Locked"] = true;
+              $playerDataEncoded = json_encode($playerData);
+              file_put_contents($playerFilePath, $playerDataEncoded);
+              $sender->sendMessage(TextFormat::GREEN . "Your skyblock island has been locked.");
+              return true;
+            } else {
+
+              $sender->sendMessage(TextFormat::RED . "Your skyblock island is already locked.");
+              return true;
+            }
+
+          } elseif ($args[1] === "off") {
+
+            if ($playerData["Island Locked"] === true) {
+
+              $playerData["Island Locked"] = false;
+              $playerDataEncoded = json_encode($playerData);
+              file_put_contents($playerFilePath, $playerDataEncoded);
+              $sender->sendMessage(TextFormat::GREEN . "Your skyblock island is no longer locked.");
+              return true;
+            } else {
+
+              $sender->sendMessage(TextFormat::RED . "Your skyblock island is not locked.");
+              return true;
+            }
+          } else {
+
+            $sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
+            return true;
+          }
         }
       } else {
 
-        $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");
+        $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
         return true;
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");
+      $sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
       return true;
     }
   }

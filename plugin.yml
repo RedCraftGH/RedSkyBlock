@@ -1,113 +1,38 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 3.1.3
-api: 3.0.0, 4.0.0
+version: 0.0.1
+api: 3.0.0
 main: RedCraftPE\RedSkyBlock\SkyBlock
 commands:
   island:
     description: This is the main command for RedSkyBlock.
-    aliases: [is, isle]
-    usage: /is [argument/command]
+    aliases: [is, isle, sb, skyblock]
+    usage: /island <args>
+  spawn:
+    description: This command will take the user to the server spawn.
+    usage: /spawn
 permissions:
-    skyblock.is:
-      description: With this permission players can use the main SkyBlock command /is.
-      default: true
     skyblock.create:
       description: With this permission players can create a SkyBlock island.
-      default: true
-    skyblock.tp:
-      description: With this permission players can teleport to other player's islands.
-      default: true
-    skyblock.members:
-      description: With this permission players can manage the members of their island.
-      default: true
-    skyblock.bypass:
-      description: With this permission players can bypass island protections.
-      default: op
-    skyblock.kick:
-      description: With this permission players can kick other players off of their island.
-      default: true
-    skyblock.lock:
-      description: With this permission players can manager their islands locked status.
-      default: true
-    skyblock.setworld:
-      description: With this permission players can set the SkyBlock world of a server.
-      default: op
-    skyblock.help:
-      description: With this permission players can use the SkyBlock help command.
-      default: true
-    skyblock.void:
-      description: With this permission players can manage the void settings for SkyBlock.
-      default: op
-    skyblock.hunger:
-      description: With this permission players can manage the hunger setting for SkyBlock.
-      default: op
-    skyblock.reset:
-      description: With this permission players can reset their islands.
-      default: true
-    skyblock.reload:
-      description: With this permission players can reload SkyBlock data.
-      default: op
-    skyblock.name:
-      description: With this permission players can change the name of their SkyBlock island.
-      default: true
-    skyblock.info:
-      description: With this permission players can look at other players SkyBlock information.
       default: true
     skyblock.createworld:
       description: With this permission players can create and set a SkyBlock world for the server.
       default: op
-    skyblock.ban:
-      description: With this permission players can ban/unban other players from their island.
+    skyblock.lock:
+      description: With this permission players can lock/unlock their skyblock island.
       default: true
-    skyblock.pos:
-      description: With this permission players can change the custom island positions.
-      default: op
-    skyblock.set:
-      description: With this permission players can set the custom island data.
-      default: op
-    skyblock.custom:
-      description: With this permission players can enable/disable custom islands.
-      default: op
-    skyblock.delete:
-      description: With this permission players can delete user's islands.
-      default: op
-    skyblock.makespawn:
-      description: With this permission players can set the custom island spawn positions.
-      default: op
+    skyblock.members:
+      description: With this permission players can add/remove members from their skyblock island.
+      default: true
     skyblock.setspawn:
-      description: With this permission players can set the spawn position of their own island.
+      description: With this permission players can set the spawn on their skyblock island.
       default: true
-    skyblock.size:
-      description: With this permission players can change the island boundaries of users.
+    skyblock.setworld:
+      description: With this permission players can set the SkyBlock world of a server.
       default: op
-    skyblock.rank:
-      description: With this permission players can view their island's rank.
+    skyblock.tp:
+      description: With this permission players can teleport to other player's islands.
       default: true
-    skyblock.top:
-      description: With this permission players can view the top island on the server.
-      default: true
-    skyblock.fly:
-      description: With this permission players can fly in the SkyBlock world.
-      default: false
-    skyblock.island.settings:
-      description: With this permission players can change their island settings.
-      default: true
-    skyblock.safevoid:
-      description: With this permission players will not die in the void IF safe void is enabled.
-      default: true
-    skyblock.nohunger:
-      description: With this permission players will not go hungry IF hunger is disabled.
-      default: true
-    skyblock.invincibleV:
-      description: With this permission players will not take damage on another player's island IF invincible visitors is enabled.
-      default: true
-    skyblock.umembers:
-      description: With this permission players can have unlimited island members regardless of the island member limit.
-      default: false
-    skyblock.onisland:
-      description: With this permission players can view who is on their island.
-      default: true
-    skyblock.challenges:
-      description: With this permission players can view the SkyBlock challenges.
-      default: true
+    skyblock.updatezone:
+      description: With this permission players can update the Island Zone.
+      default: op

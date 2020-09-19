@@ -1,53 +1,27 @@
 ---
-# Do not change!
 Version: 1
-# Do not change!
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#                                                                                                 #
-#  ██████╗ ███████╗██████╗  ███████╗██╗  ██╗██╗   ██╗ ██████╗ ██╗      ██████╗  ██████╗██╗  ██╗   #
-#  ██╔══██╗██╔════╝██╔══██╗ ██╔════╝██║ ██╔╝╚██╗ ██╔╝ ██╔══██╗██║     ██╔═══██╗██╔════╝██║ ██╔╝   #
-#  ██████╔╝█████╗  ██║  ██║ ███████╗█████╔╝  ╚████╔╝  ██████╔╝██║     ██║   ██║██║     █████╔╝    #
-#  ██╔══██╗██╔══╝  ██║  ██║ ╚════██║██╔═██╗   ╚██╔╝   ██╔══██╗██║     ██║   ██║██║     ██╔═██╗    #
-#  ██║  ██║███████╗██████╔╝ ███████║██║  ██╗   ██║    ██████╔╝███████╗╚██████╔╝╚██████╗██║  ██╗   #
-#  ╚═╝  ╚═╝╚══════╝╚═════╝  ╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝   #
-#                                                                                                 #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+Spawn World: world
 
-# It is not recommended that you manually edit this. Leave this to the plugin!
-# Changing this could stop the plugin from working correctly.
-SkyBlockWorld Base Name: false
+Generator Ores:
+  #COBBLESTONE
+  4: 60
+  #COAL
+  16: 8
+  #LAPIS
+  21: 8
+  #REDSTONE
+  73: 8
+  #IRON
+  15: 7
+  #GOLD
+  14: 4
+  #DIAMOND
+  56: 3
+  #EMERALD
+  129: 2
 
-# You can set the SkyBlock worlds that the plugin will use in your server by changing this variable.
-# It is not recommended to change this in the config.yml.
-# It is safer to change this by doing /is setworld in-game.
-# The plugin will not function if you manually change this to an incorrect value.
-SkyBlockWorlds: []
 
-# The Interval is the distance between each Island.
-# A recommended Interval is between 200-700. 500 is standard SkyBlock.
-# Any farther is useless, and any less will result in a very crowded skyblock world.
-Interval: 500
-
-# The magic cobblestone generator is automatically enabled when you first start up the plugin.
-# When enabled cobblestone generators will generate much more than just cobblestone.
-# When disabled cobblestone generators will function normally.
-CobbleGen: true
-
-# You can edit the below values to change what the magic cobblestone generator spawns.
-# Just follow the format shown below: id:percent
-# id is the id of the block you would like to appear
-# percent is the percent chance out of 100 that the item will appear.
-# The percents MUST have a sum of 100, otherwise the spawner will only spawn cobblestone.
-MagicCobbleGen Ores:
-  4: 66
-  21: 34
-
-#The Starting Items are the items in SkyBlock that a player will recieve when they first generate their island.
-#These items can be edited in the config here. It is really simple and follows this format: "id, damage, count"
-#id is the item id for an item in Minecraft, for example: stone's id is 1
-#damage is the data value which cooresponds with each individual id. For example: Red wool would have the id 35 and the damage 14
-#count is pretty simple. It is the amount of each item that the player will recieve. It is NOT recommended to set this number super high.
 Starting Items:
   - 79, 0, 2
   - 325, 10, 1
@@ -60,114 +34,13 @@ Starting Items:
   - 39, 0, 1
   - 40, 0, 1
 
-# There are two values for hunger: on and off. If hunger is off then players will no longer loose hunger
-# while they are in the SkyBlock world.
-Hunger: true
+Island Zone:
+  0: 163
+  1: 14
+  2: 267
+  3: 155
+  4: 30
+  5: 275
 
-# There are two values for void: on and off. If void is off then players who fall in the void will not die
-# while they are in the SkyBlock world.
-Void: true
-
-# There are two values for PVP: on and off. If PVP is off then players will not be able to PVP
-# while they are in the SkyBlock world.
-PVP: false
-
-# There are two values for keep inventory: on and off. If it is on then players who die will not
-# lose the items in their inventory.
-KeepInventory: false
-
-# This limits the amount of members a player can have on their island. Set the number to 0 to disable
-# member limits. The default is a 3 member limit.
-MemberLimit: 3
-
-# This is the initial island size for a player when they first generate their island. This amount is
-# equal to the length and width of a player's available island space.
-# For example: Making this number 100 would give each new player 100x100 available space for their island.
-Island Size: 100
-
-# These are the blocks that increase island value when placed. It follows this format: "id: value"
-# Id is the item id for an item in Minecraft, for example: stone's id is 1.
-# Value is the amount by which a player's island worth increases each time they place a block in this array.
-# For reference, by default, when a player places a diamond block on their island, their island's value increase by 5
-# You can have add as many block-value pairs to this array, just follow the format as shown below.
-Valuable Blocks:
-  57: 5
-  41: 4
-  42: 3
-  152: 2
-  22: 2
-  173: 1
-
-# This is the amount of islands that can be generated in a world before a new world is created.
-# The amount of islands allowed in a world should be inverse to your interval.
-# So, if you have a high interval then you should make this number smaller.
-# And if you have a low interval make this number bigger.
-# Recommended world island limit is 80.
-World Island Limit: 80
-
-# This is the cooldown (in seconds) that a player must wait before using the /is reset command again.
-# You can disable the reset cooldown by setting this value to 0. 86400 is one day.
-Reset Cooldown: 86400
-
-# If void is disabled and this is true then players who fall in the void will be teleported back
-# To their island spawn points. If this is false then they will be teleported to the server spawn.
-Island Spawn: true
-
-# If this is true players who are visiting other islands can not take damage.
-# If this is false players who are visiting will take damage normally.
-Invincible Visitors: false
-
-# This is the maximum amount of characters allowed in a player's island name.
-Name Char Limit: 20
-
-# Set this to false if you would like to disable the built-in RedSkyBlock challenges feature.
-# Leave this enabled if you would like to use the built-in RedSkyBlock challenges feature.
-Enable Challenges: true
-
-# RedSkyBlock comes with a few built-in challenges AND it allows you to create some of your
-# own challenges for players. For an in-depth tutorial on all the types of challenges
-# you can create and how to create them visit the RedSkyBlock wiki here: https://github.com/RedCraftGH/RedSkyBlock/wiki
-Challenges:
-  easy:collect:4:0:64:Cobble Generator:
-    repeating: false
-    rewards:
-      - 5 value
-  easy:collect:173:0:5:Coal Collector:
-    repeating: false
-    rewards:
-      - 5 value
-      - "173:0:5"
-  easy:collect:17:0:5:Lumberjack:
-    repeating: false
-    rewards:
-      - 10 value
-  easy:add:1:0:0:Team Player:
-    repeating: false
-    rewards:
-      - 10 value
-      - "264:0:1"
-  intermediate:collect:296:0:32:Farmer:
-    repeating: false
-    rewards:
-      - 20 value
-  intermediate:collect:57:0:5:Diamonds!!!:
-    repeating: false
-    rewards:
-      - 30 value
-  advanced:collect:12:0:10:Sand Man:
-    repeating: false
-    rewards:
-      - 40 value
-  advanced:collect:52:20:1:Golem Maker:
-    repeating: false
-    rewards:
-      - 75 value
-  advanced:collect:81:0:64:Cactus Farmer:
-    repeating: false
-    rewards:
-      - 40 value
-  advanced:collect:4:0:2000:Cobble Champion:
-    repeating: false
-    rewards:
-      - 35 value
+Zone World: world
 ...

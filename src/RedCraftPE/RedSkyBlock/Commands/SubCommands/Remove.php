@@ -2,19 +2,14 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
-use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
-
-use RedCraftPE\RedSkyBlock\SkyBlock;
-use RedCraftPE\RedSkyBlock\Commands\Island;
+use pocketmine\utils\TextFormat;
 
 class Remove {
 
-  private static $instance;
+  public function __construct($plugin) {
 
-  public function __construct() {
-
-    self::$instance = $this;
+    $this->plugin = $plugin;
   }
 
   public function onRemoveCommand(CommandSender $sender, array $args): bool {
@@ -27,49 +22,37 @@ class Remove {
         return true;
       } else {
 
-        $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
         $senderName = strtolower($sender->getName());
-        $playerName = str_replace("\"", "", implode(" ", array_slice($args, 1)));
-        $playerName = str_replace("'", "", $playerName);
-        $playerName = str_replace("`", "", $playerName);
-        $player = SkyBlock::getInstance()->getServer()->getPlayerExact($playerName);
-        if (!$player) {
+        $name = strtolower(implode(" ", array_slice($args, 1)));
+        $plugin = $this->plugin;
+        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+        if (file_exists($filePath)) {
 
-          $sender->sendMessage(TextFormat::WHITE . implode(" ", array_slice($args, 1)) . TextFormat::RED . " does not exist or is not online.");
-          return true;
-        } else {
+          $playerDataEncoded = file_get_contents($filePath);
+          $playerData = (array) json_decode($playerDataEncoded);
 
-          if (array_key_exists($senderName, $skyblockArray)) {
+          if (in_array($name, $playerData["Island Members"])) {
 
-            if (in_array($player->getName(), $skyblockArray[$senderName]["Members"])) {
-
-              if ($player->getName() !== $sender->getName()) {
-
-                unset($skyblockArray[$senderName]["Members"][array_search($player->getName(), $skyblockArray[$senderName]["Members"])]);
-                SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-                SkyBlock::getInstance()->skyblock->save();
-                $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::GREEN . " has been removed from your island!");
-                return true;
-              } else {
-
-                $sender->sendMessage(TextFormat::RED . "You cannot remove yourself from your island!");
-                return true;
-              }
-            } else {
-
-              $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::RED . " is not a member of your island.");
-              return true;
-            }
+            $key = array_search($name, $playerData["Island Members"]);
+            unset($playerData["Island Members"][$key]);
+            $playerDataEncoded = json_encode($playerData);
+            file_put_contents($filePath, $playerDataEncoded);
+            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is no longer a member of your island.");
+            return true;
           } else {
 
-            $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");
+            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is not a member of your island.");
             return true;
           }
+        } else {
+
+          $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
+          return true;
         }
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");
+      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
       return true;
     }
   }

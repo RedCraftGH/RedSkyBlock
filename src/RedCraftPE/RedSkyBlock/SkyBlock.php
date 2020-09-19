@@ -9,8 +9,10 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\block\BlockFactory;
 use pocketmine\Player;
+use pocketmine\block\Block;
 
 use RedCraftPE\RedSkyBlock\Commands\Island;
+use RedCraftPE\RedSkyBlock\Commands\Spawn;
 use RedCraftPE\RedSkyBlock\Tasks\Generate;
 use RedCraftPE\RedSkyBlock\Blocks\Lava;
 
@@ -18,77 +20,60 @@ class SkyBlock extends PluginBase {
 
   private $eventListener;
 
-  private static $instance;
-
   private $island;
+  private $spawn;
 
   public function onEnable(): void {
 
-    foreach($this->cfg->get("SkyBlockWorlds", []) as $world) {
-
-      if (!$this->getServer()->isLevelLoaded($world)) {
-
-        if ($this->getServer()->loadLevel($world)) {
-
-          $this->getServer()->loadLevel($world);
-        }
-      }
-    }
-
-    if ($this->cfg->get("SkyBlockWorld Base Name") === false) {
-
-      $this->getLogger()->info(TextFormat::RED . "In order for this plugin to function properly, you must set a SkyBlock world in your server.");
-      $this->level = null;
-    } else {
-
-      $this->level = $this->getServer()->getLevelByName($this->cfg->get("SkyBlockWorld Base Name"));
-      if (!$this->level) {
-
-        $this->getLogger()->info(TextFormat::RED . "The level currently set as the SkyBlock base world does not exist.");
-        $this->level = null;
-      } else {
-
-        $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on the base world {$this->level->getFolderName()}");
-      }
-    }
-
-    $this->eventListener = new EventListener($this, $this->level);
+    $this->eventListener = new EventListener($this);
     $this->island = new Island($this);
-    self::$instance = $this;
-    BlockFactory::registerBlock(new Lava(), true);
-  }
-  public function onLoad(): void {
+    $this->spawn = new Spawn($this);
+    BlockFactory::registerBlock(new Lava(0, $this), true);
 
-    if (!is_dir($this->getDataFolder())) {
+    if (!file_exists($this->getDataFolder() . "skyblock.json")) {
 
-      @mkdir($this->getDataFolder());
-    }
-    if (!file_exists($this->getDataFolder() . "skyblock.yml")) {
-
-      $this->saveResource("skyblock.yml");
-      $this->skyblock = new Config($this->getDataFolder() . "skyblock.yml", Config::YAML);
-    } else {
-
-      $this->skyblock = new Config($this->getDataFolder() . "skyblock.yml", Config::YAML);
+      $this->saveResource("skyblock.json");
     }
     if (!file_exists($this->getDataFolder() . "config.yml")) {
 
       $this->saveResource("config.yml");
-      $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
-    } else {
+    }
+    if (!file_exists($this->getDataFolder() . "Players")) {
 
-      $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
+      mkdir($this->getDataFolder() . "Players");
     }
 
-    if (!$this->cfg->exists("PVP")) {
-
-      $this->cfg->set("PVP", "off");
-      $this->cfg->save();
-    }
-
+    $this->skyblock = new Config($this->getDataFolder() . "skyblock.json", Config::JSON);
+    $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
     $this->cfg->reload();
     $this->skyblock->reload();
+
+    if ($this->skyblock->get("Master World") === false) {
+
+      $this->getLogger()->info(TextFormat::RED . "In order for this plugin to function properly, you must set a Skyblock Master world in your server.");
+      $masterWorld = false;
+    } else {
+
+      if ($this->getServer()->loadLevel($this->skyblock->get("Master World"))) {
+
+        $this->getServer()->loadLevel($this->skyblock->get("Master World"));
+      } else {
+
+        $this->getLogger()->info(TextFormat::RED . "Error: Unable to load the Skyblock Master world.");
+      }
+
+      $masterWorld = $this->getServer()->getLevelByName($this->skyblock->get("Master World"));
+      if (!$masterWorld) {
+
+        $this->getLogger()->info(TextFormat::RED . "The level currently set as the SkyBlock Master world does not exist.");
+        $masterWorld = null;
+      } else {
+
+        $this->getLogger()->info(TextFormat::GREEN . "SkyBlock is running on the Master world {$masterWorld->getFolderName()}");
+      }
+    }
   }
+
   public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
 
     switch(strtolower($command->getName())) {
@@ -97,167 +82,53 @@ class SkyBlock extends PluginBase {
 
         return $this->island->onIslandCommand($sender, $command, $label, $args);
       break;
+      case "spawn":
+
+        return $this->spawn->onSpawnCommand($sender, $command, $label, $args);
+      break;
     }
     return false;
   }
 
-  //API FUNCTIONS:
-  public static function getInstance(): self {
+  //api
 
-    return self::$instance;
-  }
-  public function calcRank(string $name): string {
+  public function getIslandAtPlayer(Player $player) {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $users = [];
 
-    if (!array_key_exists($name, $skyblockArray)) {
+    foreach ($skyblockArray as $owner => $spawnArray) {
 
-      return "N/A";
-    }
+      $x = $player->getX();
+      $z = $player->getZ();
 
-    foreach(array_keys($skyblockArray) as $user) {
+      $ownerX = $spawnArray[0];
+      $ownerZ = $spawnArray[1];
 
-      $userValue = $skyblockArray[$user]["Value"];
-      $users[$user] = $userValue;
-    }
+      if (($x > $ownerX - 50 && $z > $ownerZ - 50) && ($x < $ownerX + 50 && $z < $ownerZ + 50)) {
 
-    arsort($users);
-    $rank = array_search($name, array_keys($users)) + 1;
-
-    return strval($rank);
-  }
-  public function getIslandName(Player $player): string {
-
-    $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $name = strtolower($player->getName());
-
-    if (!array_key_exists($name, $skyblockArray)) {
-
-      return "N/A";
-    }
-
-    return $skyblockArray[$name]["Name"];
-  }
-  public function getMembers(Player $player): string {
-
-    $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $name = strtolower($player->getName());
-
-    if (!array_key_exists($name, $skyblockArray)) {
-
-      return "N/A";
-    }
-
-    return implode(", ", $skyblockArray[$name]["Members"]);
-  }
-  public function getValue(Player $player): string {
-
-    $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $name = strtolower($player->getName());
-
-    if (!array_key_exists($name, $skyblockArray)) {
-
-      return "N/A";
-    }
-
-    return strval($skyblockArray[$name]["Value"]);
-  }
-  public function getBanned(Player $player): string {
-
-    $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $name = strtolower($player->getName());
-
-    if (!array_key_exists($name, $skyblockArray)) {
-
-      return "N/A";
-    }
-
-    return implode(", ", $skyblockArray[$name]["Banned"]);
-  }
-  public function getLockedStatus(Player $player): string {
-
-    $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $name = strtolower($player->getName());
-
-    if (!array_key_exists($name, $skyblockArray)) {
-
-      return "N/A";
-    }
-
-    if ($skyblockArray[$name]["Locked"]) {
-
-      return "Yes";
-    } else {
-
-      return "No";
-    }
-  }
-  public function getSize(Player $player): string {
-
-    $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $name = strtolower($player->getName());
-
-    if (!array_key_exists($name, $skyblockArray)) {
-
-      return "N/A";
-    }
-
-    $startX = intval($skyblockArray[$name]["Area"]["start"]["X"]);
-    $startZ = intval($skyblockArray[$name]["Area"]["start"]["Z"]);
-    $endX = intval($skyblockArray[$name]["Area"]["end"]["X"]);
-    $endZ = intval($skyblockArray[$name]["Area"]["end"]["Z"]);
-
-    $length = $endX - $startX;
-    $width = $endZ - $startZ;
-
-    return "{$length} x {$width}";
-  }
-  public function getIslandAt(Player $player) {
-
-    $worldsArray = $this->cfg->get("SkyBlockWorlds", []);
-
-    if (in_array($player->getLevel()->getFolderName(), $worldsArray)) {
-
-      $skyblockArray = $this->skyblock->get("SkyBlock", []);
-      $islandOwner = false;
-      foreach(array_keys($skyblockArray) as $skyblock) {
-
-        if (((int) $player->getX() >= $skyblockArray[$skyblock]["Area"]["start"]["X"] - 5 && (int) $player->getZ() >= $skyblockArray[$skyblock]["Area"]["start"]["Z"] - 5 && (int) $player->getX() <= $skyblockArray[$skyblock]["Area"]["end"]["X"] + 5 && (int) $player->getZ() <= $skyblockArray[$skyblock]["Area"]["end"]["Z"] + 5) && ($player->getLevel()->getFolderName() === $skyblockArray[$skyblock]["World"])) {
-
-          $islandOwner = $skyblock;
-          break;
-        }
-      }
-
-      return $islandOwner;
-    } else {
-
-      return false;
-    }
-  }
-  public function getPlayersOnIsland(Player $player): array {
-
-    $name = strtolower($player->getName());
-    $onlinePlayers = $this->getServer()->getOnlinePlayers();
-    $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $onIsland = [];
-
-    foreach($onlinePlayers as $p) {
-
-      $pX = (int) $p->getX();
-      $pZ = (int) $p->getZ();
-      $pWorld = $p->getLevel();
-
-      if ($pWorld->getFolderName() === $skyblockArray[$name]["World"]) {
-
-        if ($pX >= $skyblockArray[$name]["Area"]["start"]["X"] && $pX <= $skyblockArray[$name]["Area"]["end"]["X"] && $pZ >= $skyblockArray[$name]["Area"]["start"]["Z"] && $pZ <= $skyblockArray[$name]["Area"]["end"]["Z"]) {
-
-          array_push($onIsland, $p->getName());
-        }
+        return $owner;
       }
     }
+    return false;
+  }
 
-    return $onIsland;
+  public function getIslandAtBlock(Block $block) {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+
+    foreach ($skyblockArray as $owner => $spawnArray) {
+
+      $x = $block->getX();
+      $z = $block->getZ();
+
+      $ownerX = $spawnArray[0];
+      $ownerZ = $spawnArray[1];
+
+      if (($x > $ownerX - 50 && $z > $ownerZ - 50) && ($x < $ownerX + 50 && $z < $ownerZ + 50)) {
+
+        return $owner;
+      }
+    }
+    return false;
   }
 }

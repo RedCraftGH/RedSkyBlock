@@ -2,19 +2,14 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
-use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
-
-use RedCraftPE\RedSkyBlock\SkyBlock;
-use RedCraftPE\RedSkyBlock\Commands\Island;
+use pocketmine\utils\TextFormat;
 
 class Add {
 
-  private static $instance;
+  public function __construct($plugin) {
 
-  public function __construct() {
-
-    self::$instance = $this;
+    $this->plugin = $plugin;
   }
 
   public function onAddCommand(CommandSender $sender, array $args): bool {
@@ -28,57 +23,35 @@ class Add {
       } else {
 
         $senderName = strtolower($sender->getName());
-        $limit = SkyBlock::getInstance()->cfg->get("MemberLimit");
-        $skyblockArray = SkyBlock::getInstance()->skyblock->get("SkyBlock", []);
-        $playerName = str_replace("\"", "", implode(" ", array_slice($args, 1)));
-        $playerName = str_replace("'", "", $playerName);
-        $playerName = str_replace("`", "", $playerName);
-        $player = SkyBlock::getInstance()->getServer()->getPlayerExact($playerName);
-        if (!$player) {
+        $name = strtolower(implode(" ", array_slice($args, 1)));
+        $plugin = $this->plugin;
+        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+        if (file_exists($filePath)) {
 
-          $sender->sendMessage(TextFormat::WHITE . implode(" ", array_slice($args, 1)) . TextFormat::RED . " does not exist or is not online.");
-          return true;
-        } else {
+          $playerDataEncoded = file_get_contents($filePath);
+          $playerData = (array) json_decode($playerDataEncoded);
 
-          if (array_key_exists($senderName, $skyblockArray)) {
+          if (in_array($name, $playerData["Island Members"])) {
 
-            if (count($skyblockArray[$senderName]["Members"]) === $limit && !$sender->hasPermission("skyblock.umembers")) {
-
-              $sender->sendMessage(TextFormat::RED . "Your island has reached the maximum number of members.");
-              return true;
-            } else {
-
-              if (in_array($player->getName(), $skyblockArray[$senderName]["Members"])) {
-
-                $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::RED . " is already a member of your island.");
-                return true;
-              } else {
-
-                if (!in_array($player->getName(), $skyblockArray[$senderName]["Banned"])) {
-
-                  $skyblockArray[$senderName]["Members"][] = $player->getName();
-                  SkyBlock::getInstance()->skyblock->set("SkyBlock", $skyblockArray);
-                  SkyBlock::getInstance()->skyblock->save();
-                  $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::GREEN . " has been added to your island.");
-                  $player->sendMessage(TextFormat::WHITE . $sender->getName() . TextFormat::GREEN . " has added you to their island.");
-                  return true;
-                } else {
-
-                  $sender->sendMessage(TextFormat::WHITE . $player->getName() . TextFormat::RED . " is banned from your island.");
-                  return true;
-                }
-              }
-            }
+            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is already a member of your island.");
+            return true;
           } else {
 
-            $sender->sendMessage(TextFormat::RED . "You do not have an island yet.");
+            $playerData["Island Members"][] = $name;
+            $playerDataEncoded = json_encode($playerData);
+            file_put_contents($filePath, $playerDataEncoded);
+            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is now a member of your island.");
             return true;
           }
+        } else {
+
+          $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
+          return true;
         }
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");
+      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
       return true;
     }
   }
