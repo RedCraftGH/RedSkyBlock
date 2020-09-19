@@ -2,7 +2,7 @@
 [![](https://poggit.pmmp.io/shield.api/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 [![](https://poggit.pmmp.io/shield.dl.total/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 
-> __*Quick Plugin Check:*__ RedSkyBlock is no longer in ALPHA! No bugs found in the current release. Use with caution.
+> __*Quick Plugin Check:*__ Plugin Stability Untested.
 
 <img src="https://github.com/RedCraftGH/RedSkyBlock/blob/master/icon.png" width="100" height="100" align="left"></img>
 
@@ -22,26 +22,26 @@ If you wish to request features, or notify me about an issue, please, make an is
 
 # Features (completed and coming soon)
 - Main Features
-  - [x] SkyBlock virtually infinite island generation
-  - [x] Magic SkyBlock cobblestone generator (Better customization next update)
+  - [x] SkyBlock World Creator and Island Generator
+  - [x] Magic SkyBlock cobblestone generator
   - [x] Island teleportation
   - [x] Island locking/unlocking
-  - [x] Island Area Protection (Customization Next update).
-  - [x] Deep customization in config.yml (More coming soon...)
-  - [x] Island Members (Configurable in the config.yml)
-  - [x] Island Kick/Ban
-  - [x] Island Top
-  - [x] Island Limits
+  - [x] Island Area Protection.
+  - [x] Customization in config.yml (More coming soon...)
+  - [x] Island Members
+  - [ ] Island Kick/Ban
+  - [ ] Island Top
+  - [ ] Island Limits
   - [x] Island generation intervals (customizable in the config.yml)
   - [x] Starting SkyBlock items (Customizable in the config.yml)
   - [x] Completely customizable island generation! You pick how you're islands look!
-  - [x] SkyBlock admin commands
-  - [x] Admin bypass permissions
+  - [ ] SkyBlock admin commands
+  - [ ] Admin bypass permissions
   - [x] Personalized Islands
 - Additional Features
-  - [x] Island information and stats
+  - [ ] Island information and stats
   - [ ] Nether islands (Coming much later...)
   - [ ] Lag fighter (Coming much later...)
-  - [x] Safe Void in SkyBlock world (Configurable in the config.yml)
-  - [x] Keep inventory (In config.yml)
+  - [ ] Safe Void in SkyBlock world (Configurable in the config.yml)
+  - [ ] Keep inventory (In config.yml)
   - [ ] More coming soon...
