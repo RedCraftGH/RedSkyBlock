@@ -46,6 +46,7 @@ class UpdateZone {
         }
       }
       $plugin->skyblock->set("Island Blocks", $islandBlocks);
+      $plugin->skyblock->set("Zone Created", true);
       $plugin->skyblock->save();
       $sender->sendMessage(TextFormat::GREEN . "The Island Zone has been updated.");
       return true;

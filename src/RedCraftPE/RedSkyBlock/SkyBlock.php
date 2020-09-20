@@ -76,16 +76,23 @@ class SkyBlock extends PluginBase {
 
   public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
 
-    switch(strtolower($command->getName())) {
+    if ($sender instanceof Player) {
 
-      case "island":
+      switch(strtolower($command->getName())) {
 
-        return $this->island->onIslandCommand($sender, $command, $label, $args);
-      break;
-      case "spawn":
+        case "island":
 
-        return $this->spawn->onSpawnCommand($sender, $command, $label, $args);
-      break;
+          return $this->island->onIslandCommand($sender, $command, $label, $args);
+        break;
+        case "spawn":
+
+          return $this->spawn->onSpawnCommand($sender, $command, $label, $args);
+        break;
+      }
+    } else {
+
+      $this->getLogger()->info(TextFormat::RED . "You can only use this command in the game.");
+      return true;
     }
     return false;
   }
