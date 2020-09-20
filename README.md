@@ -10,7 +10,7 @@
 RedSkyBlock aims to be a feature rich, user-friendly SkyBlock plugin. RedSkyBlock includes many useful, built-in features that can be edited in the config.yml and with the use of some commands in-game.
 
 # Discord
-Join the [Red Development](https://discord.gg/8s2sbvr) Discord for support and more.
+Join the [Red Development](https://discord.gg/ZZrUBkD) Discord for support and more.
 
 # Donations
 Donations are, of course, very appreciated! If you like RedSkyBlock please consider [donating](https://www.paypal.me/acidraincr).
