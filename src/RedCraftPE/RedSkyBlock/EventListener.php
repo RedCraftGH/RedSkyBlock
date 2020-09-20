@@ -44,12 +44,18 @@ class EventListener implements Listener {
     if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-      $playerData = null;
+      $playerData;
+
+      if ($owner === null) {
+
+        $event->setCancelled();
+        return;
+      }
 
       if (file_exists($filePath)) {
 
         $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
+        $playerData = (array) json_decode($playerDataEncoded, true);
       }
       if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
 
@@ -71,12 +77,18 @@ class EventListener implements Listener {
     if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-      $playerData = null;
+      $playerData;
+
+      if ($owner === null) {
+
+        $event->setCancelled();
+        return;
+      }
 
       if (file_exists($filePath)) {
 
         $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
+        $playerData = (array) json_decode($playerDataEncoded, true);
       }
       if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
 
@@ -102,12 +114,19 @@ class EventListener implements Listener {
         $owner = $plugin->getIslandAtBlock($block);
 
         $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-        $playerData = null;
+        $playerData;
+
+        if ($owner === null) {
+
+          $event->setCancelled();
+          $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+          return;
+        }
 
         if (file_exists($filePath)) {
 
           $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded);
+          $playerData = (array) json_decode($playerDataEncoded, true);
         }
 
         if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
@@ -132,12 +151,19 @@ class EventListener implements Listener {
       $owner = $plugin->getIslandAtPlayer($player);
 
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-      $playerData = null;
+      $playerData;
+
+      if ($owner === null) {
+
+        $event->setCancelled();
+        $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+        return;
+      }
 
       if (file_exists($filePath)) {
 
         $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
+        $playerData = (array) json_decode($playerDataEncoded, true);
       }
 
       if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
@@ -179,12 +205,18 @@ class EventListener implements Listener {
       if ($entity->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
         $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
-        $playerData = null;
+        $playerData;
+
+        if ($owner === null) {
+
+          $event->setCancelled();
+          return;
+        }
 
         if (file_exists($filePath)) {
 
           $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded);
+          $playerData = (array) json_decode($playerDataEncoded, true);
         }
 
         if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"])) {

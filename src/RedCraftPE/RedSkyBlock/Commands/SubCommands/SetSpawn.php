@@ -25,7 +25,7 @@ class SetSpawn {
         if (strtolower($sender->getName()) === $owner && $sender->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
           $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded);
+          $playerData = (array) json_decode($playerDataEncoded, true);
 
           $playerData["Island Spawn"][0] = (int) round($sender->getX());
           $playerData["Island Spawn"][1] = (int) round($sender->getY());

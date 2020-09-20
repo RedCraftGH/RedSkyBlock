@@ -108,9 +108,12 @@ class SkyBlock extends PluginBase {
       if (($x > $ownerX - ($islandSize / 2) && $z > $ownerZ - ($islandSize / 2)) && ($x < $ownerX + ($islandSize / 2) && $z < $ownerZ + ($islandSize / 2))) {
 
         return $owner;
+      } else {
+
+        $owner = null;
       }
     }
-    return false;
+    return $owner;
   }
 
   public function getIslandAtBlock(Block $block) {
@@ -129,8 +132,11 @@ class SkyBlock extends PluginBase {
       if (($x > $ownerX - ($islandSize / 2) && $z > $ownerZ - ($islandSize / 2)) && ($x < $ownerX + ($islandSize / 2) && $z < $ownerZ + ($islandSize / 2))) {
 
         return $owner;
+      } else {
+
+        $owner = null;
       }
     }
-    return false;
+    return $owner;
   }
 }

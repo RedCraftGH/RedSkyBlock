@@ -23,7 +23,7 @@ class Lock {
       if (file_exists($plugin->getDataFolder() . "Players/" . strtolower($sender->getName()) . ".json")) {
 
         $jsonPlayerData = file_get_contents($playerFilePath);
-        $playerData = (array) json_decode($jsonPlayerData);
+        $playerData = (array) json_decode($jsonPlayerData, true);
 
         if (count($args) < 2) {
 

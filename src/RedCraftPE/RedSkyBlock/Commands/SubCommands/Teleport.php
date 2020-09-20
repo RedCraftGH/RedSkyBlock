@@ -47,7 +47,7 @@ class Teleport {
         if (file_exists($plugin->getDataFolder() . "Players/" . $senderName . ".json")) {
 
           $playerDataEncoded = file_get_contents($plugin->getDataFolder() . "Players/" . $senderName . ".json");
-          $playerData = (array) json_decode($playerDataEncoded);
+          $playerData = (array) json_decode($playerDataEncoded, true);
 
           if ($playerData["Island Spawn"] !== []) {
 
@@ -77,7 +77,7 @@ class Teleport {
         if (file_exists($plugin->getDataFolder() . "Players/" . $name . ".json")) {
 
           $playerDataEncoded = file_get_contents($plugin->getDataFolder() . "Players/" . $name . ".json");
-          $playerData = (array) json_decode($playerDataEncoded);
+          $playerData = (array) json_decode($playerDataEncoded, true);
 
           if ($playerData["Island Locked"] === false || $senderName === $name || in_array($senderName, $playerData["Island Members"])) {
 

@@ -29,7 +29,7 @@ class Add {
         if (file_exists($filePath)) {
 
           $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded);
+          $playerData = (array) json_decode($playerDataEncoded, true);
 
           if (in_array($name, $playerData["Island Members"])) {
 
