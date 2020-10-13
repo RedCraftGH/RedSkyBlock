@@ -17,9 +17,13 @@ class Spawn {
   public function onSpawnCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
 
     $plugin = $this->plugin;
-    $world = $plugin->getServer()->getLevelByName($plugin->cfg->get("Spawn World"));
 
-    $sender->teleport(new Position(208, 14, 261, $world));
-    return true;
+    if ($plugin->cfg->get("Spawn Command") === "on") {
+
+      $spawn = $plugin->getServer()->getDefaultLevel()->getSafeSpawn();
+
+      $sender->teleport($spawn);
+      return true;
+    }
   }
 }

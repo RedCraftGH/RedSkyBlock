@@ -1,7 +1,12 @@
 ---
 Version: 1
 
-Spawn World: world
+Spawn Command: on #Turn off if you are using a different plugin that controls spawnpoints.
+Spawn Hunger: off #Turn on if you want players to lose hunger in the spawn world.
+Spawn Damage: off #Turn on if you want players to take damange in the spawn world.
+
+Island Hunger: on #Turn off if you do not want players to lose hunger in the SkyBlock world.
+Island PVP: off #Turn on if you want PVP to be enabled on SkyBlock islands.
 
 Generator Ores:
   #COBBLESTONE
@@ -35,17 +40,15 @@ Starting Items:
   - 40, 0, 1
 
 Island Zone:
-  0: 163
-  1: 14
-  2: 267
-  3: 155
-  4: 30
-  5: 275
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
 
 Zone World: world
 
 Island Interval: 600
-
 Island Size: 100
-
 Island Spawn Y: 26

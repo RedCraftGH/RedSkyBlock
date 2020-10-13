@@ -182,11 +182,15 @@ class EventListener implements Listener {
     $entity = $event->getEntity();
     $damager = $event->getDamager();
     $plugin = $this->plugin;
-    $world = $plugin->getServer()->getLevelByName($plugin->skyblock->get("Master World"));
+    $masterWorld = $plugin->getServer()->getLevelByName($plugin->skyblock->get("Master World"));
 
-    if (($entity instanceof Player && $damager instanceof Player) && $entity->getLevel()->getFolderName() === $world->getFolderName()) {
+    if (($entity instanceof Player && $damager instanceof Player) && $entity->getLevel()->getFolderName() === $masterWorld) {
 
-      $event->setCancelled();
+      if ($plugin->cfg->get("Island PVP") === "off") {
+
+        $event->setCancelled();
+        return;
+      }
     }
   }
   public function onPickup(InventoryPickupItemEvent $event) {
@@ -234,39 +238,44 @@ class EventListener implements Listener {
 
     $plugin = $this->plugin;
     $player = $event->getPlayer();
-    $world = $plugin->getServer()->getLevelByName($plugin->cfg->get("Spawn World"));
+    $spawn = $plugin->getServer()->getDefaultLevel()->getSafeSpawn();
 
-    $player->teleport(new Position(208, 14, 261, $world));
+    $player->teleport($spawn);
   }
   public function onExhaust(PlayerExhaustEvent $event) {
 
     $player = $event->getPlayer();
     $plugin = $this->plugin;
 
-    if ($player->getLevel()->getFolderName() === $plugin->cfg->get("Spawn World")) {
+    if ($player->getLevel()->getFolderName() === $plugin->getServer()->getDefaultLevel()->getFolderName() && $plugin->cfg->get("Spawn Hunger" === "off")) {
 
       $event->setCancelled();
+      return;
+    } elseif ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World") && $plugin->cfg->get("Island Hunger" === "off")) {
+
+      $event->setCancelled();
+      return;
     }
   }
   public function onDamage(EntityDamageEvent $event) {
 
     $entity = $event->getEntity();
     $plugin = $this->plugin;
-    $spawnWorld = $plugin->getServer()->getLevelByName($plugin->cfg->get("Spawn World"));
+    $spawn = $plugin->getServer()->getDefaultLevel()->getSafeSpawn();
     $masterWorld = $plugin->getServer()->getLevelByName($plugin->skyblock->get("Master World"));
 
-    if ($entity instanceof Player && $entity->getLevel() === $spawnWorld) {
+    if (($entity instanceof Player && $entity->getLevel()->getFolderName() === $plugin->getServer()->getDefaultLevel()->getFolderName()) && $plugin->cfg->get("Spawn Damage") === "off") {
 
       $event->setCancelled();
       return;
-    } elseif ($entity instanceof Player && $entity->getLevel() === $masterWorld) {
+    } elseif ($entity instanceof Player && $entity->getLevel()->getFolderName() === $masterWorld) {
 
       if ($event->getBaseDamage() >= $entity->getHealth()) {
 
         $event->setCancelled();
         $entity->setHealth($entity->getMaxHealth());
         $entity->setFood($entity->getMaxFood());
-        $entity->teleport(new Position(208, 14, 261, $spawnWorld));
+        $entity->teleport($spawn);
         $plugin->getServer()->broadcastMessage(TextFormat::WHITE . $entity->getName() . " has died.");
         return;
       }

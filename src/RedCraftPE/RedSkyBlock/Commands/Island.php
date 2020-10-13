@@ -16,6 +16,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSpawn;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Teleport;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\UpdateZone;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetZone;
 
 class Island {
 
@@ -28,6 +29,7 @@ class Island {
   private $setWorld;
   private $teleport;
   private $updateZone;
+  private $setzone;
 
   public function __construct($plugin) {
 
@@ -42,6 +44,7 @@ class Island {
     $this->setWorld = new SetWorld($plugin);
     $this->teleport = new Teleport($plugin);
     $this->updateZone = new UpdateZone($plugin);
+    $this->setzone = new SetZone($plugin);
   }
   public function onIslandCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
 
@@ -94,6 +97,10 @@ class Island {
         case "updatezone":
 
           return $this->updateZone->onUpdateZoneCommand($sender);
+        break;
+        case "setzone":
+
+          return $this->setzone->onSetZoneCommand($sender, $args);
         break;
       }
       $sender->sendMessage(TextFormat::WHITE . "Usage: /island <args>");

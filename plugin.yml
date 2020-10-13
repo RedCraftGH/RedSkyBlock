@@ -36,3 +36,6 @@ permissions:
     skyblock.updatezone:
       description: With this permission players can update the Island Zone.
       default: op
+    skyblock.setzone:
+      description: With this permission players can change the location of the island zone.
+      default: op
