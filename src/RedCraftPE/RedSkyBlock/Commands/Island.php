@@ -10,7 +10,10 @@ use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Add;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Kick;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\On;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reload;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Remove;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSpawn;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetWorld;
@@ -23,7 +26,10 @@ class Island {
   private $add;
   private $create;
   private $createWorld;
+  private $kick;
   private $lock;
+  private $on;
+  private $reload;
   private $remove;
   private $setSpawn;
   private $setWorld;
@@ -38,7 +44,10 @@ class Island {
     $this->add = new Add($plugin);
     $this->create = new Create($plugin);
     $this->createWorld = new CreateWorld($plugin);
+    $this->kick = new Kick($plugin);
     $this->lock = new Lock($plugin);
+    $this->on = new On($plugin);
+    $this->reload = new Reload($plugin);
     $this->remove = new Remove($plugin);
     $this->setSpawn = new SetSpawn($plugin);
     $this->setWorld = new SetWorld($plugin);
@@ -69,9 +78,21 @@ class Island {
 
           return $this->createWorld->onCreateWorldCommand($sender, $args);
         break;
+        case "kick":
+
+          return $this->kick->onKickCommand($sender, $args);
+        break;
         case "lock":
 
           return $this->lock->onLockCommand($sender, $args);
+        break;
+        case "on":
+
+          return $this->on->onOnCommand($sender);
+        break;
+        case "reload":
+
+          return $this->reload->onReloadCommand($sender);
         break;
         case "remove":
 

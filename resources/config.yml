@@ -1,12 +1,12 @@
 ---
 Version: 1
 
-Spawn Command: on #Turn off if you are using a different plugin that controls spawnpoints.
-Spawn Hunger: off #Turn on if you want players to lose hunger in the spawn world.
-Spawn Damage: off #Turn on if you want players to take damange in the spawn world.
+Spawn Command: "on" #Turn off if you are using a different plugin that controls spawnpoints.
+Spawn Hunger: "off" #Turn on if you want players to lose hunger in the spawn world.
+Spawn Damage: "off" #Turn on if you want players to take damange in the spawn world.
 
-Island Hunger: on #Turn off if you do not want players to lose hunger in the SkyBlock world.
-Island PVP: off #Turn on if you want PVP to be enabled on SkyBlock islands.
+Island Hunger: "on" #Turn off if you do not want players to lose hunger in the SkyBlock world.
+Island PVP: "off" #Turn on if you want PVP to be enabled on SkyBlock islands.
 
 Generator Ores:
   #COBBLESTONE
@@ -47,7 +47,7 @@ Island Zone:
   4: 0
   5: 0
 
-Zone World: world
+Zone World: "world" #Set this to the world where your custom island template resides.
 
 Island Interval: 600
 Island Size: 100

@@ -39,10 +39,10 @@ class EventListener implements Listener {
     $player = $event->getPlayer();
     $block = $event->getBlock();
     $plugin = $this->plugin;
-    $owner = $plugin->getIslandAtBlock($block);
 
     if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
+      $owner = $plugin->getIslandAtBlock($block);
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
       $playerData;
 
@@ -72,10 +72,10 @@ class EventListener implements Listener {
     $player = $event->getPlayer();
     $block = $event->getBlock();
     $plugin = $this->plugin;
-    $owner = $plugin->getIslandAtBlock($block);
 
     if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
+      $owner = $plugin->getIslandAtBlock($block);
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
       $playerData;
 
@@ -112,7 +112,6 @@ class EventListener implements Listener {
       if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
         $owner = $plugin->getIslandAtBlock($block);
-
         $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
         $playerData;
 
@@ -149,7 +148,6 @@ class EventListener implements Listener {
     if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
       $owner = $plugin->getIslandAtPlayer($player);
-
       $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
       $playerData;
 
@@ -204,10 +202,10 @@ class EventListener implements Listener {
     $plugin = $this->plugin;
 
     if ($entity instanceof Player) {
-      $owner = $plugin->getIslandAtPlayer($entity);
 
       if ($entity->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
+        $owner = $plugin->getIslandAtPlayer($entity);
         $filePath = $plugin->getDataFolder() . "Players/" . $owner . ".json";
         $playerData;
 

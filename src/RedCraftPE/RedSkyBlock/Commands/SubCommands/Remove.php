@@ -25,8 +25,9 @@ class Remove {
         $senderName = strtolower($sender->getName());
         $name = strtolower(implode(" ", array_slice($args, 1)));
         $plugin = $this->plugin;
+        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
         $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        if (file_exists($filePath)) {
+        if (array_key_exists($senderName, $skyblockArray)) {
 
           $playerDataEncoded = file_get_contents($filePath);
           $playerData = (array) json_decode($playerDataEncoded, true);

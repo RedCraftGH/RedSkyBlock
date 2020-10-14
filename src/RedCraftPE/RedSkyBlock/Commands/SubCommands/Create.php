@@ -40,10 +40,16 @@ class Create {
       } else {
 
         $level = $plugin->getServer()->getLevelByName($levelName);
-        if (!$level) {
+        if (!$plugin->getServer()->isLevelLoaded($levelName)) {
 
-          $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
-          return true;
+          if ($plugin->getServer()->loadLevel($levelName)) {
+
+            $plugin->getServer()->loadLevel($levelName);
+          } else {
+
+            $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist or can't be loaded.");
+            return true;
+          }
         }
 
         if (array_key_exists($senderName, $skyblockArray)) {

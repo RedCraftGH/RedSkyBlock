@@ -17,10 +17,11 @@ class Lock {
     if ($sender->hasPermission("skyblock.lock")) {
 
       $plugin = $this->plugin;
+      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
       $senderName = strtolower($sender->getName());
       $playerFilePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
 
-      if (file_exists($plugin->getDataFolder() . "Players/" . strtolower($sender->getName()) . ".json")) {
+      if (array_key_exists($senderName, $skyblockArray)) {
 
         $jsonPlayerData = file_get_contents($playerFilePath);
         $playerData = (array) json_decode($jsonPlayerData, true);
@@ -68,12 +69,12 @@ class Lock {
         }
       } else {
 
-        $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
+        $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
         return true;
       }
     } else {
 
-      $sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
+      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
       return true;
     }
   }

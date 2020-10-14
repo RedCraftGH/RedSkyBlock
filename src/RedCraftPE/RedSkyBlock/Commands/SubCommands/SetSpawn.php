@@ -18,9 +18,11 @@ class SetSpawn {
 
       $plugin = $this->plugin;
       $owner = $plugin->getIslandAtPlayer($sender);
+      $senderName = strtolower($sender->getName());
+      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
       $filePath = $plugin->getDataFolder() . "Players/" . strtolower($sender->getName()) . ".json";
 
-      if (file_exists($filePath)) {
+      if (array_key_exists($senderName, $skyblockArray)) {
 
         if (strtolower($sender->getName()) === $owner && $sender->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
@@ -42,7 +44,7 @@ class SetSpawn {
         }
       } else {
 
-        $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
+        $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
         return true;
       }
     } else {

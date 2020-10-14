@@ -17,6 +17,7 @@ class Spawn {
   public function onSpawnCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
 
     $plugin = $this->plugin;
+    $check = $plugin->cfg->get("Spawn Command");
 
     if ($plugin->cfg->get("Spawn Command") === "on") {
 

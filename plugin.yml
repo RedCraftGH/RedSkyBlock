@@ -39,3 +39,12 @@ permissions:
     skyblock.setzone:
       description: With this permission players can change the location of the island zone.
       default: op
+    skyblock.onisland:
+      description: With this permission players can see who is on their island.
+      default: true
+    skyblock.kick:
+      description: With this permission players can kick other players off of their island.
+      default: true
+    skyblock.reload:
+      description: With this permission players can reload the SkyBlock server files.
+      default: op

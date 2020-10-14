@@ -146,4 +146,30 @@ class SkyBlock extends PluginBase {
     }
     return $owner;
   }
+
+  public function getPlayersAtIsland(Player $player): array {
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    $islandSize = $this->cfg->get("Island Size");
+    $onlinePlayers = $this->getServer()->getOnlinePlayers();
+    $onIsland = [];
+    $playerName = strtolower($player->getName());
+
+    foreach ($onlinePlayers as $p) {
+
+      $px = $p->getX();
+      $pz = $p->getZ();
+      $pWorld = $p->getLevel();
+
+      if ($pWorld->getFolderName() === $this->skyblock->get("Master World")) {
+
+        if (($px > $skyblockArray[$playerName][0] - ($islandSize / 2) && $pz > $skyblockArray[$playerName][1] - ($islandSize / 2)) && ($px < $skyblockArray[$playerName][0] + ($islandSize / 2) && $pz < $skyblockArray[$playerName][1] + ($islandSize / 2))) {
+
+          array_push($onIsland, strtolower($p->getName()));
+        }
+      }
+    }
+
+    return $onIsland;
+  }
 }

@@ -44,7 +44,7 @@ class Teleport {
 
       if (count($args) < 2) {
 
-        if (file_exists($plugin->getDataFolder() . "Players/" . $senderName . ".json")) {
+        if (array_key_exists($senderName, $skyblockArray)) {
 
           $playerDataEncoded = file_get_contents($plugin->getDataFolder() . "Players/" . $senderName . ".json");
           $playerData = (array) json_decode($playerDataEncoded, true);
@@ -67,14 +67,14 @@ class Teleport {
           return true;
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
+          $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
           return true;
         }
       } else {
 
         $name = strtolower(implode(" ", array_slice($args, 1)));
 
-        if (file_exists($plugin->getDataFolder() . "Players/" . $name . ".json")) {
+        if (array_key_exists($name, $skyblockArray)) {
 
           $playerDataEncoded = file_get_contents($plugin->getDataFolder() . "Players/" . $name . ".json");
           $playerData = (array) json_decode($playerDataEncoded, true);
