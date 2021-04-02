@@ -57,6 +57,10 @@ class SkyBlock extends PluginBase {
       if ($this->getServer()->loadLevel($this->skyblock->get("Master World"))) {
 
         $this->getServer()->loadLevel($this->skyblock->get("Master World"));
+        if ($this->cfg->get("Nether Islands")) {
+
+          $this->getServer()->loadLevel($this->skyblock->get("Master World") . "-Nether");
+        }
       } else {
 
         $this->getLogger()->info(TextFormat::RED . "Error: Unable to load the Skyblock Master world.");
@@ -161,7 +165,7 @@ class SkyBlock extends PluginBase {
       $pz = $p->getZ();
       $pWorld = $p->getLevel();
 
-      if ($pWorld->getFolderName() === $this->skyblock->get("Master World")) {
+      if ($pWorld->getFolderName() === $this->skyblock->get("Master World") || $pWorld->getFolderName() === $this->skyblock->get("Master World") . "-Nether") {
 
         if (($px > $skyblockArray[$playerName][0] - ($islandSize / 2) && $pz > $skyblockArray[$playerName][1] - ($islandSize / 2)) && ($px < $skyblockArray[$playerName][0] + ($islandSize / 2) && $pz < $skyblockArray[$playerName][1] + ($islandSize / 2))) {
 

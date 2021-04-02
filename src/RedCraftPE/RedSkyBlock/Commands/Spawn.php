@@ -23,7 +23,14 @@ class Spawn {
 
       $spawn = $plugin->getServer()->getDefaultLevel()->getSafeSpawn();
 
+      if ($sender->getGamemode() === 0) {
+
+        $sender->setAllowFlight(false);
+      }
       $sender->teleport($spawn);
+      return true;
+    } else {
+
       return true;
     }
   }

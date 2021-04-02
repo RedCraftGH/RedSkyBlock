@@ -64,9 +64,10 @@ class Create {
             $turns = $plugin->skyblock->get("Turns");
             $steps = $plugin->skyblock->get("Steps");
             $stepChecker = $plugin->skyblock->get("Step Checker");
-            $lastX = $plugin->skyblock->get("Last X");
-            $lastZ = $plugin->skyblock->get("Last Z");
-            $dir = 0;
+            $lastX = $plugin->skyblock->get("Last X"); //starts at 0
+            $lastZ = $plugin->skyblock->get("Last Z"); //starts at 0 , coords: 0, y, 0
+            $dir = 0; //in future need to build algorithm to test for blocks at interval to create the skyblock island generation pattern
+            $cooldown = $plugin->cfg->get("Reset Cooldown");
 
             if ($steps === -1) {
 
@@ -107,7 +108,7 @@ class Create {
               }
             }
 
-            $sender->teleport(new Position($lastX + 4, $islandSpawnY, $lastZ + 2, $world));
+            $sender->teleport(new Position($lastX + 3, $islandSpawnY, $lastZ + 3, $world));
             $sender->setImmobile(true);
 
             $plugin->getScheduler()->scheduleDelayedTask(new Generate($plugin, $sender, $lastX, $lastZ, $world), 50);
@@ -127,7 +128,16 @@ class Create {
               }
             }
 
-            $playerData = array("Island Members" => [], "Island Spawn" => [], "Island Locked" => false);
+            $playerData = array(
+              "Island Members" => [],
+              "Name" => $sender->getName() . "'s island",
+              "Value" => 0,
+              "Island Spawn" => [$lastX + 3, $islandSpawnY, $lastZ + 3],
+              "Nether Spawn" => [],
+              "Cooldown" => Time() + $cooldown,
+              "Island Locked" => false,
+              "Banned" => []
+            );
 
             if (file_put_contents($plugin->getDataFolder() . "Players/" . $senderName . ".json", json_encode($playerData)) !== false) {
 
@@ -137,13 +147,14 @@ class Create {
               $plugin->getLogger()->info(TextFormat::RED . "Error: {$sender->getName}'s player files were not successfully generated.");
             }
 
-            $skyblockArray[$senderName] = [$lastX + 4, $lastZ + 2];
+            $skyblockArray[$senderName] = [$lastX + 3, $lastZ + 3]; //Necessary for event listener boundaries and api functions -- + 3 & + 3 necessary for finding first island spawn
             $plugin->skyblock->set("SkyBlock", $skyblockArray);
-            $plugin->skyblock->set("Steps", $steps);
-            $plugin->skyblock->set("Turns", $turns);
+            $plugin->skyblock->set("Steps", $steps); //take out after new island generation algorithm in place?
+            $plugin->skyblock->set("Turns", $turns); //take out after new island generation algorithm in place?
             $plugin->skyblock->set("Step Checker", $stepChecker);
             $plugin->skyblock->set("Last X", $lastX);
             $plugin->skyblock->set("Last Z", $lastZ);
+            $plugin->skyblock->set("Islands", intval($plugin->skyblock->get("Islands")) + 1);
             $plugin->skyblock->save();
             return true;
           } else {

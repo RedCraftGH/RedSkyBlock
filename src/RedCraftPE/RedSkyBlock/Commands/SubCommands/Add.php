@@ -46,7 +46,7 @@ class Add {
           }
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
+          $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
           return true;
         }
       }

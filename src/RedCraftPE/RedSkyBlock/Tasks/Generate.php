@@ -40,7 +40,7 @@ class Generate extends Task {
 
     for ($x = $lastX; $x <= $lastX + (max($x1, $x2) - min($x1, $x2)); $x++) {
 
-      for ($y = 18; $y <= 18 + (max($y1, $y2) - min($y1, $y2)); $y++) {
+      for ($y = 80; $y <= 80 + (max($y1, $y2) - min($y1, $y2)); $y++) {
 
         for ($z = $lastZ; $z <= $lastZ + (max($z1, $z2) - min($z1, $z2)); $z++) {
 

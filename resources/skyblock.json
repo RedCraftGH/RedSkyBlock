@@ -8,5 +8,7 @@
   "Last Z": 0,
   "SkyBlock": [],
   "Island Blocks": [],
-  "Zone Created": false
+  "Nether Blocks": [], 
+  "Zone Created": false,
+  "Nether Zone Created": false
 }

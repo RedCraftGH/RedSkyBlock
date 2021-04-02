@@ -14,10 +14,10 @@ commands:
 permissions:
     skyblock.create:
       description: With this permission players can create a SkyBlock island.
-      default: true
+      default: true #True means everyone will have this permission by default.
     skyblock.createworld:
       description: With this permission players can create and set a SkyBlock world for the server.
-      default: op
+      default: op #op means only operators will have this permission by default.
     skyblock.lock:
       description: With this permission players can lock/unlock their skyblock island.
       default: true
@@ -48,3 +48,32 @@ permissions:
     skyblock.reload:
       description: With this permission players can reload the SkyBlock server files.
       default: op
+    skyblock.leave:
+      description: With this permission players can remove themselves from other's islands.
+      default: true
+    skyblock.ban:
+      description: With this permission players can ban others from their own island.
+      default: true
+    skyblock.fly:
+      description: With this permission players can fly on their island or islands where they are members.
+      default: op
+    skyblock.name:
+      description: With this permission players can name their island.
+      default: true
+    skyblock.value:
+      description: With this permission players can check their islands value.
+      default: true
+    skyblock.top:
+      description: With this permission players can view the top islands.
+      default: true
+    skyblock.rank:
+      description: With this permission players can view the rank of their island.
+      default: true
+    skyblock.nether:
+      description: With this permission players use [some] nether commands.
+      default: true
+    skyblock.delete:
+      description: With this permission players can delete other player's island.
+      default: op
+    skyblock.restart:
+      description: With this permission players can restart their skyblock island.

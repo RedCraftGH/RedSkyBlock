@@ -1,12 +1,15 @@
 ---
 Version: 1
 
+# IN ORDER FOR MANUAL CHANGES IN THIS FILE TO TAKE PLACE THE COMMAND /is reload MUST BE USED ON THE SERVER OR THE SERVER MUST BE RESTARTED/RELOADED
+
 Spawn Command: "on" #Turn off if you are using a different plugin that controls spawnpoints.
 Spawn Hunger: "off" #Turn on if you want players to lose hunger in the spawn world.
 Spawn Damage: "off" #Turn on if you want players to take damange in the spawn world.
 
 Island Hunger: "on" #Turn off if you do not want players to lose hunger in the SkyBlock world.
 Island PVP: "off" #Turn on if you want PVP to be enabled on SkyBlock islands.
+Nether Islands: true #Turn off to disable this plugin's nether features
 
 Generator Ores:
   #COBBLESTONE
@@ -47,8 +50,32 @@ Island Zone:
   4: 0
   5: 0
 
-Zone World: "world" #Set this to the world where your custom island template resides.
+Nether Zone:
+  0: 0
+  1: 0
+  2: 0
+  3: 0
+  4: 0
+  5: 0
+
+Valuable Blocks:
+  133: 15
+  57: 10
+  41: 5
+  42: 5
+  152: 3
+  22: 3
+  173: 1
+
+Zone World: "world" #Set this to the world where custom island templates reside.
 
 Island Interval: 600
 Island Size: 100
-Island Spawn Y: 26
+Island Spawn Y: 26 #Initially calculated by the plugin but can be adjusted -- The height at which players first spawn into their island zone
+
+Keep Inventory: false
+Safe Void: false #Makes the void safe to jump in, IN THE SKYBLOCK WORLDS ONLY
+Island Boundaries: false #Invisible barrier that forces players to stay within island boundaries -- stability untested : working on possible optimizations?
+
+Reset Cooldown: 86400 #The time in seconds a player must wait before being able to restart their SkyBlock island again. 86400 seconds is one day.
+Reset Wipe: true #Clears the inventory of the player restarting their island

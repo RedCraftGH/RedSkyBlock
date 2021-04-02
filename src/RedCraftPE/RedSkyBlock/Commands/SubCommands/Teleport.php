@@ -49,20 +49,15 @@ class Teleport {
           $playerDataEncoded = file_get_contents($plugin->getDataFolder() . "Players/" . $senderName . ".json");
           $playerData = (array) json_decode($playerDataEncoded, true);
 
-          if ($playerData["Island Spawn"] !== []) {
+          $x = $playerData["Island Spawn"][0];
+          $y = $playerData["Island Spawn"][1];
+          $z = $playerData["Island Spawn"][2];
 
-            $x = $playerData["Island Spawn"][0];
-            $y = $playerData["Island Spawn"][1];
-            $z = $playerData["Island Spawn"][2];
+          if ($sender->getGamemode() === 0) {
 
-            $sender->teleport(new Position($x, $y, $z, $level));
-          } else {
-
-            $x = $skyblockArray[$senderName][0];
-            $z = $skyblockArray[$senderName][1];
-
-            $sender->teleport(new Position($x, $islandSpawnY, $z, $level));
+            $sender->setAllowFlight(false);
           }
+          $sender->teleport(new Position($x, $y, $z, $level));
           $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
           return true;
         } else {
@@ -81,23 +76,26 @@ class Teleport {
 
           if ($playerData["Island Locked"] === false || $senderName === $name || in_array($senderName, $playerData["Island Members"])) {
 
-            if ($playerData["Island Spawn"] !== []) {
+            if (in_array($senderName, $playerData["Banned"])) {
+
+              $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " has banned you from their island.");
+              return true;
+            } else {
 
               $x = $playerData["Island Spawn"][0];
               $y = $playerData["Island Spawn"][1];
               $z = $playerData["Island Spawn"][2];
 
-              $sender->teleport(new Position($x, $y, $z, $level));
-            } else {
+              if ($sender->getGamemode() === 0) {
 
-              $x = $skyblockArray[$name][0];
-              $z = $skyblockArray[$name][1];
-              $sender->teleport(new Position($x, $islandSpawnY, $z, $level));
+                $sender->setAllowFlight(false);
+              }
+              $sender->teleport(new Position($x, $y, $z, $level));
+              $sender->setFlying(false);
+              $sender->setAllowFlight(false);
+              $sender->sendMessage(TextFormat::GREEN . "You have been teleported to " . TextFormat::WHITE . $name . TextFormat::GREEN . "'s island.");
+              return true;
             }
-            $sender->setFlying(false);
-            $sender->setAllowFlight(false);
-            $sender->sendMessage(TextFormat::GREEN . "You have been teleported to " . TextFormat::WHITE . $name . TextFormat::GREEN . "'s island.");
-            return true;
           } else {
 
             $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " has locked their island.");

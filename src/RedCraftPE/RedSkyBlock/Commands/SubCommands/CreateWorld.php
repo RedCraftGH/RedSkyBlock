@@ -38,8 +38,16 @@ class CreateWorld {
           } else {
 
             $plugin->getServer()->generateLevel($world, null, 'pocketmine\level\generator\Flat', ["preset" => "3;minecraft:air;127;"]);
-            $sender->sendMessage(TextFormat::GREEN . "The empty world " . TextFormat::WHITE . $world . TextFormat::GREEN . " has been created for SkyBlock.");
-            return true;
+            if ($plugin->cfg->get("Nether Islands")) {
+
+              $plugin->getServer()->generateLevel($world . "-Nether", null, 'pocketmine\level\generator\Flat', ["preset" => "3;minecraft:air;8;"]);
+              $sender->sendMessage(TextFormat::GREEN . "The empty worlds " . TextFormat::WHITE . $world . TextFormat::GREEN . " and " . TextFormat::WHITE . "{$world}-Nether" . TextFormat::GREEN . " have been created for SkyBlock.");
+              return true;
+            } else {
+
+              $sender->sendMessage(TextFormat::GREEN . "The empty world " . TextFormat::WHITE . $world . TextFormat::GREEN . " has been created for SkyBlock.");
+              return true;
+            }
           }
         }
     } else {
