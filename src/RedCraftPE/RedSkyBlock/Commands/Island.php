@@ -13,7 +13,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Banned;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Delete;
-use RedCraftPE\RedSkyblock\Commands\SubCommands\Fly;
+use RedCraftPE\RedSkyblock\Commands\SubCommands\FlyCommand;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Kick;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Leave;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
@@ -77,7 +77,7 @@ class Island {
     $this->create = new Create($plugin);
     $this->createWorld = new CreateWorld($plugin);
     $this->delete = new Delete($plugin);
-    $this->fly = new Fly($plugin);
+    $this->fly = new FlyCommand($plugin);
     $this->kick = new Kick($plugin);
     $this->leave = new Leave($plugin);
     $this->lock = new Lock($plugin);
@@ -189,6 +189,7 @@ class Island {
           return $this->remove->onRemoveCommand($sender, $args);
         break;
         case "restart":
+        case "reset":
 
           return $this->restart->onRestartCommand($sender);
         break;

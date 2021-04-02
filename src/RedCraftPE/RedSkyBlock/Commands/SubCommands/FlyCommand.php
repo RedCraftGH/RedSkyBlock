@@ -5,7 +5,7 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Fly {
+class FlyCommand {
 
   public function __construct($plugin) {
 

@@ -107,6 +107,7 @@ class SkyBlock extends PluginBase {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
     $islandSize = $this->cfg->get("Island Size");
+    $owner = null;
 
     foreach ($skyblockArray as $owner => $spawnArray) {
 
