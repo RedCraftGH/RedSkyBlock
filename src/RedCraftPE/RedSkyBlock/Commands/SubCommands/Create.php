@@ -134,6 +134,7 @@ class Create {
               "Value" => 0,
               "Island Spawn" => [$lastX + 3, $islandSpawnY, $lastZ + 3],
               "Nether Spawn" => [],
+              "Island Size" => $initialSize,
               "Cooldown" => Time() + $cooldown,
               "Island Locked" => false,
               "Banned" => []

@@ -29,11 +29,12 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Remove;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Restart;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSpawn;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetWorld;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetZone;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Size;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Teleport;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Top;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Unban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\UpdateZone;
-use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetZone;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Value;
 
 class Island {
@@ -60,11 +61,12 @@ class Island {
   private $restart;
   private $setSpawn;
   private $setWorld;
+  private $setzone;
+  private $size;
   private $teleport;
   private $top;
   private $unban;
   private $updateZone;
-  private $setzone;
   private $value;
 
   public function __construct($plugin) {
@@ -93,11 +95,12 @@ class Island {
     $this->restart = new Restart($plugin);
     $this->setSpawn = new SetSpawn($plugin);
     $this->setWorld = new SetWorld($plugin);
+    $this->setzone = new SetZone($plugin);
+    $this->size = new Size($plugin);
     $this->teleport = new Teleport($plugin);
     $this->top = new Top($plugin);
     $this->unban = new Unban($plugin);
     $this->updateZone = new UpdateZone($plugin);
-    $this->setzone = new SetZone($plugin);
     $this->value = new Value($plugin);
   }
   public function onIslandCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
@@ -202,6 +205,14 @@ class Island {
 
           return $this->setWorld->onSetWorldCommand($sender, $args);
         break;
+        case "setzone":
+
+          return $this->setzone->onSetZoneCommand($sender, $args);
+        break;
+        case "size":
+
+          return $this->size->onSizeCommand($sender, $args);
+        break;
         case "spawn":
         case "goto":
         case "go":
@@ -224,10 +235,6 @@ class Island {
         case "updatezone":
 
           return $this->updateZone->onUpdateZoneCommand($sender, $args);
-        break;
-        case "setzone":
-
-          return $this->setzone->onSetZoneCommand($sender, $args);
         break;
         case "value":
 

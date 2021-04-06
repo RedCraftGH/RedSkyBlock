@@ -6,6 +6,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
 use pocketmine\utils\TextFormat;
 use pocketmine\level\Position;
+use pocketmine\math\Vector3;
 
 class Spawn {
 
@@ -28,6 +29,7 @@ class Spawn {
         $sender->setAllowFlight(false);
       }
       $sender->teleport($spawn);
+      $position = new Vector3(12, -7, 14);
       return true;
     } else {
 

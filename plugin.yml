@@ -77,3 +77,7 @@ permissions:
       default: op
     skyblock.restart:
       description: With this permission players can restart their skyblock island.
+      default: true
+    skyblock.size:
+      description: With this permission players can change the size of player's islands.
+      default: op

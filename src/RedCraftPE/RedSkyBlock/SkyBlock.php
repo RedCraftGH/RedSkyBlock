@@ -106,10 +106,14 @@ class SkyBlock extends PluginBase {
   public function getIslandAtPlayer(Player $player) {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $islandSize = $this->cfg->get("Island Size");
     $owner = null;
 
     foreach ($skyblockArray as $owner => $spawnArray) {
+
+      $filePath = $this->getDataFolder() . "Players/" . $owner . ".json";
+      $playerDataEncoded = file_get_contents($filePath);
+      $playerData = (array) json_decode($playerDataEncoded);
+      $islandSize = $playerData["Island Size"];
 
       $x = $player->getX();
       $z = $player->getZ();
@@ -131,9 +135,14 @@ class SkyBlock extends PluginBase {
   public function getIslandAtBlock(Block $block) {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $islandSize = $this->cfg->get("Island Size");
+    $owner = null;
 
     foreach ($skyblockArray as $owner => $spawnArray) {
+
+      $filePath = $this->getDataFolder() . "Players/" . $owner . ".json";
+      $playerDataEncoded = file_get_contents($filePath);
+      $playerData = (array) json_decode($playerDataEncoded);
+      $islandSize = $playerData["Island Size"];
 
       $x = $block->getX();
       $z = $block->getZ();
@@ -155,10 +164,13 @@ class SkyBlock extends PluginBase {
   public function getPlayersAtIsland(Player $player): array {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    $islandSize = $this->cfg->get("Island Size");
     $onlinePlayers = $this->getServer()->getOnlinePlayers();
     $onIsland = [];
     $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+    $islandSize = $playerData["Island Size"];
 
     foreach ($onlinePlayers as $p) {
 

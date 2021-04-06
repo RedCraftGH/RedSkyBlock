@@ -105,6 +105,10 @@ class EventListener implements Listener {
         if (array_key_exists(strval($block->getID()), $valuableArray)) {
 
           $playerData["Value"] -= $valuableArray[strval($block->getID())];
+          if ($playerData["Value"] < 0) {
+
+            $playerData["Value"] = 0;
+          }
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);
         }
@@ -312,18 +316,21 @@ class EventListener implements Listener {
           return;
         }
       }
-      if ($event->getBaseDamage() >= $entity->getHealth()) {
+      if ($entity->getGamemode() === 0) {
 
-        $event->setCancelled();
-        $entity->setHealth($entity->getMaxHealth());
-        $entity->setFood($entity->getMaxFood());
-        $entity->teleport($spawn);
-        if (!($plugin->cfg->get("Keep Inventory"))) {
+        if ($event->getBaseDamage() >= $entity->getHealth()) {
 
-          $entity->getInventory()->clearAll();
+          $event->setCancelled();
+          $entity->setHealth($entity->getMaxHealth());
+          $entity->setFood($entity->getMaxFood());
+          $entity->teleport($spawn);
+          if (!($plugin->cfg->get("Keep Inventory"))) {
+
+            $entity->getInventory()->clearAll();
+          }
+          $plugin->getServer()->broadcastMessage(TextFormat::WHITE . $entity->getName() . " has died.");
+          return;
         }
-        $plugin->getServer()->broadcastMessage(TextFormat::WHITE . $entity->getName() . " has died.");
-        return;
       }
     }
   }
