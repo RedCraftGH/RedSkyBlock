@@ -57,7 +57,7 @@ class EventListener implements Listener {
         $playerDataEncoded = file_get_contents($filePath);
         $playerData = (array) json_decode($playerDataEncoded, true);
       }
-      if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
+      if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
 
         $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
 
@@ -66,8 +66,8 @@ class EventListener implements Listener {
           $playerData["Value"] += $valuableArray[strval($block->getID())];
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);
+          return;
         }
-        return;
       } else {
 
         $event->setCancelled();
@@ -98,7 +98,7 @@ class EventListener implements Listener {
         $playerDataEncoded = file_get_contents($filePath);
         $playerData = (array) json_decode($playerDataEncoded, true);
       }
-      if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
+      if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
 
         $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
 
@@ -151,7 +151,7 @@ class EventListener implements Listener {
           $playerData = (array) json_decode($playerDataEncoded, true);
         }
 
-        if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
+        if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
 
           return;
         } else {
@@ -187,7 +187,7 @@ class EventListener implements Listener {
         $playerData = (array) json_decode($playerDataEncoded, true);
       }
 
-      if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"])) {
+      if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
 
         return;
       } else {
@@ -244,7 +244,7 @@ class EventListener implements Listener {
           $playerData = (array) json_decode($playerDataEncoded, true);
         }
 
-        if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"])) {
+        if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
 
           return;
         } else {
@@ -345,7 +345,7 @@ class EventListener implements Listener {
       if ($level->getFolderName() === $plugin->skyblock->get("Master World") || $level->getFolderName() === $plugin->skyblock->get("Master World") . "-Nether") {
 
         $island = $plugin->getIslandAtPlayer($player);
-        if ($island === null) {
+        if ($island === null && (!$player->hasPermission("skyblock.bypass"))) {
 
           $event->setCancelled();
         }

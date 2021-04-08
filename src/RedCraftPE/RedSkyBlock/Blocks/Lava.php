@@ -90,33 +90,40 @@ class Lava extends \pocketmine\block\Lava {
 			} elseif ($this->getDamage() <= 4) {
 
 				$generatorOres = $plugin->cfg->get("Generator Ores", []);
+				$masterWorld = $plugin->skyblock->get("Master World");
 
-				if (count($generatorOres) === 0) {
+				if ($this->level->getFolderName() === $masterWorld || $this->level->getFolderName() === $masterWorld . "-Nether") {
 
-					$this->liquidCollide($colliding, BlockFactory::get(Block::COBBLESTONE));
-				} else {
-
-					if (array_sum($generatorOres) !== 100) {
+					if (count($generatorOres) === 0) {
 
 						$this->liquidCollide($colliding, BlockFactory::get(Block::COBBLESTONE));
 					} else {
 
-						$blockID;
-						$randomNumber = rand(1, 100);
-						$percentChance = 0;
+						if (array_sum($generatorOres) !== 100) {
 
-						foreach ($generatorOres as $key => $oreChance) {
+							$this->liquidCollide($colliding, BlockFactory::get(Block::COBBLESTONE));
+						} else {
 
-							$percentChance += $oreChance;
+							$blockID;
+							$randomNumber = rand(1, 100);
+							$percentChance = 0;
 
-							if ($randomNumber <= $percentChance) {
+							foreach ($generatorOres as $key => $oreChance) {
 
-								$blockID = $key;
-								break;
+								$percentChance += $oreChance;
+
+								if ($randomNumber <= $percentChance) {
+
+									$blockID = $key;
+									break;
+								}
 							}
+							$this->liquidCollide($colliding, Block::get($blockID));
 						}
-						$this->liquidCollide($colliding, Block::get($blockID));
 					}
+				} else {
+
+					$this->liquidCollide($colliding, BlockFactory::get(Block::COBBLESTONE));
 				}
 			}
 		}

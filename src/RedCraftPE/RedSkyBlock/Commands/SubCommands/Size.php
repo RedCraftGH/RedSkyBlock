@@ -38,7 +38,7 @@ class Size {
           $playerDataEncoded = file_get_contents($filePath);
           $playerData = (array) json_decode($playerDataEncoded);
 
-          $playerData["Island Size"] = $size;
+          $playerData["Island Size"] = intval($size);
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);
           $sender->sendMessage(TextFormat::WHITE . $playerName . "'s" . TextFormat::GREEN . " island size has been changed to " . TextFormat::LIGHT_PURPLE . $size);

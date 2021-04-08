@@ -22,18 +22,7 @@ class Rank {
 
       if (array_key_exists($senderName, $skyblockArray)) {
 
-        $valueArray = [];
-
-        foreach($skyblockArray as $player => $data) {
-
-          $filePath = $plugin->getDataFolder() . "Players/" . $player . ".json";
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded);
-          $valueArray[$player] = $playerData["Value"];
-        }
-
-        arsort($valueArray);
-        $offset = array_search($senderName, array_keys($valueArray)) + 1;
+        $offset = $plugin->getIslandRank($sender);
         $sender->sendMessage(TextFormat::GREEN . "Your island is ranked " . TextFormat::WHITE . "#{$offset}");
         return true;
       } else {

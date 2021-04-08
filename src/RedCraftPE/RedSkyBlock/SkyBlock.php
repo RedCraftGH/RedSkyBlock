@@ -103,6 +103,163 @@ class SkyBlock extends PluginBase {
 
   //api
 
+  public function getMasterWorld(): string {
+
+    if ($this->skyblock->get("Master World") !== false) {
+
+      return $this->skyblock->get("Master World");
+    }
+  }
+
+  public function getNetherWorld(): string {
+    if ($this->skyblock->get("Master World") !== false) {
+
+      return $this->skyblock->get("Master World") . "-Nether";
+    }
+  }
+
+  public function getIslandSize(Player $player): int {
+
+    $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+
+    return $playerData["Island Size"];
+  }
+
+  public function isIslandLocked(Player $player): bool {
+
+    $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+
+    return $playerData["Island Locked"];
+  }
+
+  public function getIslandMembers(Player $player): array {
+
+    $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+
+    return $playerData["Island Members"];
+  }
+
+  public function getIslandBanned(player $player): array {
+
+    $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+
+    return $playerData["Banned"];
+  }
+
+  public function getIslandSpawn(Player $player): array {
+
+    $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+
+    return $playerData["Island Spawn"];
+  }
+
+  public function getNetherSpawn(Player $player): array {
+
+    $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+
+    if ($playerData["Nether Spawn"] !== []) {
+
+      return $playerData["Nether Spawn"];
+    }
+  }
+
+  public function getIslandValue(Player $player): int {
+
+    $playerName = strtolower($player->getName());
+    $filePath = $this->getDataFolder() . "Players/" . $playerName . ".json";
+    $playerDataEncoded = file_get_contents($filePath);
+    $playerData = (array) json_decode($playerDataEncoded);
+
+    return $playerData["Value"];
+  }
+
+  public function getIslandRank(Player $player): int {
+
+    $playerName = strtolower($player->getName());
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+
+      $valueArray = [];
+
+      foreach($skyblockArray as $players => $data) {
+
+        $filePath = $this->getDataFolder() . "Players/" . $players . ".json";
+        $playerDataEncoded = file_get_contents($filePath);
+        $playerData = (array) json_decode($playerDataEncoded);
+        $valueArray[$players] = $playerData["Value"];
+      }
+
+      arsort($valueArray);
+      $offset = array_search($playerName, array_keys($valueArray)) + 1;
+      return $offset;
+  }
+
+  public function getTopIslands(): array {
+
+    $valueArray = [];
+
+    $skyblockArray = $this->skyblock->get("SkyBlock", []);
+
+    foreach($skyblockArray as $player => $data) {
+
+      $filePath = $this->getDataFolder() . "Players/" . $player . ".json";
+      $playerDataEncoded = file_get_contents($filePath);
+      $playerData = (array) json_decode($playerDataEncoded);
+      $valueArray[$player] = $playerData["Value"];
+    }
+
+    arsort($valueArray);
+
+    $counter = 0;
+    $top1 = "N/A";
+    $top2 = "N/A";
+    $top3 = "N/A";
+    $top4 = "N/A";
+    $top5 = "N/A";
+    foreach ($valueArray as $player => $value) {
+
+      $filePath = $this->getDataFolder() . "Players/" . $player . ".json";
+      $playerDataEncoded = file_get_contents($filePath);
+      $playerData = (array) json_decode($playerDataEncoded);
+
+      $counter++;
+      if ($counter === 1) {
+
+        $top1 = $playerData["Name"] . " -- " . $value . " value";
+      } elseif ($counter === 2) {
+
+        $top2 = $playerData["Name"] . " -- " . $value . " value";
+      } elseif ($counter === 3) {
+
+        $top3 = $playerData["Name"] . " -- " . $value . " value";
+      } elseif ($counter === 4) {
+
+        $top4 = $playerData["Name"] . " -- " . $value . " value";
+      } elseif ($counter === 5) {
+
+        $top5 = $playerData["Name"] . " -- " . $value . " value";
+      }
+    }
+    return [$top1, $top2, $top3, $top4, $top5];
+  }
+
   public function getIslandAtPlayer(Player $player) {
 
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
@@ -186,7 +343,6 @@ class SkyBlock extends PluginBase {
         }
       }
     }
-
     return $onIsland;
   }
 }

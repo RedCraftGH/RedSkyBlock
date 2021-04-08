@@ -81,3 +81,6 @@ permissions:
     skyblock.size:
       description: With this permission players can change the size of player's islands.
       default: op
+    skyblock.bypass:
+      description: With this permission players can bypass island protections and borders.
+      default: op
