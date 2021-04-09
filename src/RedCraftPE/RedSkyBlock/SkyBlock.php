@@ -108,6 +108,9 @@ class SkyBlock extends PluginBase {
     if ($this->skyblock->get("Master World") !== false) {
 
       return $this->skyblock->get("Master World");
+    } else {
+
+      return "N/A";
     }
   }
 
@@ -115,6 +118,9 @@ class SkyBlock extends PluginBase {
     if ($this->skyblock->get("Master World") !== false) {
 
       return $this->skyblock->get("Master World") . "-Nether";
+    } else {
+
+      return "N/A";
     }
   }
 

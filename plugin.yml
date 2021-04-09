@@ -1,6 +1,6 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 0.0.1
+version: 1.0.0.0
 api: 3.0.0
 main: RedCraftPE\RedSkyBlock\SkyBlock
 commands:
@@ -84,3 +84,6 @@ permissions:
     skyblock.bypass:
       description: With this permission players can bypass island protections and borders.
       default: op
+    skyblock.help:
+      description: With this permission players can view the help menu
+      default: true

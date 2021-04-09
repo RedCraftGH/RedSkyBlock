@@ -36,7 +36,7 @@ If you wish to request features, or notify me about an issue, please, make an is
   - [x] Starting SkyBlock items (Customizable in the config.yml)
   - [x] Completely customizable island generation! You pick how you're islands look!
   - [x] SkyBlock admin commands
-  - [ ] Admin bypass permissions (coming soon...)
+  - [x] Admin bypass permissions (coming soon...)
   - [x] Personalized Islands
 - Additional Features
   - [x] Island information and stats (more coming soon...)

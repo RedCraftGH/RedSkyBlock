@@ -14,6 +14,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Delete;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Fly;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Help;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Kick;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Leave;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
@@ -46,6 +47,7 @@ class Island {
   private $createWorld;
   private $delete;
   private $fly;
+  private $help;
   private $kick;
   private $leave;
   private $lock;
@@ -80,6 +82,7 @@ class Island {
     $this->createWorld = new CreateWorld($plugin);
     $this->delete = new Delete($plugin);
     $this->fly = new Fly($plugin);
+    $this->help = new Help($plugin);
     $this->kick = new Kick($plugin);
     $this->leave = new Leave($plugin);
     $this->lock = new Lock($plugin);
@@ -141,6 +144,10 @@ class Island {
         case "fly":
 
           return $this->fly->onFlyCommand($sender);
+        break;
+        case "help":
+
+          return $this->help->onHelpCommand($sender, $args);
         break;
         case "kick":
 
