@@ -15,7 +15,7 @@ class Ban {
 
   public function onBanCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.ban")) {
+    if ($sender->hasPermission("redskyblock.ban")) {
 
       if (count($args) < 2) {
 

@@ -14,7 +14,7 @@ class Leave {
 
   public function onLeaveCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.leave")) {
+    if ($sender->hasPermission("redskyblock.leave")) {
 
       if (count($args) < 2) {
 

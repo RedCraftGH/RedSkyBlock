@@ -14,7 +14,7 @@ class Lock {
 
   public function onLockCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.lock")) {
+    if ($sender->hasPermission("redskyblock.lock")) {
 
       $plugin = $this->plugin;
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);

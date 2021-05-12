@@ -14,7 +14,7 @@ class Help {
 
   public function onHelpCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.help")) {
+    if ($sender->hasPermission("redskyblock.help")) {
 
       if (count($args) < 1) {
 

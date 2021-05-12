@@ -14,7 +14,7 @@ class Rank {
 
   public function onRankCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.rank")) {
+    if ($sender->hasPermission("redskyblock.rank")) {
 
       $plugin = $this->plugin;
       $senderName = strtolower($sender->getName());

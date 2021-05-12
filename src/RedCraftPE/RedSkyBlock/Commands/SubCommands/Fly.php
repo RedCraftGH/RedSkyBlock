@@ -14,7 +14,7 @@ class Fly {
 
   public function onFlyCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.fly")) {
+    if ($sender->hasPermission("redskyblock.fly")) {
 
       $plugin = $this->plugin;
       $island = $plugin->getIslandAtPlayer($sender);

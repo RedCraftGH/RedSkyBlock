@@ -14,7 +14,7 @@ class UpdateZone {
 
   public function onUpdateZoneCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.updatezone")) {
+    if ($sender->hasPermission("redskyblock.updatezone")) {
 
       $plugin = $this->plugin;
       $plugin->getServer()->loadLevel($plugin->cfg->get("Zone World"));

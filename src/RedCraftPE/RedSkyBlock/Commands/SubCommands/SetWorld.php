@@ -20,7 +20,7 @@ class SetWorld {
 
   public function onSetWorldCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.setworld")) {
+    if ($sender->hasPermission("redskyblock.setworld")) {
 
       if (count($args) < 2) {
 

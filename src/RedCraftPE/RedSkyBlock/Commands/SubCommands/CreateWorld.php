@@ -19,7 +19,7 @@ class CreateWorld {
 
   public function onCreateWorldCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.createworld")) {
+    if ($sender->hasPermission("redskyblock.createworld")) {
 
         if (count($args) < 2) {
 

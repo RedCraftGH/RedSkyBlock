@@ -14,7 +14,7 @@ class SetZone {
 
   public function onSetZoneCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.setzone")) {
+    if ($sender->hasPermission("redskyblock.setzone")) {
 
       if (count($args) < 2) {
 

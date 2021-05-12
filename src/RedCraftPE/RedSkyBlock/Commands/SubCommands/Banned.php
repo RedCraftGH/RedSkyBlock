@@ -14,7 +14,7 @@ class Banned {
 
   public function onBannedCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.ban")) {
+    if ($sender->hasPermission("redskyblock.ban")) {
 
       $plugin = $this->plugin;
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);

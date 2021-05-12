@@ -14,7 +14,7 @@ class Add {
 
   public function onAddCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.members")) {
+    if ($sender->hasPermission("redskyblock.members")) {
 
       if (count($args) < 2) {
 

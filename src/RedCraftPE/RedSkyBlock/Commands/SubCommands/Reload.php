@@ -14,7 +14,7 @@ class Reload {
 
   public function onReloadCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.reload")) {
+    if ($sender->hasPermission("redskyblock.reload")) {
 
       $plugin = $this->plugin;
       $plugin->cfg->reload();

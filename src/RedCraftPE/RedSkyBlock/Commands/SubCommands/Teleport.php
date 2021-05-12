@@ -21,7 +21,7 @@ class Teleport {
 
   public function onTeleportCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.create")) {
+    if ($sender->hasPermission("redskyblock.create")) {
 
       $plugin = $this->plugin;
       $masterWorld = $plugin->skyblock->get("Master World");

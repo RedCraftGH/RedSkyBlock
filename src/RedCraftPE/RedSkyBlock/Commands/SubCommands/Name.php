@@ -14,7 +14,7 @@ class Name {
 
   public function onNameCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.name")) {
+    if ($sender->hasPermission("redskyblock.name")) {
 
       $plugin = $this->plugin;
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);

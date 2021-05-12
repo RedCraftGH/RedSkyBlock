@@ -14,7 +14,7 @@ class Unban {
 
   public function onUnbanCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.ban")) {
+    if ($sender->hasPermission("redskyblock.ban")) {
 
       if (count($args) < 2) {
 

@@ -17,7 +17,7 @@ class Restart {
 
   public function onRestartCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.restart")) {
+    if ($sender->hasPermission("redskyblock.restart")) {
 
       $plugin = $this->plugin;
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);

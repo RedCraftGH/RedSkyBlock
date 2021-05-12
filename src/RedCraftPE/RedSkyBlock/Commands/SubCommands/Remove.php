@@ -14,7 +14,7 @@ class Remove {
 
   public function onRemoveCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.members")) {
+    if ($sender->hasPermission("redskyblock.members")) {
 
       if (count($args) < 2) {
 

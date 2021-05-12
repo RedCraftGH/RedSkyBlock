@@ -14,7 +14,7 @@ class Kick {
 
   public function onKickCommand(CommandSender $sender, array $args) {
 
-    if ($sender->hasPermission("skyblock.kick")) {
+    if ($sender->hasPermission("redskyblock.kick")) {
 
       if (count($args) < 2) {
 

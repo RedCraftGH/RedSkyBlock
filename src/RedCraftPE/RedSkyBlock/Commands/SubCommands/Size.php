@@ -14,7 +14,7 @@ class Size {
 
   public function onSizeCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.size")) {
+    if ($sender->hasPermission("redskyblock.size")) {
 
       if (count($args) < 3) {
 

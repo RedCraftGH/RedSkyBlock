@@ -14,7 +14,7 @@ class SetSpawn {
 
   public function onSetSpawnCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.setspawn")) {
+    if ($sender->hasPermission("redskyblock.setspawn")) {
 
       $plugin = $this->plugin;
 

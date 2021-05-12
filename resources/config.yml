@@ -78,4 +78,4 @@ Safe Void: false #Makes the void safe to jump in, IN THE SKYBLOCK WORLDS ONLY
 Island Boundaries: false #Invisible barrier that forces players to stay within island boundaries -- stability untested : working on possible optimizations?
 
 Reset Cooldown: 86400 #The time in seconds a player must wait before being able to restart their SkyBlock island again. 86400 seconds is one day.
-Reset Wipe: true #Clears the inventory of the player restarting their island
+Reset Wipe: false #Clears the inventory of the player restarting their island

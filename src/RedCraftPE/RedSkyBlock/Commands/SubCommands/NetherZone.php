@@ -14,7 +14,7 @@ class NetherZone {
 
   public function onNetherZoneCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.setzone")) {
+    if ($sender->hasPermission("redskyblock.setzone")) {
 
       $plugin = $this->plugin;
 

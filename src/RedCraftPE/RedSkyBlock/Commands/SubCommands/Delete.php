@@ -15,7 +15,7 @@ class Delete {
 
   public function onDeleteCommand(CommandSender $sender, array $args): bool {
 
-    if ($sender->hasPermission("skyblock.delete")) {
+    if ($sender->hasPermission("redskyblock.delete")) {
 
       if (count($args) < 2) {
 

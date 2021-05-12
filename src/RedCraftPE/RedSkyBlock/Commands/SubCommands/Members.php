@@ -14,7 +14,7 @@ class Members {
 
   public function onMembersCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.members")) {
+    if ($sender->hasPermission("redskyblock.members")) {
 
       $plugin = $this->plugin;
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);

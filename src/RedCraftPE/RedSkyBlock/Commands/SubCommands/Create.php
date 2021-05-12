@@ -22,7 +22,7 @@ class Create {
 
   public function onCreateCommand(CommandSender $sender): bool {
 
-     if ($sender->hasPermission("skyblock.create")) {
+     if ($sender->hasPermission("redskyblock.create")) {
 
       $plugin = $this->plugin;
       $itemsArray = $plugin->cfg->get("Starting Items", []);

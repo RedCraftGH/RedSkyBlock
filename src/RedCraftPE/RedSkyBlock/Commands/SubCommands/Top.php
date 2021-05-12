@@ -14,7 +14,7 @@ class Top {
 
   public function onTopCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.top")) {
+    if ($sender->hasPermission("redskyblock.top")) {
 
       $plugin = $this->plugin;
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);

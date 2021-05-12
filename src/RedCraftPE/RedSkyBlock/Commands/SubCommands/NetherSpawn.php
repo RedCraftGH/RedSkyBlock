@@ -14,7 +14,7 @@ class NetherSpawn {
 
   public function onNetherSpawnCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.nether")) {
+    if ($sender->hasPermission("redskyblock.nether")) {
 
       $plugin = $this->plugin;
 

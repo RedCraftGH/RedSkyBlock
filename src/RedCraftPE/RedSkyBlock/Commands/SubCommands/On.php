@@ -14,7 +14,7 @@ class On {
 
   public function onOnCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.onisland")) {
+    if ($sender->hasPermission("redskyblock.onisland")) {
 
       $plugin = $this->plugin;
 

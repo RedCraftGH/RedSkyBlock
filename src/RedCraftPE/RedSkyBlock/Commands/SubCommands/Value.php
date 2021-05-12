@@ -14,7 +14,7 @@ class Value {
 
   public function onValueCommand(CommandSender $sender): bool {
 
-    if ($sender->hasPermission("skyblock.value")) {
+    if ($sender->hasPermission("redskyblock.value")) {
 
       $plugin = $this->plugin;
       $senderName = strtolower($sender->getName());
