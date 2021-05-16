@@ -32,16 +32,16 @@ If you wish to request features, or notify me about an issue, please, make an is
   - [x] Island Kick/Ban
   - [x] Island Top
   - [x] Island Limits
-  - [x] Island generation intervals (customizable in the config.yml)
+  - [x] Island generation intervals (Customizable in the config.yml)
   - [x] Starting SkyBlock items (Customizable in the config.yml)
-  - [x] Completely customizable island generation! You pick how you're islands look!
-  - [x] SkyBlock admin commands
-  - [x] Admin bypass permissions (coming soon...)
+  - [x] Completely customizable island generation! You pick how you're islands look! (Updates coming later...)
+  - [x] SkyBlock admin commands (More coming soon...)
+  - [x] Admin bypass permissions
   - [x] Personalized Islands
 - Additional Features
-  - [x] Island information and stats (more coming soon...)
+  - [x] Island information and stats (More coming soon...)
   - [x] Nether islands (many nether updates coming soon...)
   - [ ] Lag fighter (Coming soon...)
-  - [x] Safe Void in SkyBlock world (Configurable in the config.yml)
-  - [x] Keep inventory (In config.yml)
+  - [x] Safe Void in SkyBlock world (Customizable in the config.yml)
+  - [x] Keep inventory (Customizable in the config.yml)
   - [ ] Much more coming soon...
