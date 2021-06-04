@@ -16,6 +16,15 @@ use RedCraftPE\RedSkyBlock\Commands\Spawn;
 use RedCraftPE\RedSkyBlock\Tasks\Generate;
 use RedCraftPE\RedSkyBlock\Blocks\Lava;
 
+
+use muqsit\invmenu\InvMenuHandler;
+use muqsit\invmenu\InvMenuEventHandler;
+use muqsit\invmenu\InvMenu;
+use muqsit\invmenu\MenuIds;
+use muqsit\invmenu\transaction\InvMenuTransaction;
+use muqsit\invmenu\transaction\InvMenuTransactionResult;
+
+
 class SkyBlock extends PluginBase {
 
   private $eventListener;
@@ -41,7 +50,16 @@ class SkyBlock extends PluginBase {
     if (!file_exists($this->getDataFolder() . "Players")) {
 
       mkdir($this->getDataFolder() . "Players");
+
+      
     }
+
+    if(!InvMenuHandler::isRegistered()){
+      InvMenuHandler::register($this);
+   }
+    $guicfg = new Config($this->getDataFolder() . "gui.yml", Config::YAML);
+		$title1 = $guicfg->get("title");
+	    $title2 = str_replace(["&", "+n",], ["§", "\n"], $title1);
 
     $this->skyblock = new Config($this->getDataFolder() . "skyblock.json", Config::JSON);
     $this->cfg = new Config($this->getDataFolder() . "config.yml", Config::YAML);
