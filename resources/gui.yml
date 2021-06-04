@@ -1,0 +1,155 @@
+# Title of GUI
+title: "Any Title"
+#place holders should be used only in item name 
+#it wonnt work on command
+
+
+#"&", "+n", "%player_name%", "%player_ping%", "%player_address%", "%player_client_id%", "%player_direction%", "%player_displayname%", "%player_hunger%", "%player_x%", "%player_y%", "%player_z%", "%player_hunger_point%", "%player_gamemode%", "%player_health_point%", "%player_location%", "%player_hunger_point_max%", "%player_health_point_max%", "%player_scale%", "%server_online%", "%server_max_players%", "%item_id%", "%item_meta%", "%item_count%", "%item_name%", "%server_load%", "%server_tps%", "%level_name%", "%level_folder_name%", "%level_player_count%", "%player_balance%"
+
+
+
+#add command, command1, command2 til command 27 if u want to give commands to items in GUI
+
+
+item.name: "&r"
+item.id: 160
+item.meta: 7
+item.count: 1
+#
+
+item.name1: "&r"
+item.id1: 160
+item.meta1: 7 
+item.count1: 1
+
+#
+item.name2: "&r"
+item.id2: 160
+item.meta2: 7 
+item.count2: 1
+
+#
+item.name3: "&r"
+item.id3: 160
+item.meta3: 7 
+item.count3: 1
+#
+item.name4: "&r"
+item.id4: 160
+item.meta4: 7 
+item.count4: 1
+#
+item.name5: "&r"
+item.id5: 160
+item.meta5: 7 
+item.count5: 1
+#
+item.name6: "&r"
+item.id6: 160
+item.meta6: 7 
+item.count6: 1
+#
+item.name7: "&r"
+item.id7: 160
+item.meta7: 7 
+item.count7: 1
+#
+item.name8: "&r"
+item.id8: 160
+item.meta8: 7 
+item.count8: 1
+#
+item.name9: ""
+item.id9: 373
+item.meta9: 0
+item.count9: 1
+#
+item.name10: ""
+item.id10: 373
+item.meta10: 5
+item.count10: 1
+#
+item.name11: ""
+item.id11: 373
+item.meta11: 6
+item.count11: 1
+#
+item.name12: ""
+item.id12: 373
+item.meta12: 7
+item.count12: 1
+#
+item.name13: ""
+item.id13: 373
+item.meta13: 8
+item.count13: 1
+#
+item.name14: ""
+item.id14: 373
+item.meta14: 9
+item.count14: 1
+#
+item.name15: ""
+item.id15: 373
+item.meta15: 10
+item.count15: 1
+#
+item.name16: ""
+item.id16: 373
+item.meta16: 11
+item.count16: 1
+#
+item.name17: "&r"
+item.id17: 160
+item.meta17: 7
+item.count17: 1
+#
+item.name18: "&r"
+item.id18: 160
+item.meta18: 7
+item.count18: 1
+#
+item.name19: ""
+item.id19: 373
+item.meta19: 12
+item.count19: 1
+#
+item.name20: ""
+item.id20: 373
+item.meta20: 13
+item.count20: 1
+#
+item.name21: ""
+item.id21: 373
+item.meta21: 14
+item.count21: 1
+#
+item.name22: ""
+item.id22: 373
+item.meta22: 15
+item.count22: 1
+#
+item.name23: ""
+item.id23: 373
+item.meta23: 16
+item.count23: 1
+#
+item.name24: ""
+item.id24: 373
+item.meta24: 19
+item.count24: 1
+#
+item.name25: ""
+item.id25: 373
+item.meta25: 20
+item.count25: 1
+#
+item.name26: "&r"
+item.id26: 160
+item.meta26: 7
+item.count26: 1
+#
+item.name27: "&r"
+item.id27: 160
+item.meta27: 7
+item.count27: 1
