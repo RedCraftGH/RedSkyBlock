@@ -16,10 +16,30 @@ class Size {
 
     if ($sender->hasPermission("redskyblock.size")) {
 
-      if (count($args) < 3) {
+      if (count($args) < 2) {
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is size <size> <player>");
+        $sender->sendMessage(TextFormat::WHITE . "Usage: /is size <size> <player> || /is size <player>");
         return true;
+      } elseif (count($args) === 2) {
+
+        $playerName = strtolower(implode(" ", array_slice($args, 1)));
+        $plugin = $this->plugin;
+        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+
+        if (array_key_exists($playerName, $skyblockArray)) {
+
+          $filePath = $plugin->getDataFolder() . "Players/" . $playerName . ".json";
+          $playerDataEncoded = file_get_contents($filePath);
+          $playerData = (array) json_decode($playerDataEncoded);
+          $size = $playerData["Island Size"];
+
+          $sender->sendMessage(TextFormat::WHITE . $playerName . "'s" . TextFormat::GREEN . " island size is" . TextFormat::AQUA . " {$size}");
+          return true;
+        } else {
+
+          $sender->sendMessage(TextFormat::RED . "{$playerName} has not created an island yet.");
+          return true;
+        }
       } else {
 
         $playerName = strtolower(implode(" ", array_slice($args, 2)));

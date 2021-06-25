@@ -126,9 +126,8 @@ class EventListener implements Listener {
     $block = $event->getBlock();
     $item = $event->getItem();
     $plugin = $this->plugin;
-    if($event->getAction() === PlayerInteractEvent::RIGHT_CLICK_BLOCK){
 
-    if ($block->getID() === 116 || $block->getID() === 52 || $block->getID() === 54 || $block->getID() === 61 || $block->getID() === 62 || $block->getID() === 138 || $block->getID() === 130 || $item->getID() === 259 || $block->getID() === 145 || $block->getID() === 58 || $block->getID() === 154 || $block->getID() === 117) {
+    if ($block->getID() === 52 ||$block->getID() === 54 || $block->getID() === 61 || $block->getID() === 62 || $block->getID() === 138 || $block->getID() === 130 || $item->getID() === 259 || $block->getID() === 145 || $block->getID() === 58 || $block->getID() === 154 || $block->getID() === 117) {
 
       if ($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World") || $player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World") . "-Nether") {
 
@@ -163,7 +162,6 @@ class EventListener implements Listener {
         }
       }
     }
-  }
   }
   public function onBucketEvent(PlayerBucketEvent $event) {
 

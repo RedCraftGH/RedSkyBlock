@@ -33,6 +33,11 @@ class Name {
         } else {
 
           $islandName = implode(" ", array_slice($args, 1));
+          if (strlen($islandName) > 21) {
+
+            $sender->sendMessage(TextFormat::RED . "This island name is too long.");
+            return true;
+          }
           $playerData["Name"] = $islandName;
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);

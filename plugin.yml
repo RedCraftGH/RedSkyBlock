@@ -1,8 +1,8 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 1.0.0.0
+version: 5.0.1
 api: 3.0.0
-mcpe-protocol: 431
+mcpe-protocol: [361, 388, 389, 390, 407, 408, 431, 440]
 main: RedCraftPE\RedSkyBlock\SkyBlock
 commands:
   island:
