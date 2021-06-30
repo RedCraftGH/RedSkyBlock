@@ -108,7 +108,13 @@ class Create {
               }
             }
 
-            $sender->teleport(new Position($lastX + 3, $islandSpawnY, $lastZ + 3, $world));
+            $cSpawnVals = $plugin->skyblock->get("CSpawnVals", []);
+
+            $spawnX = $lastX + $cSpawnVals[0];
+            $spawnY = $cSpawnVals[1];
+            $spawnZ = $lastZ + $cSpawnVals[2];
+
+            $sender->teleport(new Position($spawnX, $spawnY, $spawnZ, $world));
             $sender->setImmobile(true);
 
             $plugin->getScheduler()->scheduleDelayedTask(new Generate($plugin, $sender, $lastX, $lastZ, $world), 50);
@@ -132,7 +138,7 @@ class Create {
               "Island Members" => [],
               "Name" => $sender->getName() . "'s island",
               "Value" => 0,
-              "Island Spawn" => [$lastX + 3, $islandSpawnY, $lastZ + 3],
+              "Island Spawn" => [$spawnX, $spawnY, $spawnZ],
               "Nether Spawn" => [],
               "Island Size" => $initialSize,
               "Cooldown" => Time() + $cooldown,
@@ -148,7 +154,7 @@ class Create {
               $plugin->getLogger()->info(TextFormat::RED . "Error: {$sender->getName}'s player files were not successfully generated.");
             }
 
-            $skyblockArray[$senderName] = [$lastX + 3, $lastZ + 3]; //Necessary for event listener boundaries and api functions -- + 3 & + 3 necessary for finding first island spawn
+            $skyblockArray[$senderName] = [$spawnX, $spawnZ]; //Necessary for event listener boundaries and api functions
             $plugin->skyblock->set("SkyBlock", $skyblockArray);
             $plugin->skyblock->set("Steps", $steps); //take out after new island generation algorithm in place?
             $plugin->skyblock->set("Turns", $turns); //take out after new island generation algorithm in place?

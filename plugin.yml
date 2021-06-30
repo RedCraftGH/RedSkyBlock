@@ -1,6 +1,6 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 5.0.1
+version: 5.0.2
 api: 3.0.0
 mcpe-protocol: [361, 388, 389, 390, 407, 408, 431, 440]
 main: RedCraftPE\RedSkyBlock\SkyBlock

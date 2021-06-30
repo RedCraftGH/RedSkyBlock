@@ -24,7 +24,7 @@ class Top {
 
         $topArray = $plugin->getTopIslands();
 
-        $sender->sendMessage(TextFormat::LIGHT_PURPLE . "||Top Players||" . "\n" . TextFormat::WHITE . "#1: " . $topArray[0] . "\n" . "#2: " . $topArray[1] . "\n" . "#3: " . $topArray[2] . "\n" . "#4: " . $topArray[3] . "\n" . "#5: " . $topArray[4]);
+        $sender->sendMessage(TextFormat::LIGHT_PURPLE . "||Top Islands||" . "\n" . TextFormat::WHITE . "#1: " . $topArray[0] . "\n" . "#2: " . $topArray[1] . "\n" . "#3: " . $topArray[2] . "\n" . "#4: " . $topArray[3] . "\n" . "#5: " . $topArray[4]);
         return true;
       } else {
 

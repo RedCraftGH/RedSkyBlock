@@ -12,6 +12,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Ban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Banned;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\CustomSpawn;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Delete;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Fly;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Help;
@@ -45,6 +46,7 @@ class Island {
   private $banned;
   private $create;
   private $createWorld;
+  private $customSpawn;
   private $delete;
   private $fly;
   private $help;
@@ -80,6 +82,7 @@ class Island {
     $this->banned = new Banned($plugin);
     $this->create = new Create($plugin);
     $this->createWorld = new CreateWorld($plugin);
+    $this->customSpawn = new CustomSpawn($plugin);
     $this->delete = new Delete($plugin);
     $this->fly = new Fly($plugin);
     $this->help = new Help($plugin);
@@ -136,6 +139,10 @@ class Island {
         case "createworld":
 
           return $this->createWorld->onCreateWorldCommand($sender, $args);
+        break;
+        case "customspawn":
+
+          return $this->customSpawn->onCustomSpawnCommand($sender);
         break;
         case "delete":
 
