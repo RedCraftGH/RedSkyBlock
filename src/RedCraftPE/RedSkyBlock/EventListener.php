@@ -271,7 +271,7 @@ class EventListener implements Listener {
           return;
         }
 
-        if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
+        if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"]) || $entity->hasPermission("skyblock.bypass")) {
 
           return;
         } else {
