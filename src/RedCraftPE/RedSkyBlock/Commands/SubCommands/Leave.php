@@ -2,8 +2,9 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
-use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
+use pocketmine\Player;
 
 class Leave {
 
@@ -25,8 +26,8 @@ class Leave {
         $plugin = $this->plugin;
         $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
         $pName = strtolower(implode(" ", array_slice($args, 1)));
-        $senderName = $sender->getName();
-        $filePath = $plugin->getDataFolder() . "Players/" . $pName . "json";
+        $senderName = strtolower($sender->getName());
+        $filePath = $plugin->getDataFolder() . "Players/" . $pName . ".json";
 
         if (array_key_exists($pName, $skyblockArray)) {
 
@@ -38,7 +39,7 @@ class Leave {
             $key = array_search($senderName, $playerData["Island Members"]);
             unset($playerData["Island Members"][$key]);
             $playerDataEncoded = json_encode($playerData);
-            file_put_contents($filePath);
+            file_put_contents($filePath, $playerDataEncoded);
             $sender->sendMessage(TextFormat::GREEN . "You have left " . $pName . "'s island.");
             return true;
           } else {

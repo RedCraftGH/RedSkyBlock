@@ -48,14 +48,20 @@ class EventListener implements Listener {
 
       if ($owner === null) {
 
-        $event->setCancelled();
-        return;
+        if (!$player->hasPermission("redskyblock.bypass")) {
+
+          $event->setCancelled();
+          return;
+        }
       }
 
       if (file_exists($filePath)) {
 
         $playerDataEncoded = file_get_contents($filePath);
         $playerData = (array) json_decode($playerDataEncoded, true);
+      } else {
+
+        return;
       }
       if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
 
@@ -89,14 +95,20 @@ class EventListener implements Listener {
 
       if ($owner === null) {
 
-        $event->setCancelled();
-        return;
+        if (!$player->hasPermission("redskyblock.bypass")) {
+
+          $event->setCancelled();
+          return;
+        }
       }
 
       if (file_exists($filePath)) {
 
         $playerDataEncoded = file_get_contents($filePath);
         $playerData = (array) json_decode($playerDataEncoded, true);
+      } else {
+
+        return;
       }
       if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
 
@@ -137,18 +149,21 @@ class EventListener implements Listener {
 
         if ($owner === null) {
 
-          $event->setCancelled();
-          if ($block->getID() !== 0) {
+          if (!$player->hasPermission("redskyblock.bypass")) {
 
+            $event->setCancelled();
             $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+            return;
           }
-          return;
         }
 
         if (file_exists($filePath)) {
 
           $playerDataEncoded = file_get_contents($filePath);
           $playerData = (array) json_decode($playerDataEncoded, true);
+        } else {
+
+          return;
         }
 
         if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
@@ -176,15 +191,21 @@ class EventListener implements Listener {
 
       if ($owner === null) {
 
-        $event->setCancelled();
-        $player->sendMessage(TextFormat::RED . "You cannot use this here!");
-        return;
+        if (!$player->hasPermission("redskyblock.bypass")) {
+
+          $event->setCancelled();
+          $player->sendMessage(TextFormat::RED . "You cannot use this here!");
+          return;
+        }
       }
 
       if (file_exists($filePath)) {
 
         $playerDataEncoded = file_get_contents($filePath);
         $playerData = (array) json_decode($playerDataEncoded, true);
+      } else {
+
+        return;
       }
 
       if ($owner === strtolower($player->getName()) || in_array(strtolower($player->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
@@ -234,14 +255,20 @@ class EventListener implements Listener {
 
         if ($owner === null) {
 
-          $event->setCancelled();
-          return;
+          if (!$entity->hasPermission("redskyblock.bypass")) {
+
+            $event->setCancelled();
+            return;
+          }
         }
 
         if (file_exists($filePath)) {
 
           $playerDataEncoded = file_get_contents($filePath);
           $playerData = (array) json_decode($playerDataEncoded, true);
+        } else {
+
+          return;
         }
 
         if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {

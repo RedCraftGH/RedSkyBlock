@@ -25,11 +25,11 @@ class Help {
         $page = intval($args[1]);
         if ($page === 1) {
 
-          $sender->sendMessage(TextFormat::AQUA . "SkyBlock Help Page {$page}: \n" . TextFormat::WHITE . "/is add <player>: Add a player to your island \n" . "/is ban <player>: Ban a player from your island \n" . "/is banned: See who is banned from your island \n" . "/is create: Create an island \n" . "/is createworld <world name>: Create a SkyBlock world");
+          $sender->sendMessage(TextFormat::AQUA . "SkyBlock Help Page {$page}: \n" . TextFormat::WHITE . TextFormat::WHITE . "/is add <player>: Add a player to your island \n" . "/is ban <player>: Ban a player from your island \n" . "/is banned: See who is banned from your island \n" . "/is create: Create an island \n" . "/is createworld <world name>: Create a SkyBlock world");
           return true;
         } elseif ($page === 2) {
 
-          $sender->sendMessage(TextFormat::AQUA . "SkyBlock Help Page {$page}: \n" . TextFormat::WHITE . "/is delete <player>: Delete a player's island \n" . "/is fly: Enable/Disable flight \n" . "/is help <page#>: See the SkyBlock commands \n" . "/is kick <player(s)>: Kick players off of your island \n" . "/is leave <player>: Leave another person's island");
+          $sender->sendMessage(TextFormat::AQUA . "SkyBlock Help Page {$page}: \n" . TextFormat::WHITE . "/is customspawn: Set the initial spawn point on your custom island zone \n" . "/is delete <player>: Delete a player's island \n" . "/is fly: Enable/Disable flight \n" . "/is help <page#>: See the SkyBlock commands \n" . "/is kick <player(s)>: Kick players off of your island \n" . "/is leave <player>: Leave another person's island");
           return true;
         } elseif ($page === 3) {
 

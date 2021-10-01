@@ -4,6 +4,7 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
+use pocketmine\Player;
 
 class Kick {
 
@@ -48,7 +49,7 @@ class Kick {
                 $player = $plugin->getServer()->getPlayer($pName);
 
                 $player->teleport($plugin->getServer()->getDefaultLevel()->getSafeSpawn());
-                $player->sendMessage(TextFormat::RED . $sender->getName . " has kicked you off of their island.");
+                $player->sendMessage(TextFormat::RED . $sender->getName() . " has kicked you off of their island.");
                 $sender->sendMessage(TextFormat::GREEN . $player->getName() . " has been kicked off of your island.");
               } else {
 
