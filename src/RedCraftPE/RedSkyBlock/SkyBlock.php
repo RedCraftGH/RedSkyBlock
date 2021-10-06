@@ -242,7 +242,6 @@ class SkyBlock extends PluginBase {
   public function getIslandRank(Player $player) {
 
     $playerName = strtolower($player->getName());
-    var_dump($playerName);
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
 
       $valueArray = [];
@@ -256,14 +255,11 @@ class SkyBlock extends PluginBase {
       }
 
       arsort($valueArray);
-      var_dump($valueArray);
       if (in_array($playerName, $valueArray)) {
 
         return "N/A";
-        var_dump("Test");
       }
       $offset = array_search($playerName, array_keys($valueArray)) + 1;
-      var_dump($offset);
       return $offset;
   }
 
