@@ -5,6 +5,9 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
+
 class Size {
 
   public function __construct($plugin) {
@@ -62,6 +65,13 @@ class Size {
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);
           $sender->sendMessage(TextFormat::WHITE . $playerName . "'s" . TextFormat::GREEN . " island size has been changed to " . TextFormat::LIGHT_PURPLE . $size);
+
+          $ev = new PlayerTagUpdateEvent(
+            $plugin->getServer()->getPlayerExact($playerName),
+            new ScoreTag("redskyblock.islesize", strval($size))
+          );
+          $ev->call();
+
           return true;
         } else {
 

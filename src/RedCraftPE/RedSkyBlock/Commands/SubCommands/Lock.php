@@ -5,6 +5,9 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
+
 class Lock {
 
   public function __construct($plugin) {
@@ -40,6 +43,12 @@ class Lock {
               $playerDataEncoded = json_encode($playerData);
               file_put_contents($playerFilePath, $playerDataEncoded);
               $sender->sendMessage(TextFormat::GREEN . "Your skyblock island has been locked.");
+
+              $ev = new PlayerTagUpdateEvent(
+                $sender,
+                new ScoreTag("redskyblock.islestatus", "Locked")
+              );
+              $ev->call();
               return true;
             } else {
 
@@ -55,6 +64,12 @@ class Lock {
               $playerDataEncoded = json_encode($playerData);
               file_put_contents($playerFilePath, $playerDataEncoded);
               $sender->sendMessage(TextFormat::GREEN . "Your skyblock island is no longer locked.");
+
+              $ev = new PlayerTagUpdateEvent(
+                $sender,
+                new ScoreTag("redskyblock.islestatus", "Unlocked")
+              );
+              $ev->call();
               return true;
             } else {
 

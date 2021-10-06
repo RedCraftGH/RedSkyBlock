@@ -25,6 +25,10 @@ use pocketmine\event\player\PlayerExhaustEvent;
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Settings;
 
+use Ifera\ScoreHud\event\TagsResolveEvent;
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
+
 class EventListener implements Listener {
 
   private $plugin;
@@ -72,6 +76,17 @@ class EventListener implements Listener {
           $playerData["Value"] += $valuableArray[strval($block->getID())];
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);
+
+          $ev1 = new PlayerTagUpdateEvent(
+            $plugin->getServer()->getPlayerExact($owner),
+            new ScoreTag("redskyblock.islevalue", strval($plugin->getIslandValue($plugin->getServer()->getPlayerExact($owner))))
+          );
+          $ev1->call();
+          $ev2 = new PlayerTagUpdateEvent(
+            $plugin->getServer()->getPlayerExact($owner),
+            new ScoreTag("redskyblock.islerank", "#" . strval($plugin->getIslandRank($plugin->getServer()->getPlayerExact($owner))))
+          );
+          $ev2->call();
           return;
         }
       } else {
@@ -123,6 +138,17 @@ class EventListener implements Listener {
           }
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);
+
+          $ev1 = new PlayerTagUpdateEvent(
+            $plugin->getServer()->getPlayerExact($owner),
+            new ScoreTag("redskyblock.islevalue", strval($plugin->getIslandValue($plugin->getServer()->getPlayerExact($owner))))
+          );
+          $ev1->call();
+          $ev2 = new PlayerTagUpdateEvent(
+            $plugin->getServer()->getPlayerExact($owner),
+            new ScoreTag("redskyblock.islerank", strval("#" . $plugin->getIslandRank($plugin->getServer()->getPlayerExact($owner))))
+          );
+          $ev2->call();
         }
         return;
       } else {
@@ -271,7 +297,7 @@ class EventListener implements Listener {
           return;
         }
 
-        if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"]) || $player->hasPermission("skyblock.bypass")) {
+        if ($owner === strtolower($entity->getName()) || in_array(strtolower($entity->getName()), $playerData["Island Members"]) || $entity->hasPermission("skyblock.bypass")) {
 
           return;
         } else {
@@ -377,6 +403,50 @@ class EventListener implements Listener {
           $event->setCancelled();
         }
       }
+    }
+  }
+  public function onTagResolve(TagsResolveEvent $event) {
+
+    $plugin = $this->plugin;
+    $player = $event->getPlayer();
+    $tag = $event->getTag();
+
+    switch ($tag->getName()) {
+
+      case "redskyblock.islename":
+
+        $tag->setValue($plugin->getIslandName($player));
+      break;
+      case "redskyblock.islesize":
+
+        $tag->setValue($plugin->getIslandSize($player));
+      break;
+      case "redskyblock.islevalue":
+
+        $tag->setValue($plugin->getIslandValue($player));
+      break;
+      case "redskyblock.islerank":
+
+        $tag->setValue("#" . $plugin->getIslandRank($player));
+      break;
+      case "redskyblock.islestatus":
+
+        $status = $plugin->isIslandLocked($player);
+        if ($status) {
+
+          $tag->setValue("Locked");
+        } else {
+
+          $tag->setValue("Unlocked");
+        }
+      break;
+      case "redskyblock.membercount":
+
+        $memberArray = $plugin->getIslandMembers($player);
+        $memberCount = count($memberArray);
+
+        $tag->setValue($memberCount);
+      break;
     }
   }
 }
