@@ -48,6 +48,13 @@ class SkyBlock extends PluginBase {
     $this->cfg->reload();
     $this->skyblock->reload();
 
+    //check if ScoreHUD is available
+    $scoreHud = $this->getServer()->getPluginManager()->getPlugin("ScoreHud");
+    if ($scoreHud !== null && $scoreHud->isEnabled()) {
+
+      $this->scoreboardListener = new ScoreboardListener($this, $scoreHud);
+    }
+
     if ($this->skyblock->get("Master World") === false) {
 
       $this->getLogger()->info(TextFormat::RED . "In order for this plugin to function properly, you must set a Skyblock Master world in your server.");
@@ -255,7 +262,7 @@ class SkyBlock extends PluginBase {
       }
 
       arsort($valueArray);
-      if (in_array($playerName, $valueArray)) {
+      if (!(isset($valueArray[$playerName]))) {
 
         return "N/A";
       }

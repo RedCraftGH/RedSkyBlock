@@ -113,8 +113,7 @@ class Island {
 
     if (!$args) {
 
-      $sender->sendMessage(TextFormat::WHITE . "Usage: /island <args>");
-      return true;
+      return $this->help->onHelpCommand($sender, $args);
     } else {
 
       switch (strtolower($args[0])) {
@@ -255,8 +254,7 @@ class Island {
           return $this->value->onValueCommand($sender);
         break;
       }
-      $sender->sendMessage(TextFormat::WHITE . "Usage: /island <args>");
-      return true;
+      return $this->help->onHelpCommand($sender, $args);
     }
   }
 }

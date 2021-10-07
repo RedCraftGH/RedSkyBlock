@@ -5,9 +5,6 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
-use Ifera\ScoreHud\scoreboard\ScoreTag;
-
 class Add {
 
   public function __construct($plugin) {
@@ -46,12 +43,16 @@ class Add {
             file_put_contents($filePath, $playerDataEncoded);
             $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is now a member of your island.");
 
-            $ev = new PlayerTagUpdateEvent(
+            $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+            if ($scoreHud !== null && $scoreHud->isEnabled()) {
 
-              $sender,
-              new ScoreTag("redskyblock.membercount", strval(count($playerData["Island Members"])))
-            );
-            $ev->call();
+              $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+
+                $sender,
+                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", strval(count($playerData["Island Members"])))
+              );
+              $ev->call();
+            }
             return true;
           }
         } else {

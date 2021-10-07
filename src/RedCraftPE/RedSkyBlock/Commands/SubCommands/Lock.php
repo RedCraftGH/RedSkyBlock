@@ -5,9 +5,6 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
-use Ifera\ScoreHud\scoreboard\ScoreTag;
-
 class Lock {
 
   public function __construct($plugin) {
@@ -44,11 +41,15 @@ class Lock {
               file_put_contents($playerFilePath, $playerDataEncoded);
               $sender->sendMessage(TextFormat::GREEN . "Your skyblock island has been locked.");
 
-              $ev = new PlayerTagUpdateEvent(
-                $sender,
-                new ScoreTag("redskyblock.islestatus", "Locked")
-              );
-              $ev->call();
+              $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+              if ($scoreHud !== null && $scoreHud->isEnabled()) {
+
+                $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                  $sender,
+                  new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Locked")
+                );
+                $ev->call();
+              }
               return true;
             } else {
 
@@ -65,11 +66,15 @@ class Lock {
               file_put_contents($playerFilePath, $playerDataEncoded);
               $sender->sendMessage(TextFormat::GREEN . "Your skyblock island is no longer locked.");
 
-              $ev = new PlayerTagUpdateEvent(
-                $sender,
-                new ScoreTag("redskyblock.islestatus", "Unlocked")
-              );
-              $ev->call();
+              $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+              if ($scoreHud !== null && $scoreHud->isEnabled()) {
+
+                $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                  $sender,
+                  new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Unlocked")
+                );
+                $ev->call();
+              }
               return true;
             } else {
 

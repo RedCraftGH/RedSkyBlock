@@ -5,9 +5,6 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
-use Ifera\ScoreHud\scoreboard\ScoreTag;
-
 class Name {
 
   public function __construct($plugin) {
@@ -46,11 +43,15 @@ class Name {
           file_put_contents($filePath, $playerDataEncoded);
           $sender->sendMessage(TextFormat::GREEN . "Your island's name has been changed to " . TextFormat::LIGHT_PURPLE . $islandName);
 
-          $ev = new PlayerTagUpdateEvent(
-            $sender,
-            new ScoreTag("redskyblock.islename", strval($islandName))
-          );
-          $ev->call();
+          $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+          if ($scoreHud !== null && $scoreHud->isEnabled()) {
+
+            $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+              $sender,
+              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islename", strval($islandName))
+            );
+            $ev->call();
+          }
           return true;
         }
       } else {

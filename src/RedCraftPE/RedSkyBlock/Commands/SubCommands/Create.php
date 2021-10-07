@@ -163,6 +163,41 @@ class Create {
             $plugin->skyblock->set("Last Z", $lastZ);
             $plugin->skyblock->set("Islands", intval($plugin->skyblock->get("Islands")) + 1);
             $plugin->skyblock->save();
+
+            $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+            if ($scoreHud !== null && $scoreHud->isEnabled()) {
+
+              $ev1 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                $sender,
+                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islename", $playerData["Name"])
+              );
+              $ev2 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                $sender,
+                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islesize", $playerData["Island Size"])
+              );
+              $ev3 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                $sender,
+                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islevalue", $playerData["Value"])
+              );
+              $ev4 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                $sender,
+                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.rank", "#" . $plugin->getIslandRank($sender))
+              );
+              $ev5 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                $sender,
+                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Unlocked")
+              );
+              $ev6 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+                $sender,
+                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", "0")
+              );
+              $ev1->call();
+              $ev2->call();
+              $ev3->call();
+              $ev4->call();
+              $ev5->call();
+              $ev6->call();
+            }
             return true;
           } else {
 
