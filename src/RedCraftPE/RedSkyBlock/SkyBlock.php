@@ -251,7 +251,6 @@ class SkyBlock extends PluginBase {
 
     $playerName = strtolower($player->getName());
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
-    var_dump($playerName);
 
       $valueArray = [];
 
@@ -264,14 +263,11 @@ class SkyBlock extends PluginBase {
       }
 
       arsort($valueArray);
-      var_dump($valueArray);
       if (!(isset($valueArray[$playerName]))) {
 
-        var_dump("check");
         return "N/A";
       }
       $offset = array_search($playerName, array_keys($valueArray)) + 1;
-      var_dump($offset);
       return $offset;
   }
 
