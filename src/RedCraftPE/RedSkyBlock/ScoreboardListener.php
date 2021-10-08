@@ -10,7 +10,9 @@ use Ifera\ScoreHud\event\TagsResolveEvent;
 class ScoreboardListener implements Listener {
 
   public function __construct($plugin) {
+    
     $this->plugin = $plugin;
+    $plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
   }
 
   public function onTagResolve(TagsResolveEvent $event) {
