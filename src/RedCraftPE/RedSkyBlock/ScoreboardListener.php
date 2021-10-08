@@ -10,9 +10,7 @@ use Ifera\ScoreHud\event\TagsResolveEvent;
 class ScoreboardListener implements Listener {
 
   public function __construct($plugin) {
-
     $this->plugin = $plugin;
-    $plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
   }
 
   public function onTagResolve(TagsResolveEvent $event) {
@@ -36,26 +34,32 @@ class ScoreboardListener implements Listener {
         $tag->setValue($plugin->getIslandValue($player));
       break;
       case "redskyblock.islerank":
-
         $tag->setValue("#" . $plugin->getIslandRank($player));
       break;
       case "redskyblock.islestatus":
 
         $status = $plugin->isIslandLocked($player);
-        if ($status) {
+        if ($status == "N/A") {
+
+          $tag->setValue("N/A");
+        } elseif ($status) {
 
           $tag->setValue("Locked");
         } else {
-
+          
           $tag->setValue("Unlocked");
         }
       break;
       case "redskyblock.membercount":
 
-        $memberArray = (array) $plugin->getIslandMembers($player);
-        $memberCount = count($memberArray);
+        $memberArray = $plugin->getIslandMembers($player);
+        if ($memberArray == "N/A") {
+          $tag->setValue("N/A");
+        } else {
+          $memberCount = count((array) $memberArray);
+          $tag->setValue($memberCount);
+        }
 
-        $tag->setValue($memberCount);
       break;
     }
   }

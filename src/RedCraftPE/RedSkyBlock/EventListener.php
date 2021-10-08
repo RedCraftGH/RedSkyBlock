@@ -21,7 +21,6 @@ use pocketmine\inventory\Inventory;
 use pocketmine\item\Item;
 use pocketmine\level\Position;
 use pocketmine\event\player\PlayerExhaustEvent;
-use pocketmine\plugin\Plugin;
 
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Settings;
@@ -323,90 +322,6 @@ class EventListener implements Listener {
     if ($plugin->cfg->get("Spawn Command") === "on") {
 
       $player->teleport($spawn);
-    }
-
-    $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-    if ($scoreHud instanceof Plugin) {
-
-      $playerName = strtolower($player->getName());
-      $filePath = $plugin->getDataFolder() . "Players/" . $playerName . ".json";
-      if (!file_exists($filePath)) {
-
-        $ev1 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islename", "N/A")
-        );
-        $ev2 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islevalue", "N/A")
-        );
-        $ev3 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islerank", "N/A")
-        );
-        $ev4 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islesize", "N/A")
-        );
-        $ev5 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "N/A")
-        );
-        $ev6 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", "N/A")
-        );
-        $ev1->call();
-        $ev2->call();
-        $ev3->call();
-        $ev4->call();
-        $ev5->call();
-        $ev6->call();
-      } else {
-
-        $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
-
-        $ev1 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islename", $playerData["Name"])
-        );
-        $ev2 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islevalue", $playerData["Value"])
-        );
-        $ev3 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islerank", "#" . $plugin->getIslandRank($player))
-        );
-        $ev4 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islesize", $playerData["Island Size"])
-        );
-        if ($playerData["Island Locked"]) {
-
-          $ev5 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-            $player,
-            new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Locked")
-          );
-        } else {
-
-          $ev5 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-            $player,
-            new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Unlocked")
-          );
-        }
-        $ev6 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-          $player,
-          new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", count($playerData["Island Members"]))
-        );
-        $ev1->call();
-        $ev2->call();
-        $ev3->call();
-        $ev4->call();
-        $ev5->call();
-        $ev6->call();
-      }
     }
   }
   public function onExhaust(PlayerExhaustEvent $event) {
