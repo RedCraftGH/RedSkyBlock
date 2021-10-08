@@ -10,6 +10,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\block\BlockFactory;
 use pocketmine\Player;
 use pocketmine\block\Block;
+use pocketmine\plugin\Plugin;
 
 use RedCraftPE\RedSkyBlock\Commands\Island;
 use RedCraftPE\RedSkyBlock\Commands\Spawn;
@@ -50,9 +51,9 @@ class SkyBlock extends PluginBase {
 
     //check if ScoreHUD is available
     $scoreHud = $this->getServer()->getPluginManager()->getPlugin("ScoreHud");
-    if ($scoreHud !== null && $scoreHud->isEnabled()) {
+    if ($scoreHud instanceof Plugin) {
 
-      $this->scoreboardListener = new ScoreboardListener($this, $scoreHud);
+      $this->scoreboardListener = new ScoreboardListener($this);
     }
 
     if ($this->skyblock->get("Master World") === false) {
@@ -250,6 +251,7 @@ class SkyBlock extends PluginBase {
 
     $playerName = strtolower($player->getName());
     $skyblockArray = $this->skyblock->get("SkyBlock", []);
+    var_dump($playerName);
 
       $valueArray = [];
 
@@ -262,11 +264,14 @@ class SkyBlock extends PluginBase {
       }
 
       arsort($valueArray);
+      var_dump($valueArray);
       if (!(isset($valueArray[$playerName]))) {
 
+        var_dump("check");
         return "N/A";
       }
       $offset = array_search($playerName, array_keys($valueArray)) + 1;
+      var_dump($offset);
       return $offset;
   }
 
