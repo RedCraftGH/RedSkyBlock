@@ -5,35 +5,37 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Rank {
+class Rank{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onRankCommand(CommandSender $sender): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.rank")) {
+	public function onRankCommand(CommandSender $sender) : bool{
 
-      $plugin = $this->plugin;
-      $senderName = strtolower($sender->getName());
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+		if($sender->hasPermission("redskyblock.rank")){
 
-      if (array_key_exists($senderName, $skyblockArray)) {
+			$plugin = $this->plugin;
+			$senderName = strtolower($sender->getName());
+			$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
 
-        $offset = $plugin->getIslandRank($sender);
-        $sender->sendMessage(TextFormat::GREEN . "Your island is ranked " . TextFormat::WHITE . "#{$offset}");
-        return true;
-      } else {
+			if(array_key_exists($senderName, $skyblockArray)){
 
-        $sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
-        return true;
-      }
-    } else {
+				$offset = $plugin->getIslandRank($sender);
+				$sender->sendMessage(TextFormat::GREEN . "Your island is ranked " . TextFormat::WHITE . "#{$offset}");
+				return true;
+			}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+				$sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
+				return true;
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

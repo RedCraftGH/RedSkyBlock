@@ -2,69 +2,73 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Add {
+class Add{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onAddCommand(CommandSender $sender, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.members")) {
+	public function onAddCommand(CommandSender $sender, array $args) : bool{
 
-      if (count($args) < 2) {
+		if($sender->hasPermission("redskyblock.members")){
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is add <player>");
-        return true;
-      } else {
+			if(count($args) < 2){
 
-        $senderName = strtolower($sender->getName());
-        $name = strtolower(implode(" ", array_slice($args, 1)));
-        $plugin = $this->plugin;
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        if (array_key_exists($senderName, $skyblockArray)) {
+				$sender->sendMessage(TextFormat::WHITE . "Usage: /is add <player>");
+				return true;
+			}else{
 
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded, true);
+				$senderName = strtolower($sender->getName());
+				$name = strtolower(implode(" ", array_slice($args, 1)));
+				$plugin = $this->plugin;
+				$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+				$filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+				if(array_key_exists($senderName, $skyblockArray)){
 
-          if (in_array($name, $playerData["Island Members"])) {
+					$playerDataEncoded = file_get_contents($filePath);
+					$playerData = (array) json_decode($playerDataEncoded, true);
 
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is already a member of your island.");
-            return true;
-          } else {
+					if(in_array($name, $playerData["Island Members"])){
 
-            $playerData["Island Members"][] = $name;
-            $playerDataEncoded = json_encode($playerData);
-            file_put_contents($filePath, $playerDataEncoded);
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is now a member of your island.");
+						$sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is already a member of your island.");
+						return true;
+					}else{
 
-            $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-            if ($scoreHud !== null && $scoreHud->isEnabled()) {
+						$playerData["Island Members"][] = $name;
+						$playerDataEncoded = json_encode($playerData);
+						file_put_contents($filePath, $playerDataEncoded);
+						$sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is now a member of your island.");
 
-              $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+						$scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+						if($scoreHud !== null && $scoreHud->isEnabled()){
 
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", strval(count($playerData["Island Members"])))
-              );
-              $ev->call();
-            }
-            return true;
-          }
-        } else {
+							$ev = new PlayerTagUpdateEvent(
 
-          $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-          return true;
-        }
-      }
-    } else {
+								$sender,
+								new ScoreTag("redskyblock.membercount", strval(count($playerData["Island Members"])))
+							);
+							$ev->call();
+						}
+						return true;
+					}
+				}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+					$sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
+					return true;
+				}
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

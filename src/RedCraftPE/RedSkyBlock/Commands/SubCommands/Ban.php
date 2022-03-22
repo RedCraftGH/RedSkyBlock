@@ -3,87 +3,90 @@
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\Player;
 
-class Ban {
+class Ban{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onBanCommand(CommandSender $sender, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.ban")) {
+	public function onBanCommand(CommandSender $sender, array $args) : bool{
 
-      if (count($args) < 2) {
+		if($sender->hasPermission("redskyblock.ban")){
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is ban <player>");
-        return true;
-      } else {
+			if(count($args) < 2){
 
-        $plugin = $this->plugin;
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $senderName = strtolower($sender->getName());
+				$sender->sendMessage(TextFormat::WHITE . "Usage: /is ban <player>");
+				return true;
+			}else{
 
-        if (array_key_exists($senderName, $skyblockArray)) {
+				$plugin = $this->plugin;
+				$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+				$senderName = strtolower($sender->getName());
 
-          $name = strtolower(implode(" ", array_slice($args, 1)));
-          $playerFromName = $plugin->getServer()->getPlayer($name);
-          if ($playerFromName === null) {
+				if(array_key_exists($senderName, $skyblockArray)){
 
-            $playerFromName = $name;
-          }
-          $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded, true);
+					$name = strtolower(implode(" ", array_slice($args, 1)));
+					$playerFromName = $plugin->getServer()->getPlayerByPrefix($name);
+					if($playerFromName === null){
 
-          if (in_array($name, $playerData["Banned"])) {
+						$playerFromName = $name;
+					}
+					$filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+					$playerDataEncoded = file_get_contents($filePath);
+					$playerData = (array) json_decode($playerDataEncoded, true);
 
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is already banned from your island.");
-            return true;
-          } else {
+					if(in_array($name, $playerData["Banned"])){
 
-            if ($name !== $senderName && $playerFromName !== $sender) {
+						$sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is already banned from your island.");
+						return true;
+					}else{
 
-              if (in_array($name, $playerData["Island Members"])) {
+						if($name !== $senderName && $playerFromName !== $sender){
 
-                $key = array_search($name, $playerData["Island Members"]);
-                unset($playerData["Island Members"][$key]);
-              }
+							if(in_array($name, $playerData["Island Members"])){
 
-              $playerData["Banned"][] = $name;
-              $playerDataEncoded = json_encode($playerData);
-              file_put_contents($filePath, $playerDataEncoded);
-              $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is now banned from your island.");
+								$key = array_search($name, $playerData["Island Members"]);
+								unset($playerData["Island Members"][$key]);
+							}
 
-              if ($playerFromName instanceof Player) {
+							$playerData["Banned"][] = $name;
+							$playerDataEncoded = json_encode($playerData);
+							file_put_contents($filePath, $playerDataEncoded);
+							$sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is now banned from your island.");
 
-                $playerFromName->sendMessage(TextFormat::WHITE . $senderName . TextFormat::RED . " has banned you from their island.");
+							if($playerFromName instanceof Player){
 
-                if ($plugin->getIslandAtPlayer($playerFromName) === $senderName) {
+								$playerFromName->sendMessage(TextFormat::WHITE . $senderName . TextFormat::RED . " has banned you from their island.");
 
-                  $playerFromName->teleport($plugin->getServer()->getDefaultLevel()->getSafeSpawn());
-                }
-              }
-              return true;
-            } else if ($name === $senderName || $playerFromName === $sender) {
+								if($plugin->getIslandAtPlayer($playerFromName) === $senderName){
 
-              $sender->sendMessage(TextFormat::RED . "You cannot ban yourself from your island.");
-              return true;
-            }
-          }
-        } else {
+									$playerFromName->teleport($plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
+								}
+							}
+							return true;
+						}elseif($name === $senderName || $playerFromName === $sender){
 
-          $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-          return true;
-        }
-      }
-    } else {
+							$sender->sendMessage(TextFormat::RED . "You cannot ban yourself from your island.");
+							return true;
+						}
+					}
+				}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+					$sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
+					return true;
+				}
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+		return true;
+	}
 }

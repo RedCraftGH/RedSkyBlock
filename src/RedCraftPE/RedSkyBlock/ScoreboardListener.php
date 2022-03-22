@@ -2,67 +2,67 @@
 
 namespace RedCraftPE\RedSkyBlock;
 
-use pocketmine\event\listener;
-use pocketmine\event\block\BlockBreakEvent;
-
 use Ifera\ScoreHud\event\TagsResolveEvent;
+use pocketmine\event\Listener;
 
-class ScoreboardListener implements Listener {
+class ScoreboardListener implements Listener{
 
-  public function __construct($plugin) {
-    
-    $this->plugin = $plugin;
-    $plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
-  }
+	private SkyBlock $plugin;
 
-  public function onTagResolve(TagsResolveEvent $event) {
+	public function __construct($plugin){
 
-    $plugin = $this->plugin;
-    $player = $event->getPlayer();
-    $tag = $event->getTag();
+		$this->plugin = $plugin;
+		$plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
+	}
 
-    switch ($tag->getName()) {
+	public function onTagResolve(TagsResolveEvent $event){
 
-      case "redskyblock.islename":
+		$plugin = $this->plugin;
+		$player = $event->getPlayer();
+		$tag = $event->getTag();
 
-        $tag->setValue($plugin->getIslandName($player));
-      break;
-      case "redskyblock.islesize":
+		switch($tag->getName()){
 
-        $tag->setValue($plugin->getIslandSize($player));
-      break;
-      case "redskyblock.islevalue":
+			case "redskyblock.islename":
 
-        $tag->setValue($plugin->getIslandValue($player));
-      break;
-      case "redskyblock.islerank":
-        $tag->setValue("#" . $plugin->getIslandRank($player));
-      break;
-      case "redskyblock.islestatus":
+				$tag->setValue($plugin->getIslandName($player));
+				break;
+			case "redskyblock.islesize":
 
-        $status = $plugin->isIslandLocked($player);
-        if ($status == "N/A") {
+				$tag->setValue($plugin->getIslandSize($player));
+				break;
+			case "redskyblock.islevalue":
 
-          $tag->setValue("N/A");
-        } elseif ($status) {
+				$tag->setValue($plugin->getIslandValue($player));
+				break;
+			case "redskyblock.islerank":
+				$tag->setValue("#" . $plugin->getIslandRank($player));
+				break;
+			case "redskyblock.islestatus":
 
-          $tag->setValue("Locked");
-        } else {
-          
-          $tag->setValue("Unlocked");
-        }
-      break;
-      case "redskyblock.membercount":
+				$status = $plugin->isIslandLocked($player);
+				if($status == "N/A"){
 
-        $memberArray = $plugin->getIslandMembers($player);
-        if ($memberArray == "N/A") {
-          $tag->setValue("N/A");
-        } else {
-          $memberCount = count((array) $memberArray);
-          $tag->setValue($memberCount);
-        }
+					$tag->setValue("N/A");
+				}elseif($status){
 
-      break;
-    }
-  }
+					$tag->setValue("Locked");
+				}else{
+
+					$tag->setValue("Unlocked");
+				}
+				break;
+			case "redskyblock.membercount":
+
+				$memberArray = $plugin->getIslandMembers($player);
+				if($memberArray == "N/A"){
+					$tag->setValue("N/A");
+				}else{
+					$memberCount = count((array) $memberArray);
+					$tag->setValue($memberCount);
+				}
+
+				break;
+		}
+	}
 }

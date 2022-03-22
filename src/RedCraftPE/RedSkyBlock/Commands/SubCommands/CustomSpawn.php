@@ -3,65 +3,68 @@
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
-class CustomSpawn {
+class CustomSpawn{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onCustomSpawnCommand(CommandSender $sender): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.updatezone")) {
+	public function onCustomSpawnCommand(CommandSender $sender) : bool{
 
-      $plugin = $this->plugin;
-      $islandZone = $plugin->cfg->get("Island Zone", []);
+		if($sender->hasPermission("redskyblock.updatezone") and $sender instanceof Player){
 
-      if ($islandZone[0] === 0 && $islandZone[1] === 0 && $islandZone[2] === 0) {
+			$plugin = $this->plugin;
+			$islandZone = $plugin->cfg->get("Island Zone", []);
 
-        $sender->sendMessage(TextFormat::RED . "You must set position 1 of your custom island zone first.");
-        return true;
-      } else {
+			if($islandZone[0] === 0 && $islandZone[1] === 0 && $islandZone[2] === 0){
 
-        if ($islandZone[3] === 0 && $islandZone[4] === 0 && $islandZone[5] === 0) {
+				$sender->sendMessage(TextFormat::RED . "You must set position 1 of your custom island zone first.");
+				return true;
+			}else{
 
-          $sender->sendMessage(TextFormat::RED . "You must set position 2 of your custom island zone first.");
-          return true;
-        } else {
+				if($islandZone[3] === 0 && $islandZone[4] === 0 && $islandZone[5] === 0){
 
-          $posOneX = $islandZone[0];
-          $posOneY = $islandZone[1];
-          $posOneZ = $islandZone[2];
-          $posTwoX = $islandZone[3];
-          $posTwoY = $islandZone[4];
-          $posTwoZ = $islandZone[5];
+					$sender->sendMessage(TextFormat::RED . "You must set position 2 of your custom island zone first.");
+					return true;
+				}else{
 
-          $islandHeight = max($posOneY, $posTwoY) - min($posOneY, $posTwoY);
+					$posOneX = $islandZone[0];
+					$posOneY = $islandZone[1];
+					$posOneZ = $islandZone[2];
+					$posTwoX = $islandZone[3];
+					$posTwoY = $islandZone[4];
+					$posTwoZ = $islandZone[5];
 
-          $zoneX = min($posOneX, $posTwoX);
-          $zoneZ = min($posOneZ, $posTwoZ);
+					$islandHeight = max($posOneY, $posTwoY) - min($posOneY, $posTwoY);
 
-          $playerX = round($sender->getX());
-          $playerZ = round($sender->getZ());
+					$zoneX = min($posOneX, $posTwoX);
+					$zoneZ = min($posOneZ, $posTwoZ);
 
-          $cSpawnVals = $plugin->skyblock->get("CSpawnVals", []);
-          $cSpawnVals[0] = $playerX - $zoneX;
-          $cSpawnVals[1] = 81 + $islandHeight;
-          $cSpawnVals[2] = $playerZ - $zoneZ;
+					$playerX = round($sender->getPosition()->getX());
+					$playerZ = round($sender->getPosition()->getZ());
 
-          $sender->sendMessage(TextFormat::GREEN . "Your custom island main spawn has been set!");
+					$cSpawnVals = $plugin->skyblock->get("CSpawnVals", []);
+					$cSpawnVals[0] = $playerX - $zoneX;
+					$cSpawnVals[1] = 81 + $islandHeight;
+					$cSpawnVals[2] = $playerZ - $zoneZ;
 
-          $plugin->skyblock->set("CSpawnVals", $cSpawnVals);
-          $plugin->skyblock->save();
-          return true;
-        }
-      }
-    } else {
+					$sender->sendMessage(TextFormat::GREEN . "Your custom island main spawn has been set!");
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+					$plugin->skyblock->set("CSpawnVals", $cSpawnVals);
+					$plugin->skyblock->save();
+					return true;
+				}
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

@@ -5,47 +5,49 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Members {
+class Members{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onMembersCommand(CommandSender $sender): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.members")) {
+	public function onMembersCommand(CommandSender $sender) : bool{
 
-      $plugin = $this->plugin;
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $senderName = strtolower($sender->getName());
+		if($sender->hasPermission("redskyblock.members")){
 
-      if (array_key_exists($senderName, $skyblockArray)) {
+			$plugin = $this->plugin;
+			$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+			$senderName = strtolower($sender->getName());
 
-        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
+			if(array_key_exists($senderName, $skyblockArray)){
 
-        if (count($playerData["Island Members"]) <= 0) {
+				$filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+				$playerDataEncoded = file_get_contents($filePath);
+				$playerData = (array) json_decode($playerDataEncoded);
 
-          $members = "no members yet.";
-        } else {
+				if(count($playerData["Island Members"]) <= 0){
 
-          $members = implode(", ", $playerData["Island Members"]);
-        }
+					$members = "no members yet.";
+				}else{
 
-        $sender->sendMessage(TextFormat::LIGHT_PURPLE . "Members: " . TextFormat::WHITE . $members);
-        return true;
+					$members = implode(", ", $playerData["Island Members"]);
+				}
 
-      } else {
+				$sender->sendMessage(TextFormat::LIGHT_PURPLE . "Members: " . TextFormat::WHITE . $members);
+				return true;
 
-        $sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
-        return true;
-      }
-    } else {
+			}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+				$sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
+				return true;
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

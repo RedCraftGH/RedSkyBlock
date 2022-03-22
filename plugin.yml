@@ -1,18 +1,26 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 5.0.3
-api: 3.0.0
-mcpe-protocol: [361, 388, 389, 390, 407, 408, 431, 440, 465, 471]
+version: 5.0.4
+api: 4.0.0
 main: RedCraftPE\RedSkyBlock\SkyBlock
+softdepend: [ScoreHud]
 commands:
   island:
     description: This is the main command for RedSkyBlock.
     aliases: [is, isle, sb, skyblock]
     usage: /island <args>
+    permission: redskyblock.island
   spawn:
     description: This command will take the user to the server spawn.
     usage: /spawn
+    permission: redskyblock.spawn
 permissions:
+    redskyblock.island:
+      description: With this permission players can use island command.
+      default: true #True means everyone will have this permission by default.
+    redskyblock.spawn:
+      description: With this permission players can use spawn command.
+      default: true #True means everyone will have this permission by default.
     redskyblock.create:
       description: With this permission players can create a SkyBlock island.
       default: true #True means everyone will have this permission by default.

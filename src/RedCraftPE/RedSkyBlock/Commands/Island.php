@@ -4,9 +4,6 @@ namespace RedCraftPE\RedSkyBlock\Commands;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\utils\TextFormat;
-
-use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Add;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Ban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Banned;
@@ -38,223 +35,226 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Top;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Unban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\UpdateZone;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Value;
+use RedCraftPE\RedSkyBlock\SkyBlock;
 
-class Island {
+class Island{
 
-  private $add;
-  private $ban;
-  private $banned;
-  private $create;
-  private $createWorld;
-  private $customSpawn;
-  private $delete;
-  private $fly;
-  private $help;
-  private $kick;
-  private $leave;
-  private $lock;
-  private $members;
-  private $name;
-  private $nether;
-  private $netherSpawn;
-  private $netherZone;
-  private $on;
-  private $rank;
-  private $reload;
-  private $remove;
-  private $restart;
-  private $setSpawn;
-  private $setWorld;
-  private $setzone;
-  private $size;
-  private $teleport;
-  private $top;
-  private $unban;
-  private $updateZone;
-  private $value;
+	private Add $add;
+	private Ban $ban;
+	private Banned $banned;
+	private Create $create;
+	private CreateWorld $createWorld;
+	private CustomSpawn $customSpawn;
+	private Delete $delete;
+	private Fly $fly;
+	private Help $help;
+	private Kick $kick;
+	private Leave $leave;
+	private Lock $lock;
+	private Members $members;
+	private Name $name;
+	private Nether $nether;
+	private NetherSpawn $netherSpawn;
+	private NetherZone $netherZone;
+	private On $on;
+	private Rank $rank;
+	private Reload $reload;
+	private Remove $remove;
+	private Restart $restart;
+	private SetSpawn $setSpawn;
+	private SetWorld $setWorld;
+	private SetZone $setzone;
+	private Size $size;
+	private Teleport $teleport;
+	private Top $top;
+	private Unban $unban;
+	private UpdateZone $updateZone;
+	private Value $value;
+	public SkyBlock $plugin;
 
-  public function __construct($plugin) {
+	public function __construct(SkyBlock $plugin){
 
-    $this->plugin = $plugin;
+		$this->plugin = $plugin;
 
-    $this->add = new Add($plugin);
-    $this->ban = new Ban($plugin);
-    $this->banned = new Banned($plugin);
-    $this->create = new Create($plugin);
-    $this->createWorld = new CreateWorld($plugin);
-    $this->customSpawn = new CustomSpawn($plugin);
-    $this->delete = new Delete($plugin);
-    $this->fly = new Fly($plugin);
-    $this->help = new Help($plugin);
-    $this->kick = new Kick($plugin);
-    $this->leave = new Leave($plugin);
-    $this->lock = new Lock($plugin);
-    $this->members = new Members($plugin);
-    $this->name = new Name($plugin);
-    $this->nether = new Nether($plugin);
-    $this->netherSpawn = new NetherSpawn($plugin);
-    $this->netherZone = new NetherZone($plugin);
-    $this->on = new On($plugin);
-    $this->rank = new Rank($plugin);
-    $this->reload = new Reload($plugin);
-    $this->remove = new Remove($plugin);
-    $this->restart = new Restart($plugin);
-    $this->setSpawn = new SetSpawn($plugin);
-    $this->setWorld = new SetWorld($plugin);
-    $this->setzone = new SetZone($plugin);
-    $this->size = new Size($plugin);
-    $this->teleport = new Teleport($plugin);
-    $this->top = new Top($plugin);
-    $this->unban = new Unban($plugin);
-    $this->updateZone = new UpdateZone($plugin);
-    $this->value = new Value($plugin);
-  }
-  public function onIslandCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
+		$this->add = new Add($plugin);
+		$this->ban = new Ban($plugin);
+		$this->banned = new Banned($plugin);
+		$this->create = new Create($plugin);
+		$this->createWorld = new CreateWorld($plugin);
+		$this->customSpawn = new CustomSpawn($plugin);
+		$this->delete = new Delete($plugin);
+		$this->fly = new Fly($plugin);
+		$this->help = new Help($plugin);
+		$this->kick = new Kick($plugin);
+		$this->leave = new Leave($plugin);
+		$this->lock = new Lock($plugin);
+		$this->members = new Members($plugin);
+		$this->name = new Name($plugin);
+		$this->nether = new Nether($plugin);
+		$this->netherSpawn = new NetherSpawn($plugin);
+		$this->netherZone = new NetherZone($plugin);
+		$this->on = new On($plugin);
+		$this->rank = new Rank($plugin);
+		$this->reload = new Reload($plugin);
+		$this->remove = new Remove($plugin);
+		$this->restart = new Restart($plugin);
+		$this->setSpawn = new SetSpawn($plugin);
+		$this->setWorld = new SetWorld($plugin);
+		$this->setzone = new SetZone($plugin);
+		$this->size = new Size($plugin);
+		$this->teleport = new Teleport($plugin);
+		$this->top = new Top($plugin);
+		$this->unban = new Unban($plugin);
+		$this->updateZone = new UpdateZone($plugin);
+		$this->value = new Value($plugin);
+	}
 
-    if (!$args) {
+	public function onIslandCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
 
-      return $this->help->onHelpCommand($sender, $args);
-    } else {
+		if(!$args){
 
-      switch (strtolower($args[0])) {
+			return $this->help->onHelpCommand($sender, $args);
+		}else{
 
-        case "add":
+			switch(strtolower($args[0])){
 
-          return $this->add->onAddCommand($sender, $args);
-        break;
-        case "ban":
+				case "add":
 
-          return $this->ban->onBanCommand($sender, $args);
-        break;
-        case "banned":
+					return $this->add->onAddCommand($sender, $args);
 
-          return $this->banned->onBannedCommand($sender);
-        break;
-        case "create":
+				case "ban":
 
-          return $this->create->onCreateCommand($sender);
-        break;
-        case "cw":
-        case "createworld":
+					return $this->ban->onBanCommand($sender, $args);
 
-          return $this->createWorld->onCreateWorldCommand($sender, $args);
-        break;
-        case "customspawn":
+				case "banned":
 
-          return $this->customSpawn->onCustomSpawnCommand($sender);
-        break;
-        case "delete":
+					return $this->banned->onBannedCommand($sender);
 
-          return $this->delete->onDeleteCommand($sender, $args);
-        break;
-        case "fly":
+				case "create":
 
-          return $this->fly->onFlyCommand($sender);
-        break;
-        case "help":
+					return $this->create->onCreateCommand($sender);
 
-          return $this->help->onHelpCommand($sender, $args);
-        break;
-        case "kick":
+				case "cw":
+				case "createworld":
 
-          return $this->kick->onKickCommand($sender, $args);
-        break;
-        case "leave":
+					return $this->createWorld->onCreateWorldCommand($sender, $args);
 
-          return $this->leave->onLeaveCommand($sender, $args);
-        break;
-        case "lock":
+				case "customspawn":
 
-          return $this->lock->onLockCommand($sender, $args);
-        break;
-        case "members":
+					return $this->customSpawn->onCustomSpawnCommand($sender);
 
-          return $this->members->onMembersCommand($sender);
-        break;
-        case "name":
-        case "rename":
+				case "delete":
 
-          return $this->name->onNameCommand($sender, $args);
-        break;
-        case "nether":
+					return $this->delete->onDeleteCommand($sender, $args);
 
-          return $this->nether->onNetherCommand($sender);
-        break;
-        case "netherspawn":
+				case "fly":
 
-          return $this->netherSpawn->onNetherSpawnCommand($sender);
-        break;
-        case "netherzone":
+					return $this->fly->onFlyCommand($sender);
 
-          return $this->netherZone->onNetherZoneCommand($sender, $args);
-        break;
-        case "on":
+				case "help":
 
-          return $this->on->onOnCommand($sender);
-        break;
-        case "rank":
+					return $this->help->onHelpCommand($sender, $args);
 
-          return $this->rank->onRankCommand($sender);
-        break;
-        case "reload":
+				case "kick":
 
-          return $this->reload->onReloadCommand($sender);
-        break;
-        case "remove":
+					return $this->kick->onKickCommand($sender, $args);
 
-          return $this->remove->onRemoveCommand($sender, $args);
-        break;
-        case "restart":
-        case "reset":
+				case "leave":
 
-          return $this->restart->onRestartCommand($sender);
-        break;
-        case "setspawn":
+					return $this->leave->onLeaveCommand($sender, $args);
 
-          return $this->setSpawn->onSetSpawnCommand($sender);
-        break;
-        case "sw":
-        case "setworld":
+				case "lock":
 
-          return $this->setWorld->onSetWorldCommand($sender, $args);
-        break;
-        case "setzone":
+					return $this->lock->onLockCommand($sender, $args);
 
-          return $this->setzone->onSetZoneCommand($sender, $args);
-        break;
-        case "size":
+				case "members":
 
-          return $this->size->onSizeCommand($sender, $args);
-        break;
-        case "spawn":
-        case "goto":
-        case "go":
-        case "tp":
-        case "teleport":
-        case "visit":
+					return $this->members->onMembersCommand($sender);
 
-          return $this->teleport->onTeleportCommand($sender, $args);
-        break;
-        case "top":
-        case "leaderboard":
-        case "lb":
+				case "name":
+				case "rename":
 
-          return $this->top->onTopCommand($sender);
-        break;
-        case "unban":
+					return $this->name->onNameCommand($sender, $args);
 
-          return $this->unban->onUnbanCommand($sender, $args);
-        break;
-        case "updatezone":
+				case "nether":
 
-          return $this->updateZone->onUpdateZoneCommand($sender, $args);
-        break;
-        case "value":
+					return $this->nether->onNetherCommand($sender);
 
-          return $this->value->onValueCommand($sender);
-        break;
-      }
-      return $this->help->onHelpCommand($sender, $args);
-    }
-  }
+				case "netherspawn":
+
+					return $this->netherSpawn->onNetherSpawnCommand($sender);
+
+				case "netherzone":
+
+					return $this->netherZone->onNetherZoneCommand($sender, $args);
+
+				case "on":
+
+					return $this->on->onOnCommand($sender);
+
+				case "rank":
+
+					return $this->rank->onRankCommand($sender);
+
+				case "reload":
+
+					return $this->reload->onReloadCommand($sender);
+
+				case "remove":
+
+					return $this->remove->onRemoveCommand($sender, $args);
+
+				case "restart":
+				case "reset":
+
+					return $this->restart->onRestartCommand($sender);
+
+				case "setspawn":
+
+					return $this->setSpawn->onSetSpawnCommand($sender);
+
+				case "sw":
+				case "setworld":
+
+					return $this->setWorld->onSetWorldCommand($sender, $args);
+
+				case "setzone":
+
+					return $this->setzone->onSetZoneCommand($sender, $args);
+
+				case "size":
+
+					return $this->size->onSizeCommand($sender, $args);
+
+				case "spawn":
+				case "goto":
+				case "go":
+				case "tp":
+				case "teleport":
+				case "visit":
+
+					return $this->teleport->onTeleportCommand($sender, $args);
+
+				case "top":
+				case "leaderboard":
+				case "lb":
+
+					return $this->top->onTopCommand($sender);
+
+				case "unban":
+
+					return $this->unban->onUnbanCommand($sender, $args);
+
+				case "updatezone":
+
+					return $this->updateZone->onUpdateZoneCommand($sender, $args);
+
+				case "value":
+
+					return $this->value->onValueCommand($sender);
+
+			}
+			return $this->help->onHelpCommand($sender, $args);
+		}
+	}
 }

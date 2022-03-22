@@ -1,10 +1,10 @@
-[![](https://poggit.pmmp.io/shield.state/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
-[![](https://poggit.pmmp.io/shield.api/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
-[![](https://poggit.pmmp.io/shield.dl.total/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
+[![](https://poggit.pmmp.io/shield.state/RedSkyBlock-PM4)](https://poggit.pmmp.io/p/RedSkyBlock-PM4)
+[![](https://poggit.pmmp.io/shield.api/RedSkyBlock-PM4)](https://poggit.pmmp.io/p/RedSkyBlock-PM4)
+[![](https://poggit.pmmp.io/shield.dl.total/RedSkyBlock-PM4)](https://poggit.pmmp.io/p/RedSkyBlock-PM4)
 
 > __*Quick Plugin Check:*__ Plugin Stability is moderate. No major bugs have been found/reported yet. If you encounter one please make an issue so it may be resolved.
 
-<img src="https://github.com/RedCraftGH/RedSkyBlock/blob/master/icon.png" width="100" height="100" align="left"></img>
+<img src="https://github.com/David-pm-pl/RedSkyBlock-PM4/blob/master/icon.png" width="100" height="100" align="left"></img>
 
 # RedSkyBlock
 RedSkyBlock aims to be a feature rich, user-friendly SkyBlock plugin. RedSkyBlock includes many useful, built-in features that can be edited in the config.yml and with the use of some commands in-game.

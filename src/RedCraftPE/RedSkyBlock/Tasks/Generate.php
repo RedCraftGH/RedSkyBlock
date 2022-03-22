@@ -2,57 +2,65 @@
 
 namespace RedCraftPE\RedSkyBlock\Tasks;
 
-use pocketmine\scheduler\Task;
-use pocketmine\Player;
+use pocketmine\block\BlockFactory;
 use pocketmine\math\Vector3;
-use pocketmine\block\Block;
-use pocketmine\level\Level;
+use pocketmine\player\Player;
+use pocketmine\scheduler\Task;
+use pocketmine\world\World;
 
-class Generate extends Task {
+class Generate extends Task{
 
-  private $generator;
+	public $plugin;
 
-  public function __construct($plugin, Player $sender, Int $lastX, Int $lastZ, Level $world) {
+	public $sender;
 
-    $this->plugin = $plugin;
-    $this->sender = $sender;
-    $this->lastX = $lastX;
-    $this->lastZ = $lastZ;
-    $this->world = $world;
-  }
+	public $lastX;
 
-  public function onRun(int $tick) : void {
+	public $lastZ;
 
-    $plugin = $this->plugin;
-    $lastX = $this->lastX;
-    $lastZ = $this->lastZ;
-    $world = $this->world;
+	private $world;
 
-    $islandZone = $plugin->cfg->get("Island Zone");
-    $islandBlocks = $plugin->skyblock->get("Island Blocks");
-    $counter = 0;
-    $x1 = (int) $islandZone[0];
-    $y1 = (int) $islandZone[1];
-    $z1 = (int) $islandZone[2];
-    $x2 = (int) $islandZone[3];
-    $y2 = (int) $islandZone[4];
-    $z2 = (int) $islandZone[5];
+	public function __construct($plugin, Player $sender, int $lastX, int $lastZ, World $world){
 
-    for ($x = $lastX; $x <= $lastX + (max($x1, $x2) - min($x1, $x2)); $x++) {
+		$this->plugin = $plugin;
+		$this->sender = $sender;
+		$this->lastX = $lastX;
+		$this->lastZ = $lastZ;
+		$this->world = $world;
+	}
 
-      for ($y = 80; $y <= 80 + (max($y1, $y2) - min($y1, $y2)); $y++) {
+	public function onRun() : void{
 
-        for ($z = $lastZ; $z <= $lastZ + (max($z1, $z2) - min($z1, $z2)); $z++) {
+		$plugin = $this->plugin;
+		$lastX = $this->lastX;
+		$lastZ = $this->lastZ;
+		$world = $this->world;
 
-          $block = explode(" ", $islandBlocks[$counter]);
+		$islandZone = $plugin->cfg->get("Island Zone");
+		$islandBlocks = $plugin->skyblock->get("Island Blocks");
+		$counter = 0;
+		$x1 = (int) $islandZone[0];
+		$y1 = (int) $islandZone[1];
+		$z1 = (int) $islandZone[2];
+		$x2 = (int) $islandZone[3];
+		$y2 = (int) $islandZone[4];
+		$z2 = (int) $islandZone[5];
 
-          $world->setBlock(new Vector3($x, $y, $z), Block::get($block[0], $block[1]), false);
-          $counter++;
-        }
-      }
-    }
+		for($x = $lastX; $x <= $lastX + (max($x1, $x2) - min($x1, $x2)); $x++){
 
-    $this->sender->setImmobile(false);
-    return;
-  }
+			for($y = 80; $y <= 80 + (max($y1, $y2) - min($y1, $y2)); $y++){
+
+				for($z = $lastZ; $z <= $lastZ + (max($z1, $z2) - min($z1, $z2)); $z++){
+
+					$block = explode(" ", $islandBlocks[$counter]);
+					$world->loadChunk($x, $z);
+					$world->setBlock(new Vector3($x, $y, $z), BlockFactory::getInstance()->get($block[0], $block[1]), false);
+					$counter++;
+				}
+			}
+		}
+
+		$this->sender->setImmobile(false);
+		return;
+	}
 }

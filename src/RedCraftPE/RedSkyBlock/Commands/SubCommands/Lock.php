@@ -2,100 +2,104 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Lock {
+class Lock{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onLockCommand(CommandSender $sender, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.lock")) {
+	public function onLockCommand(CommandSender $sender, array $args) : bool{
 
-      $plugin = $this->plugin;
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $senderName = strtolower($sender->getName());
-      $playerFilePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+		if($sender->hasPermission("redskyblock.lock")){
 
-      if (array_key_exists($senderName, $skyblockArray)) {
+			$plugin = $this->plugin;
+			$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+			$senderName = strtolower($sender->getName());
+			$playerFilePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
 
-        $jsonPlayerData = file_get_contents($playerFilePath);
-        $playerData = (array) json_decode($jsonPlayerData, true);
+			if(array_key_exists($senderName, $skyblockArray)){
 
-        if (count($args) < 2) {
+				$jsonPlayerData = file_get_contents($playerFilePath);
+				$playerData = (array) json_decode($jsonPlayerData, true);
 
-          $sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
-          return true;
-        } else {
+				if(count($args) < 2){
 
-          if ($args[1] === "on") {
+					$sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
+					return true;
+				}else{
 
-            if ($playerData["Island Locked"] === false) {
+					if($args[1] === "on"){
 
-              $playerData["Island Locked"] = true;
-              $playerDataEncoded = json_encode($playerData);
-              file_put_contents($playerFilePath, $playerDataEncoded);
-              $sender->sendMessage(TextFormat::GREEN . "Your skyblock island has been locked.");
+						if($playerData["Island Locked"] === false){
 
-              $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-              if ($scoreHud !== null && $scoreHud->isEnabled()) {
+							$playerData["Island Locked"] = true;
+							$playerDataEncoded = json_encode($playerData);
+							file_put_contents($playerFilePath, $playerDataEncoded);
+							$sender->sendMessage(TextFormat::GREEN . "Your skyblock island has been locked.");
 
-                $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                  $sender,
-                  new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Locked")
-                );
-                $ev->call();
-              }
-              return true;
-            } else {
+							$scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+							if($scoreHud !== null && $scoreHud->isEnabled()){
 
-              $sender->sendMessage(TextFormat::RED . "Your skyblock island is already locked.");
-              return true;
-            }
+								$ev = new PlayerTagUpdateEvent(
+									$sender,
+									new ScoreTag("redskyblock.islestatus", "Locked")
+								);
+								$ev->call();
+							}
+							return true;
+						}else{
 
-          } elseif ($args[1] === "off") {
+							$sender->sendMessage(TextFormat::RED . "Your skyblock island is already locked.");
+							return true;
+						}
 
-            if ($playerData["Island Locked"] === true) {
+					}elseif($args[1] === "off"){
 
-              $playerData["Island Locked"] = false;
-              $playerDataEncoded = json_encode($playerData);
-              file_put_contents($playerFilePath, $playerDataEncoded);
-              $sender->sendMessage(TextFormat::GREEN . "Your skyblock island is no longer locked.");
+						if($playerData["Island Locked"] === true){
 
-              $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-              if ($scoreHud !== null && $scoreHud->isEnabled()) {
+							$playerData["Island Locked"] = false;
+							$playerDataEncoded = json_encode($playerData);
+							file_put_contents($playerFilePath, $playerDataEncoded);
+							$sender->sendMessage(TextFormat::GREEN . "Your skyblock island is no longer locked.");
 
-                $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                  $sender,
-                  new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Unlocked")
-                );
-                $ev->call();
-              }
-              return true;
-            } else {
+							$scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+							if($scoreHud !== null && $scoreHud->isEnabled()){
 
-              $sender->sendMessage(TextFormat::RED . "Your skyblock island is not locked.");
-              return true;
-            }
-          } else {
+								$ev = new PlayerTagUpdateEvent(
+									$sender,
+									new ScoreTag("redskyblock.islestatus", "Unlocked")
+								);
+								$ev->call();
+							}
+							return true;
+						}else{
 
-            $sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
-            return true;
-          }
-        }
-      } else {
+							$sender->sendMessage(TextFormat::RED . "Your skyblock island is not locked.");
+							return true;
+						}
+					}else{
 
-        $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-        return true;
-      }
-    } else {
+						$sender->sendMessage(TextFormat::WHITE . "Usage: /is lock <on/off>");
+						return true;
+					}
+				}
+			}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+				$sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
+				return true;
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }
