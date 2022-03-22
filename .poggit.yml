@@ -1,0 +1,9 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/David-pm-pl/RedSkyBlock-PM4
+build-by-default: true
+branches:
+- master
+projects:
+  RedSkyBlock-PM4:
+    path: ""
+    icon: icon.png
+...
