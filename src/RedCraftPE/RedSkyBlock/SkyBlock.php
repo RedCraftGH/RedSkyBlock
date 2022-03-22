@@ -21,10 +21,10 @@ use RedCraftPE\RedSkyBlock\Commands\Spawn;
 class SkyBlock extends PluginBase{
 
 	protected EventListener $eventListener;
-	protected Config $skyblock;
-	protected Island $island;
-	protected Spawn $spawn;
-	protected Config $cfg;
+	public Config $skyblock;
+	public Island $island;
+	public Spawn $spawn;
+	public Config $cfg;
 	public ScoreboardListener $scoreboardListener;
 
 	public function onEnable() : void{
