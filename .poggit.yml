@@ -6,6 +6,4 @@ projects:
   RedSkyBlock-PM4:
     path: ""
     icon: icon.png
-    lint:
-      phpstan: false
 ...
