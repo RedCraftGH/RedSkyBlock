@@ -59,7 +59,9 @@ class UpdateZone{
 								for($y = min($y1, $y2); $y <= max($y1, $y2); $y++){
 
 									for($z = min($z1, $z2); $z <= max($z1, $z2); $z++){
-										$zoneWorld->loadChunk($x, $z);
+										if($zoneWorld instanceof \pocketmine\world\World){
+											$zoneWorld->loadChunk($x, $z);
+										}
 										$block = $zoneWorld->getBlockAt((int) $x, (int) $y, (int) $z, true, false);
 										$blockID = $block->getID();
 										$blockDamage = $block->getMeta();
