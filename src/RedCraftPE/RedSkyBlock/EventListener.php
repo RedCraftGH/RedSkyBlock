@@ -22,6 +22,7 @@ use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 use pocketmine\world\Position;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Settings;
+use pocketmine\event\Event;
 
 class EventListener implements Listener{
 
