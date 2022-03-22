@@ -61,7 +61,7 @@ class UpdateZone{
 									for($z = min($z1, $z2); $z <= max($z1, $z2); $z++){
 										if($zoneWorld == null) 
 										{
-											$plugin->getLogger()->notice("You need setworld before updatezone");
+											$plugin->getLogger()->notice("You need setworld normal before updatezone");
 											continue;
 										}
 										$zoneWorld->loadChunk($x, $z);
@@ -92,6 +92,11 @@ class UpdateZone{
 								for($y = min($y1, $y2); $y <= max($y1, $y2); $y++){
 
 									for($z = min($z1, $z2); $z <= max($z1, $z2); $z++){
+										if($zoneWorld == null) 
+										{
+											$plugin->getLogger()->notice("You need setworld nether before updatezone");
+											continue;
+										}
 										$zoneWorld->loadChunk($x, $z);
 										$block = $zoneWorld->getBlockAt((int) $x, (int) $y, (int) $z, true, false);
 										$blockID = $block->getID();
