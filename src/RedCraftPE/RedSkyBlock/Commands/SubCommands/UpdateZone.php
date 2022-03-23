@@ -53,17 +53,17 @@ class UpdateZone{
 							$x2 = (int) $islandZone[3];
 							$y2 = (int) $islandZone[4];
 							$z2 = (int) $islandZone[5];
+							if($zoneWorld == null) 
+							{
+								$sender->sendMessage("You need setworld nether before updatezone");
+								return true;
+							}
 
 							for($x = min($x1, $x2); $x <= max($x1, $x2); $x++){
 
 								for($y = min($y1, $y2); $y <= max($y1, $y2); $y++){
 
 									for($z = min($z1, $z2); $z <= max($z1, $z2); $z++){
-										if($zoneWorld == null) 
-										{
-											$sender->sendMessage("You need setworld normal before updatezone");
-											continue;
-										}
 										$zoneWorld->loadChunk($x, $z);
 										
 										$block = $zoneWorld->getBlockAt((int) $x, (int) $y, (int) $z, true, false);
@@ -86,17 +86,17 @@ class UpdateZone{
 							$x2 = (int) $netherZone[3];
 							$y2 = (int) $netherZone[4];
 							$z2 = (int) $netherZone[5];
+							if($zoneWorld == null) 
+							{
+								$sender->sendMessage("You need setworld nether before updatezone");
+								return true;
+							}
 
 							for($x = min($x1, $x2); $x <= max($x1, $x2); $x++){
 
 								for($y = min($y1, $y2); $y <= max($y1, $y2); $y++){
 
 									for($z = min($z1, $z2); $z <= max($z1, $z2); $z++){
-										if($zoneWorld == null) 
-										{
-											$sender->sendMessage("You need setworld nether before updatezone");
-											continue;
-										}
 										$zoneWorld->loadChunk($x, $z);
 										$block = $zoneWorld->getBlockAt((int) $x, (int) $y, (int) $z, true, false);
 										$blockID = $block->getID();
