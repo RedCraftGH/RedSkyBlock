@@ -2,38 +2,41 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands;
 
-use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
-use pocketmine\utils\TextFormat;
-use pocketmine\level\Position;
-use pocketmine\math\Vector3;
+use pocketmine\command\CommandSender;
+use pocketmine\player\GameMode;
+use pocketmine\player\Player;
+use pocketmine\world\Position;
 
-class Spawn {
+class Spawn{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onSpawnCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    $plugin = $this->plugin;
-    $check = $plugin->cfg->get("Spawn Command");
+	public function onSpawnCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
 
-    if ($plugin->cfg->get("Spawn Command") === "on") {
+		$plugin = $this->plugin;
+		$check = $plugin->cfg->get("Spawn Command");
 
-      $spawn = $plugin->getServer()->getDefaultLevel()->getSafeSpawn();
+		if($plugin->cfg->get("Spawn Command") === "on"){
 
-      if ($sender->getGamemode() === 0) {
+			$spawn = $plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
+			if($sender instanceof Player){
+				if($sender->getGamemode() === GameMode::SURVIVAL()){
+					$sender->setAllowFlight(false);
+					$sender->setFlying(false);
+				}
+				$sender->teleport($spawn);
+				return true;
+			}else{
 
-        $sender->setAllowFlight(false);
-      }
-      $sender->teleport($spawn);
-      $position = new Vector3(12, -7, 14);
-      return true;
-    } else {
-
-      return true;
-    }
-  }
+				return true;
+			}
+		}
+		return true;
+	}
 }

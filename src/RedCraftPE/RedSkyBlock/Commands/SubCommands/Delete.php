@@ -2,97 +2,101 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\Player;
 
-class Delete {
+class Delete{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onDeleteCommand(CommandSender $sender, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.delete")) {
+	public function onDeleteCommand(CommandSender $sender, array $args) : bool{
 
-      if (count($args) < 2) {
+		if($sender->hasPermission("redskyblock.delete")){
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is delete <player>");
-        return true;
-      } else {
+			if(count($args) < 2){
 
-        $playerName = strtolower(implode(" ", array_slice($args, 1)));
-        $plugin = $this->plugin;
-        $player = $plugin->getServer()->getPlayerExact($playerName);
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+				$sender->sendMessage(TextFormat::WHITE . "Usage: /is delete <player>");
+				return true;
+			}else{
 
-        if ($player instanceof Player) {
+				$playerName = strtolower(implode(" ", array_slice($args, 1)));
+				$plugin = $this->plugin;
+				$player = $plugin->getServer()->getPlayerByPrefix($playerName);
+				$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
 
-          $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-          if ($scoreHud !== null && $scoreHud->isEnabled()) {
+				if($player instanceof Player){
 
-            $ev1 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-              $player,
-              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islename", "N/A")
-            );
-            $ev2 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-              $player,
-              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islesize", "N/A")
-            );
-            $ev3 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-              $player,
-              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islevalue", "N/A")
-            );
-            $ev4 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-              $player,
-              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islerank", "N/A")
-            );
-            $ev5 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-              $player,
-              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "N/A")
-            );
-            $ev6 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-              $player,
-              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", "N/A")
-            );
-            $ev1->call();
-            $ev2->call();
-            $ev3->call();
-            $ev4->call();
-            $ev5->call();
-            $ev6->call();
-          }
-          $player->sendMessage(TextFormat::RED . "Your island has been deleted by a server administrator.");
+					$scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+					if($scoreHud !== null && $scoreHud->isEnabled()){
 
-          if (($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) && ($plugin->getIslandAtPlayer($player) === $playerName)) {
+						$ev1 = new PlayerTagUpdateEvent(
+							$player,
+							new ScoreTag("redskyblock.islename", "N/A")
+						);
+						$ev2 = new PlayerTagUpdateEvent(
+							$player,
+							new ScoreTag("redskyblock.islesize", "N/A")
+						);
+						$ev3 = new PlayerTagUpdateEvent(
+							$player,
+							new ScoreTag("redskyblock.islevalue", "N/A")
+						);
+						$ev4 = new PlayerTagUpdateEvent(
+							$player,
+							new ScoreTag("redskyblock.islerank", "N/A")
+						);
+						$ev5 = new PlayerTagUpdateEvent(
+							$player,
+							new ScoreTag("redskyblock.islestatus", "N/A")
+						);
+						$ev6 = new PlayerTagUpdateEvent(
+							$player,
+							new ScoreTag("redskyblock.membercount", "N/A")
+						);
+						$ev1->call();
+						$ev2->call();
+						$ev3->call();
+						$ev4->call();
+						$ev5->call();
+						$ev6->call();
+					}
+					$player->sendMessage(TextFormat::RED . "Your island has been deleted by a server administrator.");
 
-            $player->teleport($plugin->getServer()->getDefaultLevel()->getSafeSpawn());
-          }
-        }
+					if(($player->getWorld()->getFolderName() === $plugin->skyblock->get("Master World")) && ($plugin->getIslandAtPlayer($player) === $playerName)){
 
-        if (array_key_exists($playerName, $skyblockArray)) {
+						$player->teleport($plugin->getServer()->getDefaultLevel()->getSafeSpawn());
+					}
+				}
 
-          $filePath = $plugin->getDataFolder() . "Players/" . $playerName . ".json";
+				if(array_key_exists($playerName, $skyblockArray)){
 
-          unset($skyblockArray[$playerName]);
-          unlink($filePath);
+					$filePath = $plugin->getDataFolder() . "Players/" . $playerName . ".json";
 
-          $plugin->skyblock->set("SkyBlock", $skyblockArray);
-          $plugin->skyblock->save();
-          $sender->sendMessage(TextFormat::GREEN . "You have successfully deleted " . TextFormat::WHITE . $playerName . "'s" . TextFormat::GREEN . " island.");
-          return true;
-        } else {
+					unset($skyblockArray[$playerName]);
+					unlink($filePath);
 
-          $sender->sendMessage(TextFormat::WHITE . $playerName . TextFormat::RED . " does not have an island to delete.");
-          return true;
-        }
-      }
-    } else {
+					$plugin->skyblock->set("SkyBlock", $skyblockArray);
+					$plugin->skyblock->save();
+					$sender->sendMessage(TextFormat::GREEN . "You have successfully deleted " . TextFormat::WHITE . $playerName . "'s" . TextFormat::GREEN . " island.");
+					return true;
+				}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+					$sender->sendMessage(TextFormat::WHITE . $playerName . TextFormat::RED . " does not have an island to delete.");
+					return true;
+				}
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

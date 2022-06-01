@@ -1,7 +1,11 @@
---- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/RedCraftGH/RedSkyBlock
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/David-pm-pl/RedSkyBlock-PM4
+build-by-default: true
 branches:
 - master
 projects:
-  RedSkyBlock:
+  RedSkyBlock-PM4:
     path: ""
+    icon: icon.png
+    lint:
+      phpstan: false
 ...

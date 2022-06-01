@@ -5,46 +5,48 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Banned {
+class Banned{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onBannedCommand(CommandSender $sender): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.ban")) {
+	public function onBannedCommand(CommandSender $sender) : bool{
 
-      $plugin = $this->plugin;
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $senderName = strtolower($sender->getName());
+		if($sender->hasPermission("redskyblock.ban")){
 
-      if (array_key_exists($senderName, $skyblockArray)) {
+			$plugin = $this->plugin;
+			$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+			$senderName = strtolower($sender->getName());
 
-        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
+			if(array_key_exists($senderName, $skyblockArray)){
 
-        if (count($playerData["Banned"]) <= 0) {
+				$filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+				$playerDataEncoded = file_get_contents($filePath);
+				$playerData = (array) json_decode($playerDataEncoded);
 
-          $banned = "no banned players.";
-        } else {
+				if(count($playerData["Banned"]) <= 0){
 
-          $banned = implode(", ", $playerData["Banned"]);
-        }
+					$banned = "no banned players.";
+				}else{
 
-        $sender->sendMessage(TextFormat::LIGHT_PURPLE . "Banned Players: " . TextFormat::WHITE . $banned);
-        return true;
-      } else {
+					$banned = implode(", ", $playerData["Banned"]);
+				}
 
-        $sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
-        return true;
-      }
-    } else {
+				$sender->sendMessage(TextFormat::LIGHT_PURPLE . "Banned Players: " . TextFormat::WHITE . $banned);
+				return true;
+			}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+				$sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
+				return true;
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

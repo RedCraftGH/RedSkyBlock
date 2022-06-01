@@ -4,59 +4,60 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
-use pocketmine\Player;
 
-class Leave {
+class Leave{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onLeaveCommand(CommandSender $sender, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.leave")) {
+	public function onLeaveCommand(CommandSender $sender, array $args) : bool{
 
-      if (count($args) < 2) {
+		if($sender->hasPermission("redskyblock.leave")){
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is leave <player>");
-        return true;
-      } else {
+			if(count($args) < 2){
 
-        $plugin = $this->plugin;
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $pName = strtolower(implode(" ", array_slice($args, 1)));
-        $senderName = strtolower($sender->getName());
-        $filePath = $plugin->getDataFolder() . "Players/" . $pName . ".json";
+				$sender->sendMessage(TextFormat::WHITE . "Usage: /is leave <player>");
+				return true;
+			}else{
 
-        if (array_key_exists($pName, $skyblockArray)) {
+				$plugin = $this->plugin;
+				$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+				$pName = strtolower(implode(" ", array_slice($args, 1)));
+				$senderName = strtolower($sender->getName());
+				$filePath = $plugin->getDataFolder() . "Players/" . $pName . ".json";
 
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = json_decode($playerDataEncoded, true);
+				if(array_key_exists($pName, $skyblockArray)){
 
-          if (in_array($senderName, $playerData["Island Members"])) {
+					$playerDataEncoded = file_get_contents($filePath);
+					$playerData = json_decode($playerDataEncoded, true);
 
-            $key = array_search($senderName, $playerData["Island Members"]);
-            unset($playerData["Island Members"][$key]);
-            $playerDataEncoded = json_encode($playerData);
-            file_put_contents($filePath, $playerDataEncoded);
-            $sender->sendMessage(TextFormat::GREEN . "You have left " . $pName . "'s island.");
-            return true;
-          } else {
+					if(in_array($senderName, $playerData["Island Members"])){
 
-            $sender->sendMessage(TextFormat::RED . "You are not a member of " . $pName . "'s island.");
-            return true;
-          }
-        } else {
+						$key = array_search($senderName, $playerData["Island Members"]);
+						unset($playerData["Island Members"][$key]);
+						$playerDataEncoded = json_encode($playerData);
+						file_put_contents($filePath, $playerDataEncoded);
+						$sender->sendMessage(TextFormat::GREEN . "You have left " . $pName . "'s island.");
+						return true;
+					}else{
 
-          $sender->sendMessage(TextFormat::RED . $pName . " does not have an island.");
-          return true;
-        }
-      }
-    } else {
+						$sender->sendMessage(TextFormat::RED . "You are not a member of " . $pName . "'s island.");
+						return true;
+					}
+				}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+					$sender->sendMessage(TextFormat::RED . $pName . " does not have an island.");
+					return true;
+				}
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

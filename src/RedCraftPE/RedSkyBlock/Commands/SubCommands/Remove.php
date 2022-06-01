@@ -2,70 +2,74 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Remove {
+class Remove{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onRemoveCommand(CommandSender $sender, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.members")) {
+	public function onRemoveCommand(CommandSender $sender, array $args) : bool{
 
-      if (count($args) < 2) {
+		if($sender->hasPermission("redskyblock.members")){
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is remove <player>");
-        return true;
-      } else {
+			if(count($args) < 2){
 
-        $senderName = strtolower($sender->getName());
-        $name = strtolower(implode(" ", array_slice($args, 1)));
-        $plugin = $this->plugin;
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        if (array_key_exists($senderName, $skyblockArray)) {
+				$sender->sendMessage(TextFormat::WHITE . "Usage: /is remove <player>");
+				return true;
+			}else{
 
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded, true);
+				$senderName = strtolower($sender->getName());
+				$name = strtolower(implode(" ", array_slice($args, 1)));
+				$plugin = $this->plugin;
+				$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+				$filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+				if(array_key_exists($senderName, $skyblockArray)){
 
-          if (in_array($name, $playerData["Island Members"])) {
+					$playerDataEncoded = file_get_contents($filePath);
+					$playerData = (array) json_decode($playerDataEncoded, true);
 
-            $key = array_search($name, $playerData["Island Members"]);
-            unset($playerData["Island Members"][$key]);
-            $playerDataEncoded = json_encode($playerData);
-            file_put_contents($filePath, $playerDataEncoded);
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is no longer a member of your island.");
+					if(in_array($name, $playerData["Island Members"])){
 
-            $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-            if ($scoreHud !== null && $scoreHud->isEnabled()) {
+						$key = array_search($name, $playerData["Island Members"]);
+						unset($playerData["Island Members"][$key]);
+						$playerDataEncoded = json_encode($playerData);
+						file_put_contents($filePath, $playerDataEncoded);
+						$sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is no longer a member of your island.");
 
-              $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
+						$scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+						if($scoreHud !== null && $scoreHud->isEnabled()){
 
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", strval(count($playerData["Island Members"])))
-              );
-              $ev->call();
-            }
-            return true;
-          } else {
+							$ev = new PlayerTagUpdateEvent(
 
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is not a member of your island.");
-            return true;
-          }
-        } else {
+								$sender,
+								new ScoreTag("redskyblock.membercount", strval(count($playerData["Island Members"])))
+							);
+							$ev->call();
+						}
+						return true;
+					}else{
 
-          $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
-          return true;
-        }
-      }
-    } else {
+						$sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is not a member of your island.");
+						return true;
+					}
+				}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+					$sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
+					return true;
+				}
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

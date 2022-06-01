@@ -3,62 +3,67 @@
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
-class Fly {
+class Fly{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onFlyCommand(CommandSender $sender): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.fly")) {
+	public function onFlyCommand(CommandSender $sender) : bool{
 
-      $plugin = $this->plugin;
-      $island = $plugin->getIslandAtPlayer($sender);
-      if ($island === null) {
+		if($sender->hasPermission("redskyblock.fly") and $sender instanceof Player){
 
-        $sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
-        return true;
-      }
-      $masterWorld = $plugin->skyblock->get("Master World");
-      $senderName = strtolower($sender->getName());
-      $filePath = $plugin->getDataFolder() . "Players/" . $island . ".json";
-      $playerDataEncoded = file_get_contents($filePath);
-      $playerData = (array) json_decode($playerDataEncoded);
+			$plugin = $this->plugin;
+			$island = $plugin->getIslandAtPlayer($sender);
+			if($island === null){
 
-      if ($masterWorld === $sender->getLevel()->getFolderName() || $masterWorld === $sender->getLevel()->getFolderName() . "-Nether") {
+				$sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
+				return true;
+			}
+			$masterWorld = $plugin->skyblock->get("Master World");
+			$senderName = strtolower($sender->getName());
+			$filePath = $plugin->getDataFolder() . "Players/" . $island . ".json";
+			$playerDataEncoded = file_get_contents($filePath);
+			$playerData = (array) json_decode($playerDataEncoded);
 
-        if ($island === $senderName || in_array($senderName, $playerData["Island Members"])) {
+			if($masterWorld === $sender->getWorld()->getFolderName() || $masterWorld === $sender->getWorld()->getFolderName() . "-Nether"){
 
-          if ($sender->getAllowFlight()) {
+				if($island === $senderName || in_array($senderName, $playerData["Island Members"])){
+					if($sender instanceof Player){
+						if($sender->isFlying()){
 
-            $sender->setAllowFlight(false);
-            $sender->setFlying(false);
-            $sender->sendMessage(TextFormat::GREEN . "You have disabled flight.");
-            return true;
-          } else {
+							$sender->setAllowFlight(false);
+							$sender->setFlying(false);
+							$sender->sendMessage(TextFormat::GREEN . "You have disabled flight.");
+							return true;
+						}else{
 
-            $sender->setAllowFlight(true);
-            $sender->sendMessage(TextFormat::GREEN . "You have enabled flight.");
-            return true;
-          }
-        } else {
+							$sender->setAllowFlight(true);
+							$sender->setFlying(true);
+							$sender->sendMessage(TextFormat::GREEN . "You have enabled flight.");
+							return true;
+						}
+					}
+				}else{
 
-          $sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
-          return true;
-        }
-      } else {
+					$sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
+					return true;
+				}
+			}else{
 
-        $sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
-        return true;
-      }
-    } else {
+				$sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
+				return true;
+			}
+		}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

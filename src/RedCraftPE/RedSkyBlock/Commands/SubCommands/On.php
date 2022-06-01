@@ -5,41 +5,43 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class On {
+class On{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onOnCommand(CommandSender $sender): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.onisland")) {
+	public function onOnCommand(CommandSender $sender) : bool{
 
-      $plugin = $this->plugin;
+		if($sender->hasPermission("redskyblock.onisland")){
 
-      if (array_key_exists(strtolower($sender->getName()), $plugin->skyblock->get("SkyBlock", []))) {
+			$plugin = $this->plugin;
 
-        $playerArray = $plugin->getPlayersAtIsland($sender);
+			if(array_key_exists(strtolower($sender->getName()), $plugin->skyblock->get("SkyBlock", []))){
 
-        if (count($playerArray) <= 0) {
+				$playerArray = $plugin->getPlayersAtIsland($sender);
 
-          $sender->sendMessage(TextFormat::WHITE . "There are no players on your island right now.");
-          return true;
-        } else {
+				if(count($playerArray) <= 0){
 
-          $sender->sendMessage(TextFormat::LIGHT_PURPLE . "Players At Your Island: " . TextFormat::WHITE . implode(", ", $playerArray));
-          return true;
-        }
-      } else {
+					$sender->sendMessage(TextFormat::WHITE . "There are no players on your island right now.");
+					return true;
+				}else{
 
-        $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-        return true;
-      }
-    } else {
+					$sender->sendMessage(TextFormat::LIGHT_PURPLE . "Players At Your Island: " . TextFormat::WHITE . implode(", ", $playerArray));
+					return true;
+				}
+			}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+				$sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
+				return true;
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

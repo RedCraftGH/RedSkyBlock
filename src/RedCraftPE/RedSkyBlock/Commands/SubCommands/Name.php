@@ -2,67 +2,71 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Name {
+class Name{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onNameCommand(CommandSender $sender, array $args): bool {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.name")) {
+	public function onNameCommand(CommandSender $sender, array $args) : bool{
 
-      $plugin = $this->plugin;
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $senderName = strtolower($sender->getName());
+		if($sender->hasPermission("redskyblock.name")){
 
-      if (array_key_exists($senderName, $skyblockArray)) {
+			$plugin = $this->plugin;
+			$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+			$senderName = strtolower($sender->getName());
 
-        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
+			if(array_key_exists($senderName, $skyblockArray)){
 
-        if (count($args) < 2) {
+				$filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
+				$playerDataEncoded = file_get_contents($filePath);
+				$playerData = (array) json_decode($playerDataEncoded);
 
-          $sender->sendMessage(TextFormat::WHITE . "Your island is named " . TextFormat::GREEN . $playerData["Name"]);
-          return true;
-        } else {
+				if(count($args) < 2){
 
-          $islandName = implode(" ", array_slice($args, 1));
-          if (strlen($islandName) > 21) {
+					$sender->sendMessage(TextFormat::WHITE . "Your island is named " . TextFormat::GREEN . $playerData["Name"]);
+					return true;
+				}else{
 
-            $sender->sendMessage(TextFormat::RED . "This island name is too long.");
-            return true;
-          }
-          $playerData["Name"] = $islandName;
-          $playerDataEncoded = json_encode($playerData);
-          file_put_contents($filePath, $playerDataEncoded);
-          $sender->sendMessage(TextFormat::GREEN . "Your island's name has been changed to " . TextFormat::LIGHT_PURPLE . $islandName);
+					$islandName = implode(" ", array_slice($args, 1));
+					if(strlen($islandName) > 21){
 
-          $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-          if ($scoreHud !== null && $scoreHud->isEnabled()) {
+						$sender->sendMessage(TextFormat::RED . "This island name is too long.");
+						return true;
+					}
+					$playerData["Name"] = $islandName;
+					$playerDataEncoded = json_encode($playerData);
+					file_put_contents($filePath, $playerDataEncoded);
+					$sender->sendMessage(TextFormat::GREEN . "Your island's name has been changed to " . TextFormat::LIGHT_PURPLE . $islandName);
 
-            $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-              $sender,
-              new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islename", strval($islandName))
-            );
-            $ev->call();
-          }
-          return true;
-        }
-      } else {
+					$scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
+					if($scoreHud !== null && $scoreHud->isEnabled()){
 
-        $sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
-        return true;
-      }
-    } else {
+						$ev = new PlayerTagUpdateEvent(
+							$sender,
+							new ScoreTag("redskyblock.islename", strval($islandName))
+						);
+						$ev->call();
+					}
+					return true;
+				}
+			}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+				$sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
+				return true;
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

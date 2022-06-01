@@ -4,73 +4,74 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
-use pocketmine\Player;
 
-class Kick {
+class Kick{
 
-  public function __construct($plugin) {
+	public $plugin;
 
-    $this->plugin = $plugin;
-  }
+	public function __construct($plugin){
 
-  public function onKickCommand(CommandSender $sender, array $args) {
+		$this->plugin = $plugin;
+	}
 
-    if ($sender->hasPermission("redskyblock.kick")) {
+	public function onKickCommand(CommandSender $sender, array $args){
 
-      if (count($args) < 2) {
+		if($sender->hasPermission("redskyblock.kick")){
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is kick <player(s)>");
-        return true;
-      } else {
+			if(count($args) < 2){
 
-        $plugin = $this->plugin;
-        $senderName = strtolower($sender->getName());
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $playerArray = $plugin->getPlayersAtIsland($sender);
+				$sender->sendMessage(TextFormat::WHITE . "Usage: /is kick <player(s)>");
+				return true;
+			}else{
 
-        if (array_key_exists($senderName, $skyblockArray)) {
+				$plugin = $this->plugin;
+				$senderName = strtolower($sender->getName());
+				$skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+				$playerArray = $plugin->getPlayersAtIsland($sender);
 
-          $kickArray = [];
+				if(array_key_exists($senderName, $skyblockArray)){
 
-          for ($i = 0; $i <= count($args) - 1; $i++) {
+					$kickArray = [];
 
-            if ($i !== 0) {
+					for($i = 0; $i <= count($args) - 1; $i++){
 
-              array_push($kickArray, strtolower($args[$i]));
-            }
-          }
+						if($i !== 0){
 
-          foreach($kickArray as $pName) {
+							array_push($kickArray, strtolower($args[$i]));
+						}
+					}
 
-            if (in_array($pName, $playerArray)) {
+					foreach($kickArray as $pName){
 
-              if ($pName !== strtolower($sender->getName())) {
+						if(in_array($pName, $playerArray)){
 
-                $player = $plugin->getServer()->getPlayer($pName);
+							if($pName !== strtolower($sender->getName())){
 
-                $player->teleport($plugin->getServer()->getDefaultLevel()->getSafeSpawn());
-                $player->sendMessage(TextFormat::RED . $sender->getName() . " has kicked you off of their island.");
-                $sender->sendMessage(TextFormat::GREEN . $player->getName() . " has been kicked off of your island.");
-              } else {
+								$player = $plugin->getServer()->getPlayerByPrefix($pName);
 
-                $sender->sendMessage(TextFormat::RED . "You can't kick yourself off of your island.");
-              }
-            } else {
+								$player->teleport($plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
+								$player->sendMessage(TextFormat::RED . $sender->getName() . " has kicked you off of their island.");
+								$sender->sendMessage(TextFormat::GREEN . $player->getName() . " has been kicked off of your island.");
+							}else{
 
-              $sender->sendMessage(TextFormat::RED . $pName . " is not on your island.");
-            }
-          }
-          return true;
-        } else {
+								$sender->sendMessage(TextFormat::RED . "You can't kick yourself off of your island.");
+							}
+						}else{
 
-          $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-          return true;
-        }
-      }
-    } else {
+							$sender->sendMessage(TextFormat::RED . $pName . " is not on your island.");
+						}
+					}
+					return true;
+				}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+					$sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
+					return true;
+				}
+			}
+		}else{
+
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }

@@ -5,66 +5,68 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class SetZone {
+class SetZone{
+	
+	public $plugin;
 
-  public function __construct($plugin) {
+	public function __construct($plugin){
 
-    $this->plugin = $plugin;
-  }
+		$this->plugin = $plugin;
+	}
 
-  public function onSetZoneCommand(CommandSender $sender, array $args): bool {
+	public function onSetZoneCommand(CommandSender $sender, array $args) : bool{
 
-    if ($sender->hasPermission("redskyblock.setzone")) {
+		if($sender->hasPermission("redskyblock.setzone") and $sender instanceof \pocketmine\player\Player){
 
-      if (count($args) < 2) {
+			if(count($args) < 2){
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is setzone <1/2>");
-        return true;
-      } else {
+				$sender->sendMessage(TextFormat::WHITE . "Usage: /is setzone <1/2>");
+				return true;
+			}else{
 
-        $plugin = $this->plugin;
-        $islandZone = $plugin->cfg->get("Island Zone", []);
+				$plugin = $this->plugin;
+				$islandZone = $plugin->cfg->get("Island Zone", []);
 
-        if ($args[1] === "1") {
+				if($args[1] === "1"){
 
-          $x = round($sender->getX());
-          $y = round($sender->getY());
-          $z = round($sender->getZ());
+					$x = round($sender->getPosition()->getX());
+					$y = round($sender->getPosition()->getY());
+					$z = round($sender->getPosition()->getZ());
 
-          $islandZone[0] = $x;
-          $islandZone[1] = $y;
-          $islandZone[2] = $z;
+					$islandZone[0] = $x;
+					$islandZone[1] = $y;
+					$islandZone[2] = $z;
 
-          $plugin->cfg->set("Island Zone", $islandZone);
-          $plugin->cfg->save();
-          $sender->sendMessage(TextFormat::GREEN . "The first position of your island zone has been set.");
-          return true;
+					$plugin->cfg->set("Island Zone", $islandZone);
+					$plugin->cfg->save();
+					$sender->sendMessage(TextFormat::GREEN . "The first position of your island zone has been set.");
+					return true;
 
-        } elseif ($args[1] === "2") {
+				}elseif($args[1] === "2"){
 
-          $x = round($sender->getX());
-          $y = round($sender->getY());
-          $z = round($sender->getZ());
+					$x = round($sender->getPosition()->getX());
+					$y = round($sender->getPosition()->getY());
+					$z = round($sender->getPosition()->getZ());
 
-          $islandZone[3] = $x;
-          $islandZone[4] = $y;
-          $islandZone[5] = $z;
+					$islandZone[3] = $x;
+					$islandZone[4] = $y;
+					$islandZone[5] = $z;
 
-          $plugin->cfg->set("Island Zone", $islandZone);
-          $plugin->cfg->save();
-          $sender->sendMessage(TextFormat::GREEN . "The second position of your island zone has been set.");
-          return true;
+					$plugin->cfg->set("Island Zone", $islandZone);
+					$plugin->cfg->save();
+					$sender->sendMessage(TextFormat::GREEN . "The second position of your island zone has been set.");
+					return true;
 
-        } else {
+				}else{
 
-          $sender->sendMessage(TextFormat::WHITE . "Usage: /is setzone <1/2>");
-          return true;
-        }
-      }
-    } else {
+					$sender->sendMessage(TextFormat::WHITE . "Usage: /is setzone <1/2>");
+					return true;
+				}
+			}
+		}else{
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
-  }
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
+			return true;
+		}
+	}
 }
