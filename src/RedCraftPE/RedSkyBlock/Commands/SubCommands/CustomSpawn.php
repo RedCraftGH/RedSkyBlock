@@ -43,8 +43,8 @@ class CustomSpawn {
           $zoneX = min($posOneX, $posTwoX);
           $zoneZ = min($posOneZ, $posTwoZ);
 
-          $playerX = round($sender->getX());
-          $playerZ = round($sender->getZ());
+          $playerX = round($sender->getPosition()->x);
+          $playerZ = round($sender->getPosition()->z);
 
           $cSpawnVals = $plugin->skyblock->get("CSpawnVals", []);
           $cSpawnVals[0] = $playerX - $zoneX;

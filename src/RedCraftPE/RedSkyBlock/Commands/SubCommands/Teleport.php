@@ -4,7 +4,7 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
-use pocketmine\level\Position;
+use pocketmine\world\Position;
 
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\Island;
@@ -31,8 +31,8 @@ class Teleport {
         $sender->sendMessage(TextFormat::RED . "You must set a SkyBlock world in order for this plugin to function properly.");
         return true;
       }
-      $level = $plugin->getServer()->getLevelByName($masterWorld);
-      if (!$level) {
+      $world = $plugin->getServer()->getWorldManager()->getWorldByName($masterWorld);
+      if (!$world) {
 
         $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist.");
         return true;
@@ -57,7 +57,7 @@ class Teleport {
 
             $sender->setAllowFlight(false);
           }
-          $sender->teleport(new Position($x, $y, $z, $level));
+          $sender->teleport(new Position($x, $y, $z, $world));
           $sender->sendMessage(TextFormat::GREEN . "You have been teleported to your island!");
           return true;
         } else {
@@ -90,7 +90,7 @@ class Teleport {
 
                 $sender->setAllowFlight(false);
               }
-              $sender->teleport(new Position($x, $y, $z, $level));
+              $sender->teleport(new Position($x, $y, $z, $world));
               $sender->setFlying(false);
               $sender->setAllowFlight(false);
               $sender->sendMessage(TextFormat::GREEN . "You have been teleported to " . TextFormat::WHITE . $name . TextFormat::GREEN . "'s island.");

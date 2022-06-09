@@ -27,9 +27,9 @@ class SetZone {
 
         if ($args[1] === "1") {
 
-          $x = round($sender->getX());
-          $y = round($sender->getY());
-          $z = round($sender->getZ());
+          $x = round($sender->getPosition()->x);
+          $y = round($sender->getPosition()->y);
+          $z = round($sender->getPosition()->z);
 
           $islandZone[0] = $x;
           $islandZone[1] = $y;
@@ -42,9 +42,9 @@ class SetZone {
 
         } elseif ($args[1] === "2") {
 
-          $x = round($sender->getX());
-          $y = round($sender->getY());
-          $z = round($sender->getZ());
+          $x = round($sender->getPosition()->x);
+          $y = round($sender->getPosition()->y);
+          $z = round($sender->getPosition()->z);
 
           $islandZone[3] = $x;
           $islandZone[4] = $y;

@@ -5,7 +5,7 @@ namespace RedCraftPE\RedSkyBlock\Commands;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
 use pocketmine\utils\TextFormat;
-use pocketmine\level\Position;
+use pocketmine\world\Position;
 use pocketmine\math\Vector3;
 
 class Spawn {
@@ -22,7 +22,7 @@ class Spawn {
 
     if ($plugin->cfg->get("Spawn Command") === "on") {
 
-      $spawn = $plugin->getServer()->getDefaultLevel()->getSafeSpawn();
+      $spawn = $plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
 
       if ($sender->getGamemode() === 0) {
 

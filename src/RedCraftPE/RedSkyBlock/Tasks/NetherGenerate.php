@@ -3,16 +3,16 @@
 namespace RedCraftPE\RedSkyBlock\Tasks;
 
 use pocketmine\scheduler\Task;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\math\Vector3;
-use pocketmine\block\Block;
-use pocketmine\level\Level;
+use pocketmine\block\BlockFactory;
+use pocketmine\world\World;
 
 class NetherGenerate extends Task {
 
   private $netherGenerator;
 
-  public function __construct($plugin, Player $sender, Int $x, Int $z, Level $netherWorld) {
+  public function __construct($plugin, Player $sender, Int $x, Int $z, World $netherWorld) {
 
     $this->plugin = $plugin;
     $this->sender = $sender;
@@ -21,7 +21,7 @@ class NetherGenerate extends Task {
     $this->netherWorld = $netherWorld;
   }
 
-  public function onRun(int $tick) : void {
+  public function onRun() : void {
 
     $plugin = $this->plugin;
     $spawnX = $this->x;
@@ -46,7 +46,7 @@ class NetherGenerate extends Task {
 
           $block = explode(" ", $netherBlocks[$counter]);
 
-          $netherWorld->setBlock(new Vector3($x, $y, $z), Block::get($block[0], $block[1]), false);
+          $netherWorld->setBlock(new Vector3($x, $y, $z), BlockFactory::getInstance()->get($block[0], $block[1]), false);
           $counter++;
         }
       }

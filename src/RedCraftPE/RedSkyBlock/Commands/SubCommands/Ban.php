@@ -4,7 +4,7 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class Ban {
 
@@ -30,7 +30,7 @@ class Ban {
         if (array_key_exists($senderName, $skyblockArray)) {
 
           $name = strtolower(implode(" ", array_slice($args, 1)));
-          $playerFromName = $plugin->getServer()->getPlayer($name);
+          $playerFromName = $plugin->getServer()->getPlayerByPrefix($name);
           if ($playerFromName === null) {
 
             $playerFromName = $name;
@@ -64,7 +64,7 @@ class Ban {
 
                 if ($plugin->getIslandAtPlayer($playerFromName) === $senderName) {
 
-                  $playerFromName->teleport($plugin->getServer()->getDefaultLevel()->getSafeSpawn());
+                  $playerFromName->teleport($plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
                 }
               }
               return true;

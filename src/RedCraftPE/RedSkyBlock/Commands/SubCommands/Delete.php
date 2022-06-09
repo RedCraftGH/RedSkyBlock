@@ -4,7 +4,7 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class Delete {
 
@@ -66,9 +66,9 @@ class Delete {
           }
           $player->sendMessage(TextFormat::RED . "Your island has been deleted by a server administrator.");
 
-          if (($player->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) && ($plugin->getIslandAtPlayer($player) === $playerName)) {
+          if (($player->getWorld()->getFolderName() === $plugin->skyblock->get("Master World")) && ($plugin->getIslandAtPlayer($player) === $playerName)) {
 
-            $player->teleport($plugin->getServer()->getDefaultLevel()->getSafeSpawn());
+            $player->teleport($plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
           }
         }
 

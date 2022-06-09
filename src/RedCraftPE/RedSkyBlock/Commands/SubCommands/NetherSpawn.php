@@ -27,18 +27,18 @@ class NetherSpawn {
 
         if (array_key_exists($senderName, $skyblockArray)) {
 
-          if (strtolower($sender->getName()) === $owner && $sender->getLevel()->getFolderName() === $plugin->skyblock->get("Master World") . "-Nether") {
+          if (strtolower($sender->getName()) === $owner && $sender->getWorld()->getFolderName() === $plugin->skyblock->get("Master World") . "-Nether") {
 
             $playerDataEncoded = file_get_contents($filePath);
             $playerData = (array) json_decode($playerDataEncoded, true);
 
-            $playerData["Nether Spawn"][0] = (int) round($sender->getX());
-            $playerData["Nether Spawn"][1] = (int) round($sender->getY());
-            $playerData["Nether Spawn"][2] = (int) round($sender->getZ());
+            $playerData["Nether Spawn"][0] = (int) round($sender->getPosition()->x);
+            $playerData["Nether Spawn"][1] = (int) round($sender->getPosition()->y);
+            $playerData["Nether Spawn"][2] = (int) round($sender->getPosition()->z);
 
             $playerDataEncoded = json_encode($playerData);
             file_put_contents($filePath, $playerDataEncoded);
-            $sender->sendMessage(TextFormat::GREEN . "Your nether island spawn point has been set to " . TextFormat::WHITE . (int) round($sender->getX()) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getY()) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getZ()) . TextFormat::GREEN . ".");
+            $sender->sendMessage(TextFormat::GREEN . "Your nether island spawn point has been set to " . TextFormat::WHITE . (int) round($sender->getPosition()->x) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getPosition()->y) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getPosition()->z) . TextFormat::GREEN . ".");
             return true;
           } else {
 

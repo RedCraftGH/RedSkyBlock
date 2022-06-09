@@ -25,18 +25,18 @@ class SetSpawn {
 
       if (array_key_exists($senderName, $skyblockArray)) {
 
-        if (strtolower($sender->getName()) === $owner && $sender->getLevel()->getFolderName() === $plugin->skyblock->get("Master World")) {
+        if (strtolower($sender->getName()) === $owner && $sender->getWorld()->getFolderName() === $plugin->skyblock->get("Master World")) {
 
           $playerDataEncoded = file_get_contents($filePath);
           $playerData = (array) json_decode($playerDataEncoded, true);
 
-          $playerData["Island Spawn"][0] = (int) round($sender->getX());
-          $playerData["Island Spawn"][1] = (int) round($sender->getY());
-          $playerData["Island Spawn"][2] = (int) round($sender->getZ());
+          $playerData["Island Spawn"][0] = (int) round($sender->getPosition()->x);
+          $playerData["Island Spawn"][1] = (int) round($sender->getPosition()->y);
+          $playerData["Island Spawn"][2] = (int) round($sender->getPosition()->z);
 
           $playerDataEncoded = json_encode($playerData);
           file_put_contents($filePath, $playerDataEncoded);
-          $sender->sendMessage(TextFormat::GREEN . "Your island spawn point has been set to " . TextFormat::WHITE . (int) round($sender->getX()) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getY()) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getZ()) . TextFormat::GREEN . ".");
+          $sender->sendMessage(TextFormat::GREEN . "Your island spawn point has been set to " . TextFormat::WHITE . (int) round($sender->getPosition()->x) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getPosition()->y) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getPosition()->z) . TextFormat::GREEN . ".");
           return true;
         } else {
 

@@ -3,16 +3,16 @@
 namespace RedCraftPE\RedSkyBlock\Tasks;
 
 use pocketmine\scheduler\Task;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\math\Vector3;
-use pocketmine\block\Block;
-use pocketmine\level\Level;
+use pocketmine\block\BlockFactory;
+use pocketmine\world\World;
 
 class Generate extends Task {
 
   private $generator;
 
-  public function __construct($plugin, Player $sender, Int $lastX, Int $lastZ, Level $world) {
+  public function __construct($plugin, Player $sender, Int $lastX, Int $lastZ, World $world) {
 
     $this->plugin = $plugin;
     $this->sender = $sender;
@@ -21,7 +21,7 @@ class Generate extends Task {
     $this->world = $world;
   }
 
-  public function onRun(int $tick) : void {
+  public function onRun() : void {
 
     $plugin = $this->plugin;
     $lastX = $this->lastX;
@@ -46,7 +46,7 @@ class Generate extends Task {
 
           $block = explode(" ", $islandBlocks[$counter]);
 
-          $world->setBlock(new Vector3($x, $y, $z), Block::get($block[0], $block[1]), false);
+          $world->setBlock(new Vector3($x, $y, $z), BlockFactory::getInstance()->get($block[0], $block[1]), false);
           $counter++;
         }
       }

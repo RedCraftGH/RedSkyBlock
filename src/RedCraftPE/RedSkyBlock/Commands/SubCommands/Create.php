@@ -4,9 +4,9 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
-use pocketmine\level\Position;
+use pocketmine\world\Position;
 use pocketmine\math\Vector3;
-use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
 use pocketmine\block\Block;
 
 use RedCraftPE\RedSkyBlock\SkyBlock;
@@ -29,22 +29,22 @@ class Create {
       $interval = $plugin->cfg->get("Island Interval");
       $initialSize = $plugin->cfg->get("Island Size");
       $islandSpawnY = $plugin->cfg->get("Island Spawn Y");
-      $levelName = $plugin->skyblock->get("Master World");
+      $worldName = $plugin->skyblock->get("Master World");
       $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
       $senderName = strtolower($sender->getName());
 
-      if ($levelName === false) {
+      if ($worldName === false) {
 
         $sender->sendMessage(TextFormat::RED . "You must set a SkyBlock Master world in order for this plugin to function properly.");
         return true;
       } else {
 
-        $level = $plugin->getServer()->getLevelByName($levelName);
-        if (!$plugin->getServer()->isLevelLoaded($levelName)) {
+        $world = $plugin->getServer()->getWorldManager()->getWorldByName($worldName);
+        if (!$plugin->getServer()->getWorldManager()->isWorldLoaded($worldName)) {
 
-          if ($plugin->getServer()->loadLevel($levelName)) {
+          if ($plugin->getServer()->getWorldManager()->loadWorld($worldName)) {
 
-            $plugin->getServer()->loadLevel($levelName);
+            $plugin->getServer()->getWorldManager()->loadWorld($worldName);
           } else {
 
             $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist or can't be loaded.");
@@ -60,7 +60,7 @@ class Create {
 
           if ($plugin->skyblock->get("Zone Created")) {
 
-            $world = $plugin->getServer()->getLevelByName($levelName);
+            $world = $plugin->getServer()->getWorldManager()->getWorldByName($worldName);
             $turns = $plugin->skyblock->get("Turns");
             $steps = $plugin->skyblock->get("Steps");
             $stepChecker = $plugin->skyblock->get("Step Checker");
@@ -129,7 +129,7 @@ class Create {
                   $id = intval($itemArray[0]);
                   $damage = intval($itemArray[1]);
                   $count = intval($itemArray[2]);
-                  $sender->getInventory()->addItem(Item::get($id, $damage, $count));
+                  $sender->getInventory()->addItem(ItemFactory::getInstance()->get($id, $damage, $count));
                 }
               }
             }

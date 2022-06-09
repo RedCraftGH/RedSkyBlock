@@ -29,7 +29,7 @@ class Fly {
       $playerDataEncoded = file_get_contents($filePath);
       $playerData = (array) json_decode($playerDataEncoded);
 
-      if ($masterWorld === $sender->getLevel()->getFolderName() || $masterWorld === $sender->getLevel()->getFolderName() . "-Nether") {
+      if ($masterWorld === $sender->getWorld()->getFolderName() || $masterWorld === $sender->getWorld()->getFolderName() . "-Nether") {
 
         if ($island === $senderName || in_array($senderName, $playerData["Island Members"])) {
 

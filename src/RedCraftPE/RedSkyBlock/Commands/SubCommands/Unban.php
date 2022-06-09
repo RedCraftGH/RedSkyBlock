@@ -29,7 +29,7 @@ class Unban {
         if (array_key_exists($senderName, $skyblockArray)) {
 
           $name = strtolower(implode(" ", array_slice($args, 1)));
-          $playerFromName = $plugin->getServer()->getPlayer($name);
+          $playerFromName = $plugin->getServer()->getPlayerByPrefix($name);
           if ($playerFromName === null) {
 
             $playerFromName = $name;

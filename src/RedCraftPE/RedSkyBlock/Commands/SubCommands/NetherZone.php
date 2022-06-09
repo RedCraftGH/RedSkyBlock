@@ -30,9 +30,9 @@ class NetherZone {
 
           if ($args[1] === "1") {
 
-            $x = round($sender->getX());
-            $y = round($sender->getY());
-            $z = round($sender->getZ());
+            $x = round($sender->getPosition()->x);
+            $y = round($sender->getPosition()->y);
+            $z = round($sender->getPosition()->z);
 
             $netherZone[0] = $x;
             $netherZone[1] = $y;
@@ -45,9 +45,9 @@ class NetherZone {
 
           } elseif ($args[1] === "2") {
 
-            $x = round($sender->getX());
-            $y = round($sender->getY());
-            $z = round($sender->getZ());
+            $x = round($sender->getPosition()->x);
+            $y = round($sender->getPosition()->y);
+            $z = round($sender->getPosition()->z);
 
             $netherZone[3] = $x;
             $netherZone[4] = $y;
