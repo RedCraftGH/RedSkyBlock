@@ -271,7 +271,7 @@ class EventListener implements Listener {
   }
   public function onPickup(EntityItemPickupEvent $event) {
 
-    $entity = $this->getOrigin();
+    $entity = $event->getOrigin();
     $plugin = $this->plugin;
 
     if ($entity instanceof Player) {
