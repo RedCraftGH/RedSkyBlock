@@ -2,7 +2,7 @@
 [![](https://poggit.pmmp.io/shield.api/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 [![](https://poggit.pmmp.io/shield.dl.total/RedSkyBlock)](https://poggit.pmmp.io/p/RedSkyBlock)
 
-> __*Quick Plugin Check:*__ Plugin Stability is moderate. No major bugs have been found/reported yet. If you encounter one please make an issue so it may be resolved.
+> __*Quick Plugin Check:*__ Plugin Stability is untested. Use at your own risk.
 
 <img src="https://github.com/RedCraftGH/RedSkyBlock/blob/master/icon.png" width="100" height="100" align="left"></img>
 
