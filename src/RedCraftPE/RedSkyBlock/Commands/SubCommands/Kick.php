@@ -6,71 +6,69 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use pocketmine\player\Player;
 
-class Kick {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-  public function __construct($plugin) {
+use CortexPE\Commando\args\TextArgument;
 
-    $this->plugin = $plugin;
+class Kick extends SBSubCommand {
+
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.island");
+    $this->registerArgument(0, new TextArgument("name", false));
   }
 
-  public function onKickCommand(CommandSender $sender, array $args) {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.kick")) {
+    if (isset($args["name"])) {
 
-      if (count($args) < 2) {
+      if ($this->checkIsland($sender)) {
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is kick <player(s)>");
-        return true;
-      } else {
+        $name = $args["name"];
+        $island = $this->plugin->islandManager->getIsland($sender);
+        $player = $this->plugin->getServer()->getPlayerByPrefix($name);
+        if ($player instanceof Player) {
 
-        $plugin = $this->plugin;
-        $senderName = strtolower($sender->getName());
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $playerArray = $plugin->getPlayersAtIsland($sender);
+          if ($this->plugin->islandManager->isOnIsland($player, $island)) {
 
-        if (array_key_exists($senderName, $skyblockArray)) {
+            if ($island->getCreator() !== $sender->getName()) {
 
-          $kickArray = [];
+              $message = $this->getMShop()->construct("KICKED_PLAYER");
+              $message = str_replace("{NAME}", $player->getName(), $message);
+              $sender->sendMessage($message);
 
-          for ($i = 0; $i <= count($args) - 1; $i++) {
+              $message = $this->getMShop()->construct("KICKED_FROM_ISLAND");
+              $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+              $player->sendMessage($message);
 
-            if ($i !== 0) {
-
-              array_push($kickArray, strtolower($args[$i]));
-            }
-          }
-
-          foreach($kickArray as $pName) {
-
-            if (in_array($pName, $playerArray)) {
-
-              if ($pName !== strtolower($sender->getName())) {
-
-                $player = $plugin->getServer()->getPlayerByPrefix($pName);
-
-                $player->teleport($plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
-                $player->sendMessage(TextFormat::RED . $sender->getName() . " has kicked you off of their island.");
-                $sender->sendMessage(TextFormat::GREEN . $player->getName() . " has been kicked off of your island.");
-              } else {
-
-                $sender->sendMessage(TextFormat::RED . "You can't kick yourself off of your island.");
-              }
+              $spawn = $this->plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
+              $player->teleport($spawn);
             } else {
 
-              $sender->sendMessage(TextFormat::RED . $pName . " is not on your island.");
+              $message = $this->getMShop()->construct("CANT_KICK_SELF");
+              $sender->sendMessage($message);
             }
+          } else {
+
+            $message = $this->getMShop()->construct("TARGET_NOT_FOUND");
+            $message = str_replace("{NAME}", $player->getName(), $message);
+            $sender->sendMessage($message);
           }
-          return true;
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-          return true;
+          $message = $this->getMShop()->construct("TARGET_NOT_FOUND");
+          $message = str_replace("{NAME}", $name, $message);
+          $sender->sendMessage($message);
         }
+      } else {
+
+        $message = $this->getMShop()->construct("NO_ISLAND");
+        $sender->sendMessage($message);
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $this->sendUsage();
+      return;
     }
   }
 }

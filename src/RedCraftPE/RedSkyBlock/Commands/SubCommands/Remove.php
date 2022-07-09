@@ -4,68 +4,65 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
+use pocketmine\player\Player;
 
-class Remove {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-  public function __construct($plugin) {
+use CortexPE\Commando\args\TextArgument;
 
-    $this->plugin = $plugin;
+class Remove extends SBSubCommand {
+
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.island");
+    $this->registerArgument(0, new TextArgument("name", false));
   }
 
-  public function onRemoveCommand(CommandSender $sender, array $args): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.members")) {
+    if (isset($args["name"])) {
 
-      if (count($args) < 2) {
+      if ($this->checkIsland($sender)) {
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is remove <player>");
-        return true;
-      } else {
+        $name = $args["name"];
+        $island = $this->plugin->islandManager->getIsland($sender);
+        $creator = $island->getCreator();
 
-        $senderName = strtolower($sender->getName());
-        $name = strtolower(implode(" ", array_slice($args, 1)));
-        $plugin = $this->plugin;
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        if (array_key_exists($senderName, $skyblockArray)) {
+        if (strtolower($name) !== strtolower($creator)) {
 
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded, true);
+          if ($island->removeMember($name)) {
 
-          if (in_array($name, $playerData["Island Members"])) {
+            $message = $this->getMShop()->construct("MEMBER_REMOVED");
+            $message = str_replace("{NAME}", $name, $message);
+            $sender->sendMessage($message);
 
-            $key = array_search($name, $playerData["Island Members"]);
-            unset($playerData["Island Members"][$key]);
-            $playerDataEncoded = json_encode($playerData);
-            file_put_contents($filePath, $playerDataEncoded);
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is no longer a member of your island.");
+            $player = $this->plugin->getServer()->getPlayerExact($name);
+            if ($player instanceof Player) {
 
-            $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-            if ($scoreHud !== null && $scoreHud->isEnabled()) {
-
-              $ev = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", strval(count($playerData["Island Members"])))
-              );
-              $ev->call();
+              $message = $this->getMShop()->construct("REMOVED_FROM_ISLAND");
+              $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+              $player->sendMessage($message);
             }
-            return true;
           } else {
 
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is not a member of your island.");
-            return true;
+            $message = $this->getMShop()->construct("NOT_A_MEMBER_OTHER");
+            $message = str_replace("{NAME}", $name, $message);
+            $sender->sendMessage($message);
           }
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You have to create a skyblock island to use this command.");
-          return true;
+          $message = $this->getMShop()->construct("CANT_REMOVE_SELF");
+          $sender->sendMessage($message);
         }
+      } else {
+
+        $message = $this->getMShop()->construct("NO_ISLAND");
+        $sender->sendMessage($message);
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $this->sendUsage();
+      return;
     }
   }
 }

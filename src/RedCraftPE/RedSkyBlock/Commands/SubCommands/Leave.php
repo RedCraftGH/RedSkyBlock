@@ -4,59 +4,48 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
-use pocketmine\Player;
 
-class Leave {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-  public function __construct($plugin) {
+use CortexPE\Commando\args\TextArgument;
 
-    $this->plugin = $plugin;
+class Leave extends SBSubCommand {
+
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.island");
+    $this->registerArgument(0, new TextArgument("island", false));
   }
 
-  public function onLeaveCommand(CommandSender $sender, array $args): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.leave")) {
+    if (isset($args["island"])) {
 
-      if (count($args) < 2) {
+      $islandName = $args["island"];
+      $island = $this->plugin->islandManager->getIslandByName($islandName);
+      if ($island instanceof Island) {
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is leave <player>");
-        return true;
-      } else {
+        if ($island->removeMember($sender->getName())) {
 
-        $plugin = $this->plugin;
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $pName = strtolower(implode(" ", array_slice($args, 1)));
-        $senderName = strtolower($sender->getName());
-        $filePath = $plugin->getDataFolder() . "Players/" . $pName . ".json";
-
-        if (array_key_exists($pName, $skyblockArray)) {
-
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = json_decode($playerDataEncoded, true);
-
-          if (in_array($senderName, $playerData["Island Members"])) {
-
-            $key = array_search($senderName, $playerData["Island Members"]);
-            unset($playerData["Island Members"][$key]);
-            $playerDataEncoded = json_encode($playerData);
-            file_put_contents($filePath, $playerDataEncoded);
-            $sender->sendMessage(TextFormat::GREEN . "You have left " . $pName . "'s island.");
-            return true;
-          } else {
-
-            $sender->sendMessage(TextFormat::RED . "You are not a member of " . $pName . "'s island.");
-            return true;
-          }
+          $message = $this->getMShop()->construct("REMOVED_FROM_ISLAND");
+          $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+          $sender->sendMessage($message);
         } else {
 
-          $sender->sendMessage(TextFormat::RED . $pName . " does not have an island.");
-          return true;
+          $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+          $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+          $sender->sendMessage($message);
         }
+      } else {
+
+        $message = $this->getMShop()->construct("COULD_NOT_FIND_ISLAND");
+        $message = str_replace("{ISLAND_NAME}", $islandName, $message);
+        $sender->sendMessage($message);
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $this->sendUsage();
+      return;
     }
   }
 }

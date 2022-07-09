@@ -1,97 +1,33 @@
 name: RedSkyBlock
 author: RedCraftPE
-version: 5.0.4
+version: 0.0.1-BETA
 api: 4.0.0
 main: RedCraftPE\RedSkyBlock\SkyBlock
-commands:
-  island:
-    description: This is the main command for RedSkyBlock.
-    aliases: [is, isle, sb, skyblock]
-    usage: /island <args>
-    permission: redskyblock.island
-  spawn:
-    description: This command will take the user to the server spawn.
-    usage: /spawn
-    permission: redskyblock.spawn
 permissions:
-    redskyblock.spawn:
-      description: With this permission players can teleport to the server spawn point.
-      default: true
-    redskyblock.island:
-      description: With this permission players can use RedSkyBlock commands.
-      default: true
-    redskyblock.create:
-      description: With this permission players can create a SkyBlock island.
-      default: true #True means everyone will have this permission by default.
-    redskyblock.createworld:
-      description: With this permission players can create and set a SkyBlock world for the server.
-      default: op #op means only operators will have this permission by default.
-    redskyblock.lock:
-      description: With this permission players can lock/unlock their skyblock island.
-      default: true
-    redskyblock.members:
-      description: With this permission players can add/remove members from their skyblock island.
-      default: true
-    redskyblock.setspawn:
-      description: With this permission players can set the spawn on their skyblock island.
-      default: true
-    redskyblock.setworld:
-      description: With this permission players can set the SkyBlock world of a server.
-      default: op
-    redskyblock.tp:
-      description: With this permission players can teleport to other player's islands.
-      default: true
-    redskyblock.updatezone:
-      description: With this permission players can update the Island Zone.
-      default: op
-    redskyblock.setzone:
-      description: With this permission players can change the location of the island zone.
-      default: op
-    redskyblock.onisland:
-      description: With this permission players can see who is on their island.
-      default: true
-    redskyblock.kick:
-      description: With this permission players can kick other players off of their island.
-      default: true
-    redskyblock.reload:
-      description: With this permission players can reload the SkyBlock server files.
-      default: op
-    redskyblock.leave:
-      description: With this permission players can remove themselves from other's islands.
-      default: true
-    redskyblock.ban:
-      description: With this permission players can ban others from their own island.
-      default: true
-    redskyblock.fly:
-      description: With this permission players can fly on their island or islands where they are members.
-      default: op
-    redskyblock.name:
-      description: With this permission players can name their island.
-      default: true
-    redskyblock.value:
-      description: With this permission players can check their islands value.
-      default: true
-    redskyblock.top:
-      description: With this permission players can view the top islands.
-      default: true
-    redskyblock.rank:
-      description: With this permission players can view the rank of their island.
-      default: true
-    redskyblock.nether:
-      description: With this permission players use [some] nether commands.
-      default: true
-    redskyblock.delete:
-      description: With this permission players can delete other player's island.
-      default: op
-    redskyblock.restart:
-      description: With this permission players can restart their skyblock island.
-      default: true
-    redskyblock.size:
-      description: With this permission players can change the size of player's islands.
-      default: op
-    redskyblock.bypass:
-      description: With this permission players can bypass island protections and borders.
-      default: op
-    redskyblock.help:
-      description: With this permission players can view the help menu
-      default: true
+  redskyblock.admin:
+    default: op
+    description: With this permission players will recieve access to all RedSkyBlock Admin commands.
+  redskyblock.bypass:
+    default: op
+    description: With this permission players can bypass SkyBlock boundaries.
+  redskyblock.createworld:
+    default: false
+    description: With this permission players can create a world ready for SkyBlock!
+  redskyblock.setworld:
+    default: false
+    description: With this permission players can select the world used for SkyBlock.
+  redskyblock.reload:
+    default: false
+    description: With this permission players can reload the SkyBlock files.
+  redskyblock.zone:
+    default: false
+    description: With this permission players can manage the custom island zone.
+  redskyblock.island:
+    default: true
+    description: With this permission players will have access to the basic SkyBlock commands.
+  redskyblock.members:
+    default: false
+    description: With this permission players can have unlimited members on their SkyBlock island.
+  redskyblock.fly:
+    default: false
+    description: With this permission players can fly in the SkyBlock world.

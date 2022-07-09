@@ -1,0 +1,183 @@
+# Messages for the CreateWorld Command. Available Paramaters: {WORLD}
+CW: "{GREEN}The empty world {WHITE}{WORLD}{GREEN} has been created for SkyBlock."
+CW_NETHER: "{GREEN}The empty worlds {WHITE}{WORLD}{GREEN} and {WHITE}{WORLD}-Nether{GREEN} have been created for SkyBlock."
+CW_EXISTS: "{RED}The world you are trying to create already exists."
+
+# Messages for the SetWorld Command. Available Parameters: {WORLD}
+WORLD_SET: "{GREEN}{WORLD} has been set as the SkyBlock Master world on this server."
+NO_WORLD: "{RED}World {WHITE}{WORLD}{RED} not found!"
+NO_CHANGE: "{RED}This world is already set as the SkyBlock base world."
+
+# Message for the reload command:
+RELOAD: "{GREEN}All SkyBlock data has been reloaded."
+
+# Message sent to console if % chance of blocks generated in Magic Cobblestone Generator DO NOT add up to 100.
+GEN_FORMAT: "Generator Ores %s do not add up to 100%"
+
+# Message sent to console if a SkyBlock world has not been set:
+NO_MASTER: "{RED}In order for this plugin to function properly, you must set a Skyblock Master world in your server."
+
+# Message sent to console if the selected SkyBlock world could not be loaded:
+LOAD_ERROR: "{RED}Error: Unable to load the Skyblock Master world."
+
+# Message sent to console if the selected SkyBlock world does not exist:
+MASTER_FAILED: "{RED}The world currently set as the SkyBlock Master world does not exist."
+
+# Message sent to console if the selected SkyBlock world has been loaded and is ready. Available Paramaters: {MWORLD}
+MASTER_SUCCESS: "{GREEN}SkyBlock is running on the Master world {MWORLD}."
+
+# Message sent upon autosaving SkyBlock islands
+AUTOSAVE: "{GREEN}Autosaved SkyBlock Islands."
+
+# Messages sent upon using the zone tools: Available Parameters: {ZWORLD}, {X}, {Y}, {Z}
+SET_POS1: "{GREEN}Zone Position 1 set at {X}, {Y}, {Z} in world: {ZWORLD}"
+SET_POS2: "{GREEN}Zone Position 2 set at {X}, {Y}, {Z} in world: {ZWORLD}"
+SET_CUSTOM_SPAWN: "{GREEN}Custom Island Spawn set!"
+SPAWN_FEATHER_NOT_READY: "{RED}You must set Zone Position 1 and 2 before using this tool!" # Parameters not available for this message!
+WRONG_WORLD: "{RED}You did not set your Zone Positions in this world." # Parameters not available for this message!
+
+# Messages for the update zone command:
+UPDATE_ZONE: "{GREEN}Your custom island zone has been updated!"
+NO_ZONE: "{RED}You have not created a custom island zone yet!"
+
+# Message sent if an island command is used before a SkyBlock world is set.
+NO_MASTER_WORLD: "{RED}A SkyBlock world must be selected before this command may be used."
+
+# Message sent if a player tries to create an island but already has one:
+ALREADY_CREATED_ISLAND: "{RED}You have already created a SkyBlock island."
+
+# Message sent upon a player creating a new island:
+ISLAND_CREATED: "{GREEN}Your island has been created!"
+
+# Message sent upon using an island command without an island:
+NO_ISLAND: "{RED}You have not created a SkyBlock island yet!"
+
+# Message sent if there is an error with generating data files:
+FILE_CREATION_ERROR: "{RED}Error creating files required for this task."
+
+# Message sent upon teleporting to your own island:
+GO_HOME: "{GREEN}You have been teleported to your island."
+
+# Message sent upon changing island name: Available Parameters: {NAME}
+NAME_CHANGE: "{GREEN}Your island has been renamed {WHITE}{NAME}."
+
+# Message sent if a player is not on their island but a command requires them to be:
+NOT_ON_OWN_ISLAND: "{RED}You must be on your island to use this command!"
+# Message sent if a player is not on their island or an island they are a member of but a command requires them to be:
+NOT_ON_ISLAND: "{RED}You must be on an island you are a part of to use this command!"
+
+# Message sent if a player changes their island spawnpoint: Available Parameters: {X}, {Y}, {Z}
+SPAWN_CHANGED: "{GREEN}Your island spawn has been changed to {X}, {Y}, {Z}."
+
+# Message sent when a player checks the rank of their own island: Available Parameters: {RANK}, {TOTAL_ISLANDS}
+ISLAND_RANK_SELF: "{GREEN}Your island is ranked {WHITE}#{RANK} {GREEN}out of {TOTAL_ISLANDS} islands."
+# Message sent when a player checks the rank of another player's island: Available Parameters: {RANK}, {TOTAL_ISLANDS}, {NAME}
+ISLAND_RANK_OTHER: "{WHITE}{NAME}{GREEN} is ranked {WHITE}#{RANK} {GREEN}out of {TOTAL_ISLANDS} islands."
+
+# Message sent when a player checks the value of their own island: Available Parameters: {VALUE}
+ISLAND_VALUE_SELF: "{GREEN}Your Island Value: {WHITE}{VALUE}"
+# Message sent when a player checks the rank of another player's island: Available Parameters: {NAME}, {VALUE}
+ISLAND_VALUE_OTHER: "{WHITE}{NAME} {GREEN}Value: {WHITE}{VALUE}"
+
+# Message sent if the island specified could not be found: Available Parameters: {NAME}
+COULD_NOT_FIND_ISLAND: "{RED}Could not find an island with the name {WHITE}{ISLAND_NAME}{RED}."
+# Message sent if the target specified could not be found: Available Parameters: {NAME}
+TARGET_NOT_FOUND: "{RED}Could not find {WHITE}{NAME}{RED}."
+
+# Message sent when a player checks who is on their island:
+PLAYERS_ON_ISLAND: "{GREEN}Players on Your Island: {WHITE}{PLAYERS}"
+
+# Messages for the lock command:
+LOCKED: "{GREEN}Your island is now locked."
+ALREADY_LOCKED: "{RED}Your island is already locked."
+
+# Messages for the unlock command:
+UNLOCKED: "{GREEN}Your island is now unlocked."
+ALREADY_UNLOCKED: "{RED}Your island is already unlocked."
+
+# Message sent if an island is locked while attempting to visit: Available Parameters: {ISLAND_NAME}
+ISLAND_LOCKED: "{WHITE}{ISLAND_NAME}{RED} is not accepting visitors now."
+# Message sent when a player visits another island: Available Paramaters: {ISLAND_NAME}
+WELCOME_TO_ISLAND: "{GREEN}You are now visiting {WHITE}{ISLAND_NAME}!"
+# Message sent if a player attemps to visit an island where they have been banned: Available Parameters: {ISLAND_NAME}
+
+BANNED: "{RED}You have been banned from {WHITE}{ISLAND_NAME}{RED}."
+# Message sent when unbanning a player from your island: Available Parameters: {NAME}
+UNBANNED: "{WHITE}{NAME}{GREEN} is no longer banned from your island."
+# Message sent upon banning a player from your island: Available Parameters: {NAME}
+BANNED_PLAYER: "{GREEN}You have banned {WHITE}{NAME}{GREEN} from your island."
+# Message sent to a player if they are unbanned from an island: Available Parameters: {ISLAND_NAME}
+NO_LONGER_BANNED: "{GREEN}You are no longer banned from {WHITE}{ISLAND_NAME}{GREEN}."
+# Message sent if attempting to ban a player that is already banned from your island: Available Parameters: {NAME}
+ALREADY_BANNED: "{WHITE}{NAME}{RED} has already been banned from your island."
+# Message sent if attempting to unban a player that is not banned from your island: Available Parameters: {NAME}
+NOT_BANNED: "{WHITE}{NAME}{RED} is not banned from your island."
+# Message sent if a player tries to ban themself from their island:
+CANT_BAN_SELF: "{RED}You cannot ban yourself from your island."
+# Message sent when a player views the players that are banned from their island: Available Parameters: {BANNED_PLAYERS}
+BANNED_PLAYERS: "{GREEN}Players Banned From Your Island: {WHITE}{BANNED_PLAYERS}"
+
+# Message sent if another player has not made an island yet: Available Parameters: {NAME}
+PLAYER_HAS_NO_ISLAND: "{WHITE}{NAME}{RED} has not made a SkyBlock island yet."
+
+# Messages for the invite command: Available Parameters: {NAME}
+INVITED_PLAYER: "{GREEN}Successfully invited {WHITE}{NAME}{GREEN} to your island."
+ALREADY_INVITED: "{RED}You have already invited {WHITE}{NAME}{RED} to your island."
+
+# Message sent when a player views the members of their island: Available Parameters: {MEMBERS}
+ISLAND_MEMBERS: "{GREEN}Members of Your Island: {WHITE}{MEMBERS}"
+
+# Message sent if the island member limit is reached
+MEMBER_LIMIT_REACHED: "{RED}This island has reached the member limit."
+
+# Message sent if a player tries to invite themself:
+CANT_INVITE_SELF: "{RED}You can't invite yourself to your island."
+
+# Messages for the invite accept command: Available Paramaters: {ISLAND_NAME}
+ACCEPTED_INVITE: "{GREEN}You are now a member of {WHITE}{ISLAND_NAME}{GREEN}."
+NOT_INVITED: "{RED}You have not recieved an invite from {WHITE}{ISLAND_NAME}{RED}."
+
+# Message sent to island owner if a player accepts their invite: Available Parameters: {NAME}
+JOINED_ISLAND: "{WHITE}{NAME}{GREEN} has accepted your invite and is now a member of your island."
+
+# Message sent to a player if they're invited to join an island: Available Parameters: {ISLAND_NAME}
+INVITED_TO_ISLAND: "{GREEN}You have been invited to join {ISLAND_NAME}. To accept type /is accept {ISLAND_NAME}"
+
+# Message sent if trying to invite someone who is banned from your island: Available Parameters: {NAME}
+CANT_INVITE_BANNED: "{RED}You cannot invite {WHITE}{NAME}{RED} because they've been banned from your island."
+
+# Messages for the name command: Available Parameters: {ISLAND_NAME}
+ISLAND_NAME_SELF: "{GREEN}Your island's name is {WHITE}{ISLAND_NAME}{GREEN}."
+ISLAND_NAME_OTHER: "{GREEN}The island you are on is named {WHITE}{ISLAND_NAME}{GREEN}."
+
+# Message sent if a player tries to remove themself from their island.
+CANT_REMOVE_SELF: "{RED}You cannot remove yourself from your island."
+
+# Message sent if a player tries to remove someone from their island that is not a memebr: Available Parameters: {NAME}
+NOT_A_MEMBER_OTHER: "{WHITE}{NAME}{RED} is not a member of your island."
+# Message sent if you try leaving an island you're not a member of: Available Parameters: {ISLAND_NAME}
+NOT_A_MEMBER_SELF: "{RED}You are not a member of {WHITE}{ISLAND_NAME}{RED}."
+
+# Message sent when a player removes a member from their island: Available Parameters: {NAME}
+MEMBER_REMOVED: "{WHITE}{NAME}{GREEN} is no longer a member of your island."
+
+# Message sent when a player gets removed from another's island: Available Parameters: {ISLAND_NAME}
+REMOVED_FROM_ISLAND: "{GREEN}You are no longer a member of {WHITE}{ISLAND_NAME}{GREEN}."
+
+# Message sent upon enabling flight on an island:
+FLIGHT_ENABLED: "{GREEN}You can now fly"
+
+# Message sent upon disabling flight on an island:
+FLIGHT_DISABLED: "{GREEN}You have disabled flight"
+
+# Message sent when a player kicks another from their SkyBlock island: Available Parameters: {NAME}
+KICKED_PLAYER: "{GREEN}Kicked {WHITE}{NAME}{GREEN} off of your island."
+# Message sent if a player kicks you off of their island: Available Parameters: {ISLAND_NAME}
+KICKED_FROM_ISLAND: "{RED}You were kicked off of {WHITE}{ISLAND_NAME}{RED}."
+# Message sent if a player tries to kick themself off of their SkyBlock island:
+CANT_KICK_SELF: "{RED}You cannot kick yourself off of your island."
+
+# Top Islands Display Message:
+# Available Parameters: {POSITION_ONE}, {POSITION_TWO}, {POSITION_THREE}, {POSITION_FOUR}, {POSITION_FIVE}, {POSITION_SIX}
+# Available Parameters: {PAGE_NUMBER}, {TOTAL_PAGES}
+TOP_ISLANDS: "{GREEN}Top Islands Page {WHITE}{PAGE_NUMBER}{GREEN} of {TOTAL_PAGES}:{NEW_LINE}{WHITE}{POSITION_ONE}{NEW_LINE}{WHITE}{POSITION_TWO}{NEW_LINE}{WHITE}{POSITION_THREE}{NEW_LINE}{WHITE}{POSITION_FOUR}{NEW_LINE}{WHITE}{POSITION_FIVE}{NEW_LINE}{WHITE}{POSITION_SIX}"

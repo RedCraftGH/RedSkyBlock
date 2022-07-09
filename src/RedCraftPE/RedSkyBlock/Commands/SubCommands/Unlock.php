@@ -7,7 +7,7 @@ use pocketmine\utils\TextFormat;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-class Banned extends SBSubCommand {
+class Unlock extends SBSubCommand {
 
   public function prepare(): void {
 
@@ -19,12 +19,16 @@ class Banned extends SBSubCommand {
     if ($this->checkIsland($sender)) {
 
       $island = $this->plugin->islandManager->getIsland($sender);
-      $banned = $island->getBanned();
-      $banned = implode(", ", $banned);
 
-      $message = $this->getMShop()->construct("BANNED_PLAYERS");
-      $message = str_replace("{BANNED_PLAYERS}", $banned, $message);
-      $sender->sendMessage($message);
+      if ($island->unlock()) {
+
+        $message = $this->getMShop()->construct("UNLOCKED");
+        $sender->sendMessage($message);
+      } else {
+
+        $message = $this->getMShop()->construct("ALREADY_UNLOCKED");
+        $sender->sendMessage($message);
+      }
     } else {
 
       $message = $this->getMShop()->construct("NO_ISLAND");

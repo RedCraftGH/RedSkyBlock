@@ -2,52 +2,61 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
-use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
+use pocketmine\utils\TextFormat;
+use pocketmine\world\World;
 
-use RedCraftPE\RedSkyBlock\SkyBlock;
-use RedCraftPE\RedSkyBlock\Commands\Island;
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-class SetWorld {
+use CortexPE\Commando\args\RawStringArgument;
 
-  private static $instance;
+class SetWorld extends SBSubCommand {
 
-  public function __construct($plugin) {
+  private $islandCount; //will use later for reconfiguration
 
-    self::$instance = $this;
-    $this->plugin = $plugin;
+  protected function prepare(): void {
+
+    $this->setPermission("redskyblock.admin;redskyblock.setworld");
+    $this->registerArgument(0, new RawStringArgument("name", false));
   }
 
-  public function onSetWorldCommand(CommandSender $sender, array $args): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.setworld")) {
+    if (isset($args["name"])) {
 
-      if (count($args) < 2) {
+      $plugin = $this->plugin;
+      $name = $args["name"];
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /island setworld <world name>");
-        return true;
-      } else {
+      if ($plugin->skyblock->get("Master World") !== $name) {
 
-        $plugin = $this->plugin;
-        $world = implode(" ", array_splice($args, 1));
+        if ($plugin->getServer()->getWorldManager()->loadWorld($name)) {
 
-        if ($plugin->skyblock->get("Master World") === $world) {
+          $plugin->skyblock->set("Islands", 0); //reconfigure so if master world is changed back to previous skyblock world the amount of islands already created remains
+          $plugin->skyblock->set("Master World", $name);
+          $plugin->skyblock->save();
 
-          $sender->sendMessage(TextFormat::RED . "This world is already set as the SkyBlock base world.");
-          return true;
+          $message = $this->getMShop()->construct("WORLD_SET");
+          $message = str_replace("{WORLD}", $name, $message);
+          $sender->sendMessage($message);
+          return;
         } else {
 
-          $plugin->skyblock->set("Islands", 0);
-          $plugin->skyblock->set("Master World", $world);
-          $plugin->skyblock->save();
-          $sender->sendMessage(TextFormat::GREEN . $world . " has been set as the SkyBlock Master world on this server.");
-          return true;
+          $message = $this->getMShop()->construct("NO_WORLD");
+          $message = str_replace("{WORLD}", $name, $message);
+          $sender->sendMessage($message);
+          return;
         }
+      } else {
+
+        $message = $this->getMShop()->construct("NO_CHANGE");
+        $message = str_replace("{WORLD}", $name, $message);
+        $sender->sendMessage($message);
+        return;
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You do not have the proper permissions to run this command.");
-      return true;
+      $this->sendUsage();
+      return;
     }
   }
 }

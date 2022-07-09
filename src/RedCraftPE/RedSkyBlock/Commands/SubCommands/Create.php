@@ -2,72 +2,57 @@
 
 namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
-use pocketmine\utils\TextFormat;
 use pocketmine\command\CommandSender;
-use pocketmine\world\Position;
-use pocketmine\math\Vector3;
+use pocketmine\utils\TextFormat;
 use pocketmine\item\ItemFactory;
-use pocketmine\block\Block;
+use pocketmine\world\Position;
 
-use RedCraftPE\RedSkyBlock\SkyBlock;
-use RedCraftPE\RedSkyBlock\Tasks\Generate;
-use RedCraftPE\RedSkyBlock\Commands\Island;
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
+use RedCraftPE\RedSkyBlock\Island;
+use RedCraftPE\RedSkyBlock\Tasks\IslandGenerator;
 
-class Create {
+class Create extends SBSubCommand {
 
-  public function __construct($plugin) {
+  public function prepare(): void {
 
-    $this->plugin = $plugin;
+    $this->setPermission("redskyblock.island");
   }
 
-  public function onCreateCommand(CommandSender $sender): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-     if ($sender->hasPermission("redskyblock.create")) {
+    if ($this->checkMasterWorld()) {
 
-      $plugin = $this->plugin;
-      $itemsArray = $plugin->cfg->get("Starting Items", []);
-      $interval = $plugin->cfg->get("Island Interval");
-      $initialSize = $plugin->cfg->get("Island Size");
-      $islandSpawnY = $plugin->cfg->get("Island Spawn Y");
-      $worldName = $plugin->skyblock->get("Master World");
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $senderName = strtolower($sender->getName());
+      if ($this->checkZone()) {
 
-      if ($worldName === false) {
+        $plugin = $this->plugin;
+        $masterWorldName = $plugin->skyblock->get("Master World");
 
-        $sender->sendMessage(TextFormat::RED . "You must set a SkyBlock Master world in order for this plugin to function properly.");
-        return true;
-      } else {
+        if (!$plugin->getServer()->getWorldManager()->isWorldLoaded($masterWorldName)) {
 
-        $world = $plugin->getServer()->getWorldManager()->getWorldByName($worldName);
-        if (!$plugin->getServer()->getWorldManager()->isWorldLoaded($worldName)) {
+          if (!$plugin->getServer()->getWorldManager()->loadWorld($masterWorldName)) {
 
-          if ($plugin->getServer()->getWorldManager()->loadWorld($worldName)) {
-
-            $plugin->getServer()->getWorldManager()->loadWorld($worldName);
-          } else {
-
-            $sender->sendMessage(TextFormat::RED . "The world currently set as the SkyBlock world does not exist or can't be loaded.");
-            return true;
+            $message = $this->getMShop()->construct("LOAD_ERROR");
+            $sender->sendMessage($message);
           }
-        }
-
-        if (array_key_exists($senderName, $skyblockArray)) {
-
-          $sender->sendMessage(TextFormat::RED . "You already have a Skyblock island.");
-          return true;
         } else {
 
-          if ($plugin->skyblock->get("Zone Created")) {
+          if (!$this->checkIsland($sender)) {
 
-            $world = $plugin->getServer()->getWorldManager()->getWorldByName($worldName);
+            $startingItems = $plugin->cfg->get("Starting Items", []);
+            $interval = $plugin->cfg->get("Island Interval");
+            $initialSize = $plugin->cfg->get("Island Size");
+            $islandSpawnY = $plugin->cfg->get("Island Spawn Y");
+            $resetCooldown = $plugin->cfg->get("Reset Cooldown");
+            $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
+            $senderName = $sender->getName();
+            $masterWorld = $plugin->getServer()->getWorldManager()->getWorldByName($masterWorldName);
+
             $turns = $plugin->skyblock->get("Turns");
             $steps = $plugin->skyblock->get("Steps");
             $stepChecker = $plugin->skyblock->get("Step Checker");
-            $lastX = $plugin->skyblock->get("Last X"); //starts at 0
-            $lastZ = $plugin->skyblock->get("Last Z"); //starts at 0 , coords: 0, y, 0
-            $dir = 0; //in future need to build algorithm to test for blocks at interval to create the skyblock island generation pattern
-            $cooldown = $plugin->cfg->get("Reset Cooldown");
+            $lastX = $plugin->skyblock->get("Last X");
+            $lastZ = $plugin->skyblock->get("Last Z");
+            $dir = 0;
 
             if ($steps === -1) {
 
@@ -109,107 +94,70 @@ class Create {
             }
 
             $cSpawnVals = $plugin->skyblock->get("CSpawnVals", []);
+            $initialSpawnPoint = [$lastX + $cSpawnVals[0], $islandSpawnY + $cSpawnVals[1], $lastZ + $cSpawnVals[2]];
 
-            $spawnX = $lastX + $cSpawnVals[0];
-            $spawnY = $cSpawnVals[1];
-            $spawnZ = $lastZ + $cSpawnVals[2];
-
-            $sender->teleport(new Position($spawnX, $spawnY, $spawnZ, $world));
+            $sender->teleport(new Position($initialSpawnPoint[0], $initialSpawnPoint[1], $initialSpawnPoint[2], $masterWorld));
             $sender->setImmobile(true);
+            $plugin->getScheduler()->scheduleDelayedTask(new IslandGenerator($plugin, $sender, $lastX, $lastZ, $masterWorld), 60);
 
-            $plugin->getScheduler()->scheduleDelayedTask(new Generate($plugin, $sender, $lastX, $lastZ, $world), 50);
+            $islandData = [
+              "creator" => $sender->getName(),
+              "name" => $sender->getName() . "'s island",
+              "size" => $initialSize,
+              "value" => 0,
+              "initialspawnpoint" => $initialSpawnPoint,
+              "spawnpoint" => $initialSpawnPoint,
+              "members" => [],
+              "banned" => [],
+              "resetcooldown" => Time() + $resetCooldown,
+              "lockstatus" => false
+            ];
 
-            foreach($itemsArray as $items) {
+            $island = $plugin->islandManager->constructIsland($islandData);
 
-              if (count($itemsArray) > 0) {
+            foreach($startingItems as $item) {
 
-                $itemArray = explode(" ", $items);
+              if (count($startingItems) !== 0) {
+
+                $itemArray = explode(" ", $item);
                 if (count($itemArray) === 3) {
-
-                  $id = intval($itemArray[0]);
-                  $damage = intval($itemArray[1]);
-                  $count = intval($itemArray[2]);
-                  $sender->getInventory()->addItem(ItemFactory::getInstance()->get($id, $damage, $count));
+                  //[id, meta, count]
+                  $sender->getInventory()->addItem(ItemFactory::getInstance()->get((int) $itemArray[0], (int) $itemArray[1], (int) $itemArray[2]));
                 }
               }
             }
 
-            $playerData = array(
-              "Island Members" => [],
-              "Name" => $sender->getName() . "'s island",
-              "Value" => 0,
-              "Island Spawn" => [$spawnX, $spawnY, $spawnZ],
-              "Nether Spawn" => [],
-              "Island Size" => $initialSize,
-              "Cooldown" => Time() + $cooldown,
-              "Island Locked" => false,
-              "Banned" => []
-            );
-
-            if (file_put_contents($plugin->getDataFolder() . "Players/" . $senderName . ".json", json_encode($playerData)) !== false) {
-
-              $sender->sendMessage(TextFormat::GREEN . "You have successfully created your skyblock island.");
-            } else {
-
-              $plugin->getLogger()->info(TextFormat::RED . "Error: {$sender->getName}'s player files were not successfully generated.");
-            }
-
-            $skyblockArray[$senderName] = [$spawnX, $spawnZ]; //Necessary for event listener boundaries and api functions
-            $plugin->skyblock->set("SkyBlock", $skyblockArray);
-            $plugin->skyblock->set("Steps", $steps); //take out after new island generation algorithm in place?
-            $plugin->skyblock->set("Turns", $turns); //take out after new island generation algorithm in place?
+            $plugin->skyblock->set("Steps", $steps);
+            $plugin->skyblock->set("Turns", $turns);
             $plugin->skyblock->set("Step Checker", $stepChecker);
             $plugin->skyblock->set("Last X", $lastX);
             $plugin->skyblock->set("Last Z", $lastZ);
-            $plugin->skyblock->set("Islands", intval($plugin->skyblock->get("Islands")) + 1);
             $plugin->skyblock->save();
 
-            $scoreHud = $plugin->getServer()->getPluginManager()->getPlugin("ScoreHud");
-            if ($scoreHud !== null && $scoreHud->isEnabled()) {
+            if (file_put_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $senderName . ".json", json_encode($islandData)) !== false) {
 
-              $ev1 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islename", $playerData["Name"])
-              );
-              $ev2 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islesize", $playerData["Island Size"])
-              );
-              $ev3 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islevalue", $playerData["Value"])
-              );
-              $ev4 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.rank", "#" . $plugin->getIslandRank($sender))
-              );
-              $ev5 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.islestatus", "Unlocked")
-              );
-              $ev6 = new \Ifera\ScoreHud\event\PlayerTagUpdateEvent(
-                $sender,
-                new \Ifera\ScoreHud\scoreboard\ScoreTag("redskyblock.membercount", "0")
-              );
-              $ev1->call();
-              $ev2->call();
-              $ev3->call();
-              $ev4->call();
-              $ev5->call();
-              $ev6->call();
+              $message = $this->getMShop()->construct("ISLAND_CREATED");
+              $sender->sendMessage($message);
+            } else {
+
+              $message = $this->getMShop()->construct("FILE_CREATION_ERROR");
+              $sender->sendMessage($message);
             }
-            return true;
           } else {
 
-            $sender->sendMessage(TextFormat::RED . "A custom island zone must be created before islands can be generated.");
-            return true;
+            $message = $this->getMShop()->construct("ALREADY_CREATED_ISLAND");
+            $sender->sendMessage($message);
           }
         }
+      } else {
+
+        $message = $this->getMShop()->construct("NO_ZONE");
+        $sender->sendMessage($message);
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $message = $this->getMShop()->construct("NO_MASTER_WORLD");
+      $sender->sendMessage($message);
     }
   }
 }

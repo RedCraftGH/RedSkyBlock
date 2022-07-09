@@ -6,84 +6,69 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use pocketmine\player\Player;
 
-class Ban {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-  public function __construct($plugin) {
+use CortexPE\Commando\args\TextArgument;
 
-    $this->plugin = $plugin;
+class Ban extends SBSubCommand {
+
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.island");
+    $this->registerArgument(0, new TextArgument("name", false));
   }
 
-  public function onBanCommand(CommandSender $sender, array $args): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.ban")) {
+    if (isset($args["name"])) {
 
-      if (count($args) < 2) {
+      if ($this->checkIsland($sender)) {
 
-        $sender->sendMessage(TextFormat::WHITE . "Usage: /is ban <player>");
-        return true;
-      } else {
+        $name = $args["name"];
+        $island = $this->plugin->islandManager->getIsland($sender);
+        $creator = $island->getCreator();
+        $island->removeMember($name);
 
-        $plugin = $this->plugin;
-        $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-        $senderName = strtolower($sender->getName());
+        if (strtolower($name) !== strtolower($creator)) {
 
-        if (array_key_exists($senderName, $skyblockArray)) {
+          if ($island->ban($name)) {
 
-          $name = strtolower(implode(" ", array_slice($args, 1)));
-          $playerFromName = $plugin->getServer()->getPlayerByPrefix($name);
-          if ($playerFromName === null) {
+            $message = $this->getMShop()->construct("BANNED_PLAYER");
+            $message = str_replace("{NAME}", $name, $message);
+            $sender->sendMessage($message);
 
-            $playerFromName = $name;
-          }
-          $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded, true);
+            $player = $this->plugin->getServer()->getPlayerExact($name);
+            if ($player instanceof Player && !$player->hasPermission("redskyblock.admin")) {
 
-          if (in_array($name, $playerData["Banned"])) {
+              if ($this->plugin->islandManager->isOnIsland($player, $island)) {
 
-            $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::RED . " is already banned from your island.");
-            return true;
+                $spawn = $this->plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
+                $player->teleport($spawn);
+              }
+              $message = $this->getMShop()->construct("BANNED");
+              $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+              $player->sendMessage($message);
+            }
           } else {
 
-            if ($name !== $senderName && $playerFromName !== $sender) {
-
-              if (in_array($name, $playerData["Island Members"])) {
-
-                $key = array_search($name, $playerData["Island Members"]);
-                unset($playerData["Island Members"][$key]);
-              }
-
-              $playerData["Banned"][] = $name;
-              $playerDataEncoded = json_encode($playerData);
-              file_put_contents($filePath, $playerDataEncoded);
-              $sender->sendMessage(TextFormat::WHITE . $name . TextFormat::GREEN . " is now banned from your island.");
-
-              if ($playerFromName instanceof Player) {
-
-                $playerFromName->sendMessage(TextFormat::WHITE . $senderName . TextFormat::RED . " has banned you from their island.");
-
-                if ($plugin->getIslandAtPlayer($playerFromName) === $senderName) {
-
-                  $playerFromName->teleport($plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
-                }
-              }
-              return true;
-            } else if ($name === $senderName || $playerFromName === $sender) {
-
-              $sender->sendMessage(TextFormat::RED . "You cannot ban yourself from your island.");
-              return true;
-            }
+            $message = $this->getMShop()->construct("ALREADY_BANNED");
+            $message = str_replace("{NAME}", $name, $message);
+            $sender->sendMessage($message);
           }
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-          return true;
+          $message = $this->getMShop()->construct("CANT_BAN_SELF");
+          $sender->sendMessage($message);
         }
+      } else {
+
+        $message = $this->getMShop()->construct("NO_ISLAND");
+        $sender->sendMessage($message);
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $this->sendUsage();
+      return;
     }
   }
 }

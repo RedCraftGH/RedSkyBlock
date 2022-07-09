@@ -5,53 +5,40 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class SetSpawn {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-  public function __construct($plugin) {
+class SetSpawn extends SBSubCommand {
 
-    $this->plugin = $plugin;
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.island");
   }
 
-  public function onSetSpawnCommand(CommandSender $sender): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.setspawn")) {
+    if ($this->checkIsland($sender)) {
 
-      $plugin = $this->plugin;
+      $island = $this->plugin->islandManager->getIsland($sender);
+      if ($this->plugin->islandManager->isOnIsland($sender, $island)) {
 
-      $owner = $plugin->getIslandAtPlayer($sender);
-      $senderName = strtolower($sender->getName());
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $filePath = $plugin->getDataFolder() . "Players/" . strtolower($sender->getName()) . ".json";
+        $senderPos = $sender->getPosition();
+        $spawnPoint = [round($senderPos->x), round($senderPos->y), round($senderPos->z)];
+        $island->setSpawnPoint($spawnPoint);
 
-      if (array_key_exists($senderName, $skyblockArray)) {
-
-        if (strtolower($sender->getName()) === $owner && $sender->getWorld()->getFolderName() === $plugin->skyblock->get("Master World")) {
-
-          $playerDataEncoded = file_get_contents($filePath);
-          $playerData = (array) json_decode($playerDataEncoded, true);
-
-          $playerData["Island Spawn"][0] = (int) round($sender->getPosition()->x);
-          $playerData["Island Spawn"][1] = (int) round($sender->getPosition()->y);
-          $playerData["Island Spawn"][2] = (int) round($sender->getPosition()->z);
-
-          $playerDataEncoded = json_encode($playerData);
-          file_put_contents($filePath, $playerDataEncoded);
-          $sender->sendMessage(TextFormat::GREEN . "Your island spawn point has been set to " . TextFormat::WHITE . (int) round($sender->getPosition()->x) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getPosition()->y) . TextFormat::GREEN . ", " . TextFormat::WHITE . (int) round($sender->getPosition()->z) . TextFormat::GREEN . ".");
-          return true;
-        } else {
-
-          $sender->sendMessage(TextFormat::RED . "You must be on your island to set your island's spawn point.");
-          return true;
-        }
+        $message = $this->getMShop()->construct("SPAWN_CHANGED");
+        $message = str_replace("{X}", round($senderPos->x), $message);
+        $message = str_replace("{Y}", round($senderPos->y), $message);
+        $message = str_replace("{Z}", round($senderPos->z), $message);
+        $sender->sendMessage($message);
       } else {
 
-        $sender->sendMessage(TextFormat::RED . "You have not created a SkyBlock island yet.");
-        return true;
+        $message = $this->getMShop()->construct("NOT_ON_OWN_ISLAND");
+        $sender->sendMessage($message);
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $message = $this->getMShop()->construct("NO_ISLAND");
+      $sender->sendMessage($message);
     }
   }
 }

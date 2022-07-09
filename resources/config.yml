@@ -1,7 +1,7 @@
 ---
 Version: 1
 
-# IN ORDER FOR MANUAL CHANGES IN THIS FILE TO TAKE PLACE THE COMMAND /is reload MUST BE USED ON THE SERVER OR THE SERVER MUST BE RESTARTED/RELOADED
+# IN ORDER FOR MANUAL CHANGES IN THIS FILE TO TAKE PLACE THE COMMAND /is reload MUST BE USED ON THE SERVER OR THE SERVER MUST BE RESTARTED
 
 Spawn Command: "on" #Turn off if you are using a different plugin that controls spawnpoints.
 Spawn Hunger: "off" #Turn on if you want players to lose hunger in the spawn world.
@@ -31,16 +31,16 @@ Generator Ores:
 
 
 Starting Items:
-  - 79, 0, 2
-  - 325, 10, 1
-  - 287, 0, 12
-  - 351, 15, 2
-  - 338, 0, 1
-  - 361, 0, 1
-  - 81, 0, 1
-  - 360, 0, 1
-  - 39, 0, 1
-  - 40, 0, 1
+  0: "79 0 2"
+  1: "325 10 1"
+  2: "287 0 12"
+  3: "351 15 2"
+  4: "338 0 1"
+  5: "361 0 1"
+  6: "81 0 1"
+  7: "360 0 1"
+  8: "3 0 1"
+  9: "40 0 1"
 
 Island Zone:
   0: 0
@@ -79,3 +79,7 @@ Island Boundaries: false #Invisible barrier that forces players to stay within i
 
 Reset Cooldown: 86400 #The time in seconds a player must wait before being able to restart their SkyBlock island again. 86400 seconds is one day.
 Reset Wipe: false #Clears the inventory of the player restarting their island
+
+Autosave Timer: 5 # Every x minutes all islands will autosave. Default: 5 minutes. Server restart required for changes to take effect.
+
+Member Limit: 3

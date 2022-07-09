@@ -5,60 +5,48 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Fly {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
+use RedCraftPE\RedSkyBlock\Island;
 
-  public function __construct($plugin) {
+class Fly extends SBSubCommand {
 
-    $this->plugin = $plugin;
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.admin;redskyblock.fly");
   }
 
-  public function onFlyCommand(CommandSender $sender): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.fly")) {
+    $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
+    if ($island instanceof Island) {
 
-      $plugin = $this->plugin;
-      $island = $plugin->getIslandAtPlayer($sender);
-      if ($island === null) {
+      if (in_array(strtolower($sender->getName()), $island->getMembers()) || $sender->getName() === $island->getCreator()) {
 
-        $sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
-        return true;
-      }
-      $masterWorld = $plugin->skyblock->get("Master World");
-      $senderName = strtolower($sender->getName());
-      $filePath = $plugin->getDataFolder() . "Players/" . $island . ".json";
-      $playerDataEncoded = file_get_contents($filePath);
-      $playerData = (array) json_decode($playerDataEncoded);
+        if ($sender->getAllowFlight()) {
 
-      if ($masterWorld === $sender->getWorld()->getFolderName() || $masterWorld === $sender->getWorld()->getFolderName() . "-Nether") {
+          $sender->setAllowFlight(false);
+          $sender->setFlying(false);
 
-        if ($island === $senderName || in_array($senderName, $playerData["Island Members"])) {
-
-          if ($sender->getAllowFlight()) {
-
-            $sender->setAllowFlight(false);
-            $sender->setFlying(false);
-            $sender->sendMessage(TextFormat::GREEN . "You have disabled flight.");
-            return true;
-          } else {
-
-            $sender->setAllowFlight(true);
-            $sender->sendMessage(TextFormat::GREEN . "You have enabled flight.");
-            return true;
-          }
+          $message = $this->getMShop()->construct("FLIGHT_DISABLED");
+          $sender->sendMessage($message);
         } else {
 
-          $sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
-          return true;
+          $sender->setAllowFlight(true);
+          $sender->setFlying(true);
+
+          $message = $this->getMShop()->construct("FLIGHT_ENABLED");
+          $sender->sendMessage($message);
         }
       } else {
 
-        $sender->sendMessage(TextFormat::RED . "You must be on your island to use this command.");
-        return true;
+        $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+        $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+        $sender->sendMessage();
       }
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $message = $this->getMShop()->construct("NOT_ON_ISLAND");
+      $sender->sendMessage($message);
     }
   }
 }

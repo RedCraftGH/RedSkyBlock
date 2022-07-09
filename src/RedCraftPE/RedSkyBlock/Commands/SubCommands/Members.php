@@ -5,47 +5,30 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Members {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-  public function __construct($plugin) {
+class Members extends SBSubCommand {
 
-    $this->plugin = $plugin;
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.island");
   }
 
-  public function onMembersCommand(CommandSender $sender): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.members")) {
+    if ($this->checkIsland($sender)) {
 
-      $plugin = $this->plugin;
-      $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
-      $senderName = strtolower($sender->getName());
+      $island = $this->plugin->islandManager->getIsland($sender);
+      $members = $island->getMembers();
+      $members = implode(", ", array_keys($members));
 
-      if (array_key_exists($senderName, $skyblockArray)) {
-
-        $filePath = $plugin->getDataFolder() . "Players/" . $senderName . ".json";
-        $playerDataEncoded = file_get_contents($filePath);
-        $playerData = (array) json_decode($playerDataEncoded);
-
-        if (count($playerData["Island Members"]) <= 0) {
-
-          $members = "no members yet.";
-        } else {
-
-          $members = implode(", ", $playerData["Island Members"]);
-        }
-
-        $sender->sendMessage(TextFormat::LIGHT_PURPLE . "Members: " . TextFormat::WHITE . $members);
-        return true;
-
-      } else {
-
-        $sender->sendMessage(TextFormat::RED . "You don't have a SkyBlock island yet.");
-        return true;
-      }
+      $message = $this->getMShop()->construct("ISLAND_MEMBERS");
+      $message = str_replace("{MEMBERS}", $members, $message);
+      $sender->sendMessage($message);
     } else {
 
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
+      $message = $this->getMShop()->construct("NO_ISLAND");
+      $sender->sendMessage($message);
     }
   }
 }

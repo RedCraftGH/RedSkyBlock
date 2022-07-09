@@ -5,26 +5,24 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
-class Reload {
+use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
-  public function __construct($plugin) {
+class Reload extends SBSubCommand {
 
-    $this->plugin = $plugin;
+  public function prepare(): void {
+
+    $this->setPermission("redskyblock.admin;redskyblock.reload");
   }
 
-  public function onReloadCommand(CommandSender $sender): bool {
+  public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if ($sender->hasPermission("redskyblock.reload")) {
+    $plugin = $this->plugin;
+    $plugin->cfg->reload();
+    $plugin->skyblock->reload();
+    $plugin->messages->reload();
 
-      $plugin = $this->plugin;
-      $plugin->cfg->reload();
-      $plugin->skyblock->reload();
-      $sender->sendMessage(TextFormat::GREEN . "All SkyBlock data has been reloaded.");
-      return true;
-    } else {
-
-      $sender->sendMessage(TextFormat::RED . "You don't have permission to use this command.");
-      return true;
-    }
+    $message = $this->getMShop()->construct("RELOAD");
+    $sender->sendMessage($message);
+    return;
   }
 }

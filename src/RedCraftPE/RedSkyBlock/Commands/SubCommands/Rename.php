@@ -6,40 +6,40 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
-use RedCraftPE\RedSkyBlock\Island;
 
-class Name extends SBSubCommand {
+use CortexPE\Commando\args\TextArgument;
+
+class Rename extends SBSubCommand {
 
   public function prepare(): void {
 
     $this->setPermission("redskyblock.island");
+    $this->registerArgument(0, new TextArgument("name", false));
   }
 
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
-    if ($island instanceof Island) {
+    if (isset($args["name"])) {
 
-      $islandName = $island->getName();
-
-      $message = $this->getMShop()->construct("ISLAND_NAME_OTHER");
-      $message = str_replace("{ISLAND_NAME}", $islandName, $message);
-      $sender->sendMessage($message);
-    } else {
+      $name = $args["name"];
 
       if ($this->checkIsland($sender)) {
 
         $island = $this->plugin->islandManager->getIsland($sender);
-        $islandName = $island->getName();
+        $island->setName($name);
 
-        $message = $this->getMShop()->construct("ISLAND_NAME_SELF");
-        $message = str_replace("{ISLAND_NAME}", $islandName, $message);
+        $message = $this->getMShop()->construct("NAME_CHANGE");
+        $message = str_replace("{NAME}", $name, $message);
         $sender->sendMessage($message);
       } else {
 
         $message = $this->getMShop()->construct("NO_ISLAND");
         $sender->sendMessage($message);
       }
+    } else {
+
+      $this->sendUsage();
+      return;
     }
   }
 }
