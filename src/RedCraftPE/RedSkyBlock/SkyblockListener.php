@@ -12,6 +12,7 @@ use pocketmine\player\Player;
 use pocketmine\inventory\Inventory;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
+use pocketmine\item\StringToItemParser;
 
 //import events:
 //block events:
@@ -23,8 +24,13 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
+use pocketmine\event\player\PlayerExhaustEvent;
+use pocketmine\event\player\PlayerDeathEvent;
 //entity events:
 use pocketmine\event\entity\EntityTeleportEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityItemPickupEvent;
 
 use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 use RedCraftPE\RedSkyBlock\Island;
@@ -50,55 +56,42 @@ class SkyBlockListener implements Listener {
 
     if ($world === $masterWorld || $world === $masterWorld . "-Nether") {
 
-      if (count($generatorOres) === 0) {
-
-        return;
-      } else {
+      if (count($generatorOres) !== 0) {
 
         if (array_sum($generatorOres) !== 100) {
 
           $message = $plugin->mShop->construct("GEN_FORMAT");
           $plugin->getLogger()->info($message);
-          return;
         } else {
 
-          $event->cancel();
-
-          $blockID;
-          $randomNumber = rand(1, 100);
+          $genBlock = null;
+          $randomNumber = random_int(1, 100);
           $percentChance = 0;
 
-          foreach ($generatorOres as $key => $oreChance) {
+          foreach ($generatorOres as $blockName => $oreChance) {
 
             $percentChance += $oreChance;
 
             if ($randomNumber <= $percentChance) {
 
-              $blockID = $key;
+              $genBlock = StringToItemParser::getInstance()->parse($blockName)->getBlock();
               break;
             }
           }
-          $block->getPosition()->getWorld()->setBlock($block->getPosition(), BlockFactory::getInstance()->get($blockID, 0));
-          return;
+          if ($genBlock instanceof Block) {
+
+            $event->cancel();
+            $block->getPosition()->getWorld()->setBlock($block->getPosition(), $genBlock);
+          }
         }
       }
-    } else {
-
-      return;
     }
   }
 
   public function onJoin(PlayerJoinEvent $event) {
 
-    $plugin = $this->plugin;
     $player = $event->getPlayer();
-    $spawn = $plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
     ZoneManager::clearZoneTools($player);
-
-    if ($plugin->cfg->get("Spawn Command") === "on") {
-
-      $player->teleport($spawn);
-    }
   }
 
   public function onQuit(PlayerQuitEvent $event) {
@@ -261,11 +254,13 @@ class SkyBlockListener implements Listener {
         if (array_key_exists($playerNameLower, $members) || $playerName === $creator || $player->hasPermission("redskyblock.bypass")) {
 
           $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
-          $blockID = $block->getID();
-          if (array_key_exists(strval($blockID), $valuableArray)) {
+          $blockName = str_replace(" ", "_", strtolower($block->getName()));
+          if (array_key_exists($blockName, $valuableArray)) {
 
-            $island->removeValue((int) $valuableArray[strval($blockID)]);
+            $island->removeValue((int) $valuableArray[$blockName]);
           }
+
+          $island->addToStat("blocks_broken", 1);
         } else {
 
           $event->cancel();
@@ -301,11 +296,13 @@ class SkyBlockListener implements Listener {
         if (array_key_exists($playerNameLower, $members) || $playerName === $creator || $player->hasPermission("redskyblock.bypass")) {
 
           $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
-          $blockID = $block->getID();
-          if (array_key_exists(strval($blockID), $valuableArray)) {
+          $blockName = str_replace(" ", "_", strtolower($block->getName()));
+          if (array_key_exists($blockName, $valuableArray)) {
 
-            $island->addValue((int) $valuableArray[strval($blockID)]);
+            $island->addValue((int) $valuableArray[$blockName]);
           }
+
+          $island->addToStat("blocks_placed", 1);
         } else {
 
           $event->cancel();
@@ -334,6 +331,107 @@ class SkyBlockListener implements Listener {
           $entity->setFlying(false);
         }
       }
+    }
+  }
+
+  public function onDamage(EntityDamageEvent $event) {
+
+    $plugin = $this->plugin;
+    $entity = $event->getEntity();
+    if ($entity instanceof Player) {
+
+      $cause = $event->getCause();
+      if ($cause === EntityDamageEvent::CAUSE_VOID) {
+
+        $island = $plugin->islandManager->getIslandAtPlayer($entity);
+        if ($island instanceof Island) {
+
+          $islandSettings = $island->getSettings();
+          if ($islandSettings["safevoid"]) {
+
+            $event->cancel();
+
+            $islandSpawn = $island->getSpawnPoint();
+            $masterWorld = $plugin->islandManager->getMasterWorld();
+            $entity->teleport(new Position($islandSpawn[0], $islandSpawn[1], $islandSpawn[2], $masterWorld));
+          }
+        }
+      }
+    }
+  }
+
+  public function onDamageByEntity(EntityDamageByEntityEvent $event) {
+
+    $plugin = $this->plugin;
+    $attackingEntity = $event->getDamager();
+    $entity = $event->getEntity();
+
+    if ($attackingEntity instanceof Player && $entity instanceof Player) {
+
+      $island = $plugin->islandManager->getIslandAtPlayer($entity);
+      if ($island instanceof Island) {
+
+        $islandSettings = $island->getSettings();
+        if (!$islandSettings["pvp"]) {
+
+          $event->cancel();
+        }
+      }
+    }
+  }
+
+  public function onExhaust(PlayerExhaustEvent $event) {
+
+    $plugin = $this->plugin;
+    $player = $event->getPlayer();
+    $playerWorld = $player->getWorld();
+    $masterWorld = $plugin->islandManager->getMasterWorld();
+    $doHunger = $plugin->cfg->get("Island Hunger");
+
+    if ($playerWorld === $masterWorld && !$doHunger) {
+
+      $player->getHungerManager()->addFood(10);
+    }
+  }
+
+  public function onPickup(EntityItemPickupEvent $event) {
+
+    $entity = $event->getEntity();
+    if ($entity instanceof Player) {
+
+      $island = $this->plugin->islandManager->getIslandAtPlayer($entity);
+      if ($island instanceof Island) {
+
+        $islandSettings = $island->getSettings();
+        $islandMembers = $island->getMembers();
+        $islandCreator = $island->getCreator();
+
+        if ($entity->getName() !== $islandCreator) {
+
+          if (!$entity->hasPermission("redskyblock.bypass")) {
+
+            if (!array_key_exists(strtolower($entity->getName()), $islandMembers)) {
+
+              if (!$islandSettings["visitor_pickup"]) {
+
+                $event->cancel();
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public function onDeath(PlayerDeathEvent $event) {
+
+    $keepInventory = $this->plugin->cfg->get("Keep Inventory");
+    $playerWorld = $event->getPlayer()->getWorld();
+    $masterWorld = $this->plugin->islandManager->getMasterWorld();
+
+    if ($playerWorld === $masterWorld && $keepInventory) {
+
+      $event->setKeepInventory(true);
     }
   }
 }

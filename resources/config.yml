@@ -3,82 +3,52 @@ Version: 1
 
 # IN ORDER FOR MANUAL CHANGES IN THIS FILE TO TAKE PLACE THE COMMAND /is reload MUST BE USED ON THE SERVER OR THE SERVER MUST BE RESTARTED
 
-Spawn Command: "on" #Turn off if you are using a different plugin that controls spawnpoints.
-Spawn Hunger: "off" #Turn on if you want players to lose hunger in the spawn world.
-Spawn Damage: "off" #Turn on if you want players to take damange in the spawn world.
-
-Island Hunger: "on" #Turn off if you do not want players to lose hunger in the SkyBlock world.
-Island PVP: "off" #Turn on if you want PVP to be enabled on SkyBlock islands.
-Nether Islands: true #Turn off to disable this plugin's nether features
-
+# Format: "block_name: %chance" %chance MUST ADD UP TO 100
 Generator Ores:
-  #COBBLESTONE
-  4: 60
-  #COAL
-  16: 8
-  #LAPIS
-  21: 8
-  #REDSTONE
-  74: 8
-  #IRON
-  15: 7
-  #GOLD
-  14: 4
-  #DIAMOND
-  56: 3
-  #EMERALD
-  129: 2
+  cobblestone: 60
+  coal_ore: 8
+  lapis_ore: 8
+  redstone_ore: 8
+  iron_ore: 7
+  gold_ore: 4
+  diamond_ore: 3
+  emerald_ore: 2
 
-
+# Format: "item_name: count"
 Starting Items:
-  0: "79 0 2"
-  1: "325 10 1"
-  2: "287 0 12"
-  3: "351 15 2"
-  4: "338 0 1"
-  5: "361 0 1"
-  6: "81 0 1"
-  7: "360 0 1"
-  8: "3 0 1"
-  9: "40 0 1"
+  ice: 2
+  lava_bucket: 1
+  string: 12
+  bone_meal: 2
+  sugar_cane: 1
+  pumpkin_seeds: 1
+  cactus: 1
+  melon: 1
+  dirt: 1
+  red_mushroom: 1
 
-Island Zone:
-  0: 0
-  1: 0
-  2: 0
-  3: 0
-  4: 0
-  5: 0
-
-Nether Zone:
-  0: 0
-  1: 0
-  2: 0
-  3: 0
-  4: 0
-  5: 0
-
+# Format: "block_name: value"
 Valuable Blocks:
-  133: 15
-  57: 10
-  41: 5
-  42: 5
-  152: 3
-  22: 3
-  173: 1
-
-Zone World: "world" #Set this to the world where custom island templates reside.
+  emerald_block: 15
+  diamond_block: 10
+  gold_block: 5
+  iron_block: 5
+  redstone_block: 3
+  lapis_lazuli_block: 3
+  coal_block: 1
 
 Island Interval: 600
 Island Size: 100
-Island Spawn Y: 26 #Initially calculated by the plugin but can be adjusted -- The height at which players first spawn into their island zone
+Island Max Size: 300
+Island Spawn Y: 26
 
-Keep Inventory: false
-Safe Void: false #Makes the void safe to jump in, IN THE SKYBLOCK WORLDS ONLY
+Island Hunger: true #Turn off if you do not want players to lose hunger in the SkyBlock world.
+
+Keep Inventory: false #Turn on if you do not want players to lose their inventory upon death.
+
 Island Boundaries: false #Invisible barrier that forces players to stay within island boundaries -- stability untested : working on possible optimizations?
 
 Reset Cooldown: 86400 #The time in seconds a player must wait before being able to restart their SkyBlock island again. 86400 seconds is one day.
-Reset Wipe: false #Clears the inventory of the player restarting their island
 
 Autosave Timer: 5 # Every x minutes all islands will autosave. Default: 5 minutes. Server restart required for changes to take effect.
 

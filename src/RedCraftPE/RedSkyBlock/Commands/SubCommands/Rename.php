@@ -8,11 +8,13 @@ use pocketmine\utils\TextFormat;
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
 use CortexPE\Commando\args\TextArgument;
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
 
 class Rename extends SBSubCommand {
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.island");
     $this->registerArgument(0, new TextArgument("name", false));
   }

@@ -10,7 +10,12 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Ban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Banned;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\DecreaseSize;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Delete;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Fly;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Help;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\IncreaseSize;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Info;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Invite;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Kick;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
@@ -21,7 +26,10 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Rank;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reload;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Remove;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Rename;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reset;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSize;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSpawn;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Setting;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Teleport;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\TopIslands;
@@ -31,10 +39,14 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\UpdateZone;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Value;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Visit;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\ZoneTools;
+//todo: get rid of calls to getSafeSpawn (maybe), island boundaries config (heavy performance),
+//todo (cont'd): garbage collector to remove island objects not being used from memory, better island generation technique, nether islands (maybe),
+//todo (cont'd): island quests, island leveling system, island permissions for members based on island rank, island chat, minions,
+//todo (cont'd): skyblock based custom enchants, multiple custom islands, skyblock inventory GUIs, add scoreboard support
+//todo (cont'd): add more configurable options in config
 
 use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\args\RawStringArgument;
-use CortexPE\Commando\constraint\InGameRequiredConstraint;
 
 class SBCommand extends BaseCommand {
 
@@ -48,7 +60,6 @@ class SBCommand extends BaseCommand {
 
   protected function prepare(): void {
 
-    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->registerArgument(0, new RawStringArgument("help", true));
 
     $this->registerSubCommand(new Accept(
@@ -84,10 +95,43 @@ class SBCommand extends BaseCommand {
       ["cw"]
     ));
 
+    $this->registerSubCommand(new DecreaseSize(
+      $this->plugin,
+      "decreasesize",
+      "Decrease the size of a player's SkyBlock island.",
+      ["decrease", "subtractsize", "subtract"]
+    ));
+
+    $this->registerSubCommand(new Delete(
+      $this->plugin,
+      "delete",
+      "Delete a player's SkyBlock island.",
+      ["disband", "kill", "eridicate", "expunge", "cancel"]
+    ));
+
     $this->registerSubCommand(new Fly(
       $this->plugin,
       "fly",
       "Enable Flight in the SkyBlock world."
+    ));
+
+    $this->registerSubCommand(new Help(
+      $this->plugin,
+      "help",
+      "Open the RedSkyBlock Help menu"
+    ));
+
+    $this->registerSubCommand(new IncreaseSize(
+      $this->plugin,
+      "increasesize",
+      "Increase the size of a player's SkyBlock island.",
+      ["increase", "addsize"]
+    ));
+
+    $this->registerSubCommand(new Info(
+      $this->plugin,
+      "info",
+      "See detailed info about the SkyBlock Island you're on."
     ));
 
     $this->registerSubCommand(new Invite(
@@ -153,10 +197,29 @@ class SBCommand extends BaseCommand {
       "Renames your SkyBlock island."
     ));
 
+    $this->registerSubCommand(new Reset(
+      $this->plugin,
+      "reset",
+      "Reset your SkyBlock island."
+    ));
+
+    $this->registerSubCommand(new SetSize(
+      $this->plugin,
+      "setsize",
+      "Set the size of a player's island.",
+      ["size"]
+    ));
+
     $this->registerSubCommand(new SetSpawn(
       $this->plugin,
       "setspawn",
       "Changes the spawnpoint on your SkyBlock island."
+    ));
+
+    $this->registerSubCommand(new Setting(
+      $this->plugin,
+      "setting",
+      "Edit an Island Setting on your SkyBlock island."
     ));
 
     $this->registerSubCommand(new SetWorld(

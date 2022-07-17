@@ -54,10 +54,10 @@ abstract class SBSubCommand extends BaseSubCommand {
 
   public function checkIsland(Player $player): bool {
 
-    $skyblockArray = scandir($this->plugin->getDataFolder() . "../RedSkyBlock/Players");
+    $playerFiles = scandir($this->plugin->getDataFolder() . "../RedSkyBlock/Players");
     $playerName = $player->getName();
 
-    if (in_array($playerName . ".json", $skyblockArray)) {
+    if (in_array($playerName . ".json", $playerFiles)) {
 
       return true;
     } else {

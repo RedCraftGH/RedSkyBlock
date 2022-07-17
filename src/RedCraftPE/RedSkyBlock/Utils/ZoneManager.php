@@ -110,10 +110,11 @@ class ZoneManager {
         for ($z = $zoneStartPosition[2]; $z <= $zoneStartPosition[2] + $zoneSize[2]; $z++) {
 
           $block = $zoneWorld->getBlockAt((int) $x, (int) $y, (int) $z, true, false);
+          $blockName = str_replace(" ", "_", strtolower($block->getName()));
           $blockID = $block->getID();
           $blockMeta = $block->getMeta();
 
-          array_push($zone, $blockID . ":" . $blockMeta);
+          array_push($zone, $blockName);
         }
       }
     }

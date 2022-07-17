@@ -18,6 +18,5 @@ class AutoSaveIslands extends Task {
   public function onRun(): void {
 
     $this->plugin->islandManager->saveAllIslands();
-    $message = $this->plugin->mShop->construct("AUTOSAVE");
   }
 }

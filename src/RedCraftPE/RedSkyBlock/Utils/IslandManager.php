@@ -48,9 +48,9 @@ class IslandManager {
   public function constructAllIslands(): void {
 
     $plugin = $this->plugin;
-    $skyblockArray = scandir($plugin->getDataFolder() . "../RedSkyBlock/Players");
+    $playerFiles = scandir($plugin->getDataFolder() . "../RedSkyBlock/Players");
 
-    foreach($skyblockArray as $fileName) {
+    foreach($playerFiles as $fileName) {
 
       if (is_file($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $fileName)) {
 
@@ -72,7 +72,9 @@ class IslandManager {
       "members" => $island->getMembers(),
       "banned" => $island->getBanned(),
       "resetcooldown" => $island->getResetCooldown(),
-      "lockstatus" => $island->getLockStatus()
+      "lockstatus" => $island->getLockStatus(),
+      "settings" => $island->getSettings(),
+      "stats" => $island->getStats()
     ];
 
     return $islandData;
@@ -89,8 +91,7 @@ class IslandManager {
 
   public function saveAllIslands(): void {
 
-    $islands = $this->islands;
-    foreach($islands as $island) {
+    foreach($this->islands as $island) {
 
       $this->saveIsland($island);
     }
@@ -112,6 +113,19 @@ class IslandManager {
 
       return null;
     }
+  }
+
+  public function getIslandByCreatorName(string $name): ?Island {
+
+    $island = null;
+    foreach ($this->islands as $owner => $isle) {
+
+      if (strtolower($owner) === strtolower($name)) {
+
+        $island = $isle;
+      }
+    }
+    return $island;
   }
 
   public function getIslandByName(string $islandName): ?Island {
@@ -140,10 +154,17 @@ class IslandManager {
     unset($this->islands[$island->getCreator()]);
   }
 
+  public function removeAllIslands(): void {
+
+    $this->islands = [];
+  }
+
   public function deleteIsland(Island $island): void {
 
     unset($this->islands[$island->getCreator()]);
-    //remove files from directory
+
+    $filePath = $this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $island->getCreator() . ".json";
+    unlink($filePath);
   }
 
   public function getMasterWorld(): ?world {
@@ -284,10 +305,9 @@ class IslandManager {
 
   public function getIslandRank(Island $island): ?int {
 
-    $islands = $this->islands;
     $valueArray = [];
 
-    foreach ($islands as $creator => $isle) {
+    foreach ($this->islands as $creator => $isle) {
 
       $value = $isle->getValue();
       $valueArray[$creator] = $value;
@@ -306,10 +326,9 @@ class IslandManager {
 
   public function getTopIslands(): array {
 
-    $islands = $this->islands;
     $topIslands = [];
 
-    foreach($islands as $island) {
+    foreach($this->islands as $island) {
 
       $value = $island->getValue();
       $islandName = $island->getName();
@@ -318,5 +337,10 @@ class IslandManager {
 
     arsort($topIslands);
     return $topIslands;
+  }
+
+  public function getIslandsEmployedAt(string $playerName): array {
+
+
   }
 }

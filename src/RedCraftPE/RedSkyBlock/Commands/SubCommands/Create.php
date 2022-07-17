@@ -4,18 +4,24 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
-use pocketmine\item\ItemFactory;
+use pocketmine\item\StringToItemParser;
 use pocketmine\world\Position;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 use RedCraftPE\RedSkyBlock\Island;
 use RedCraftPE\RedSkyBlock\Tasks\IslandGenerator;
 
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
+
 class Create extends SBSubCommand {
+
+  public static $instance;
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.island");
+    self::$instance = $this;
   }
 
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
@@ -38,12 +44,10 @@ class Create extends SBSubCommand {
 
           if (!$this->checkIsland($sender)) {
 
-            $startingItems = $plugin->cfg->get("Starting Items", []);
             $interval = $plugin->cfg->get("Island Interval");
             $initialSize = $plugin->cfg->get("Island Size");
             $islandSpawnY = $plugin->cfg->get("Island Spawn Y");
             $resetCooldown = $plugin->cfg->get("Reset Cooldown");
-            $skyblockArray = $plugin->skyblock->get("SkyBlock", []);
             $senderName = $sender->getName();
             $masterWorld = $plugin->getServer()->getWorldManager()->getWorldByName($masterWorldName);
 
@@ -110,22 +114,12 @@ class Create extends SBSubCommand {
               "members" => [],
               "banned" => [],
               "resetcooldown" => Time() + $resetCooldown,
-              "lockstatus" => false
+              "lockstatus" => false,
+              "settings" => [],
+              "stats" => []
             ];
 
             $island = $plugin->islandManager->constructIsland($islandData);
-
-            foreach($startingItems as $item) {
-
-              if (count($startingItems) !== 0) {
-
-                $itemArray = explode(" ", $item);
-                if (count($itemArray) === 3) {
-                  //[id, meta, count]
-                  $sender->getInventory()->addItem(ItemFactory::getInstance()->get((int) $itemArray[0], (int) $itemArray[1], (int) $itemArray[2]));
-                }
-              }
-            }
 
             $plugin->skyblock->set("Steps", $steps);
             $plugin->skyblock->set("Turns", $turns);
@@ -159,5 +153,10 @@ class Create extends SBSubCommand {
       $message = $this->getMShop()->construct("NO_MASTER_WORLD");
       $sender->sendMessage($message);
     }
+  }
+
+  public static function getInstance(): self {
+
+    return self::$instance;
   }
 }

@@ -7,10 +7,13 @@ use pocketmine\utils\TextFormat;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
+
 class Members extends SBSubCommand {
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.island");
   }
 

@@ -9,6 +9,8 @@ use pocketmine\player\Player;
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
+
 class ZoneTools extends SBSubCommand {
 
   private $zoneShovel;
@@ -16,6 +18,7 @@ class ZoneTools extends SBSubCommand {
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.admin;redskyblock.zone");
     $this->zoneShovel = ZoneManager::getZoneShovel();
     $this->spawnFeather = ZoneManager::getSpawnFeather();

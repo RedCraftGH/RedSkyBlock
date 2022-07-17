@@ -8,11 +8,13 @@ use pocketmine\utils\TextFormat;
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
 use CortexPE\Commando\args\IntegerArgument;
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
 
 class TopIslands extends SBSubCommand {
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.island");
     $this->registerArgument(0, new IntegerArgument("page #", true));
   }
@@ -27,6 +29,7 @@ class TopIslands extends SBSubCommand {
     if (isset($args["page #"])) {
 
       $pageNumber = (int) $args["page #"];
+      if ($pageNumber <= 0) $pageNumber = 1;
     } else {
 
       $pageNumber = 1;

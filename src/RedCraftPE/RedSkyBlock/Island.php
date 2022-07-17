@@ -16,6 +16,18 @@ class Island {
   private $banned;
   private $resetCooldown;
   private $lockStatus;
+  private $settings;
+  private $stats;
+
+  private $defaultSettings = array(
+    "pvp" => false,
+    "safevoid" => true,
+    "visitor_pickup" => false
+  );
+  private $defaultStats = array(
+    "blocks_broken" => 0,
+    "blocks_placed" => 0
+  );
 
   private $invited = [];
 
@@ -31,6 +43,17 @@ class Island {
     $this->banned = $islandData["banned"];
     $this->resetCooldown = $islandData["resetcooldown"];
     $this->lockStatus = $islandData["lockstatus"];
+    $this->settings = (array) $islandData["settings"];
+    $this->stats = (array) $islandData["stats"];
+
+    if ($this->settings === []) {
+
+      $this->settings = $this->defaultSettings;
+    }
+    if ($this->stats === []) {
+
+      $this->stats = $this->defaultStats;
+    }
   }
 
   public function getCreator(): string {
@@ -220,5 +243,35 @@ class Island {
 
       return false;
     }
+  }
+
+  public function getSettings(): array {
+
+    return $this->settings;
+  }
+
+  public function changeSetting(string $setting, bool $bias): void {
+
+    $this->settings[$setting] = $bias;
+  }
+
+  public function resetSettings(): void {
+
+    $this->settings = $this->defaultSettings;
+  }
+
+  public function getStats(): array {
+
+    return $this->stats;
+  }
+
+  public function addToStat(string $stat, int $amount): void {
+
+    $this->stats[$stat] += $amount;
+  }
+
+  public function removeFromStat(string $stat, int $amount): void {
+
+    $this->stats[$stat] -= $amount;
   }
 }

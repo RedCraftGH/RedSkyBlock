@@ -8,10 +8,13 @@ use pocketmine\utils\TextFormat;
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
+
 class UpdateZone extends SBSubCommand {
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.admin;redskyblock.zone");
   }
 

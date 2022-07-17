@@ -26,9 +26,6 @@ MASTER_FAILED: "{RED}The world currently set as the SkyBlock Master world does n
 # Message sent to console if the selected SkyBlock world has been loaded and is ready. Available Paramaters: {MWORLD}
 MASTER_SUCCESS: "{GREEN}SkyBlock is running on the Master world {MWORLD}."
 
-# Message sent upon autosaving SkyBlock islands
-AUTOSAVE: "{GREEN}Autosaved SkyBlock Islands."
-
 # Messages sent upon using the zone tools: Available Parameters: {ZWORLD}, {X}, {Y}, {Z}
 SET_POS1: "{GREEN}Zone Position 1 set at {X}, {Y}, {Z} in world: {ZWORLD}"
 SET_POS2: "{GREEN}Zone Position 2 set at {X}, {Y}, {Z} in world: {ZWORLD}"
@@ -181,3 +178,41 @@ CANT_KICK_SELF: "{RED}You cannot kick yourself off of your island."
 # Available Parameters: {POSITION_ONE}, {POSITION_TWO}, {POSITION_THREE}, {POSITION_FOUR}, {POSITION_FIVE}, {POSITION_SIX}
 # Available Parameters: {PAGE_NUMBER}, {TOTAL_PAGES}
 TOP_ISLANDS: "{GREEN}Top Islands Page {WHITE}{PAGE_NUMBER}{GREEN} of {TOTAL_PAGES}:{NEW_LINE}{WHITE}{POSITION_ONE}{NEW_LINE}{WHITE}{POSITION_TWO}{NEW_LINE}{WHITE}{POSITION_THREE}{NEW_LINE}{WHITE}{POSITION_FOUR}{NEW_LINE}{WHITE}{POSITION_FIVE}{NEW_LINE}{WHITE}{POSITION_SIX}"
+
+# Message sent when a player changes a setting on their island: Available Paramaters: {SETTING}, {VALUE}
+SETTING_CHANGED: "{GREEN}Island {SETTING} is now {VALUE}"
+# Message sent when a player tries to change an island setting that does not exist: Available Paramaters: {SETTING}
+SETTING_NOT_EXIST: "{WHITE}{SETTING} {RED}is not a valid Island Setting."
+
+# Message sent if an integer argument must be >= 0 but less than 0 is given: Available Paramaters: {VALUE}
+INT_LESS_THAN_ZERO: "{RED}You must enter a value greater than or equal to 0: {WHITE}{VALUE}{RED} given."
+
+# Message sent when the command to change the size of a player's island is run: Available Paramaters: {NAME}, {SIZE}
+PLAYER_ISLAND_SIZE_CHANGE: "{GREEN}You have changed {WHITE}{NAME}'s {GREEN}island size to {WHITE}{SIZE}{GREEN}."
+# Message sent when a player's island size is changed:
+ISLAND_SIZE_CHANGED: "{GREEN}Your island size has been changed to {WHITE}{SIZE}{GREEN}."
+
+# Message sent if a player tries to reset their SkyBlock island but their island still has a reset cooldown
+CANT_RESET_YET: "{RED}You must wait {WHITE}{TIME}{RED} before resetting your island."
+
+# Message sent if the island a player is on has been deleted:
+ISLAND_ON_DELETED: "{RED}The island you were on has been deleted."
+# Message sent to a player if their island is deleted:
+ISLAND_DELETED: "{RED}Your island has been deleted by an administrator."
+
+# Message format for the RedSkyBlock Help Menu: Available Paramaters: {PAGE_NUMBER}, {TOTAL_PAGES}, {COMMAND_ONE}, {COMMAND_TWO}, {COMMAND_THREE}, {COMMAND_FOUR}, {COMMAND_FIVE}, {COMMAND_SIX}
+HELP_MENU: "{RED}{BOLD}RedSkyBlock{RESET}{WHITE} Help Menu Page {GREEN}{PAGE_NUMBER}{WHITE} of {GREEN}{TOTAL_PAGES}{WHITE}:{NEW_LINE}{COMMAND_ONE}{NEW_LINE}{COMMAND_TWO}{NEW_LINE}{COMMAND_THREE}{NEW_LINE}{COMMAND_FOUR}{NEW_LINE}{COMMAND_FIVE}{NEW_LINE}{COMMAND_SIX}"
+# Message format for the RedSkyBlock Help Menu for a specific command: Available Parameters: {COMMAND}, {DESCRIPTION}, {USAGE}, {PERMISSIONS}, {ALIASES}
+HELP_MENU_SPECIFIC: "{RED}{BOLD}RedSkyBlock{RESET}{WHITE} Help Menu for {GREEN}{COMMAND}{WHITE} command:{GREEN}{NEW_LINE}Aliases: {WHITE}{ALIASES}{NEW_LINE}{GREEN}Description: {WHITE}{DESCRIPTION}{NEW_LINE}{GREEN}Usage: {WHITE}/is {USAGE}{NEW_LINE}{GREEN}Permissions Required: {WHITE}{PERMISSIONS}"
+# Message sent if a player searches the help menu for an invalid command: Available Parameters: {COMMAND}
+NO_SUCH_COMMAND: "{WHITE}{COMMAND}{RED} is not a RedSkyBlock command."
+
+# Message format for the Detailed SkyBlock info command:
+# Available Paramaters:
+# {ISLAND_NAME}, {ISLAND_CREATOR}, {ISLAND_SIZE}, {SPAWN_POINT}, {ISLAND_VALUE}, {RESET_COOLDOWN}, {LOCK_STATUS}, {MEMBERS}, {BANNED}, {ISLAND_SETTINGS}, {ISLAND_STATS}
+ISLAND_INFO_FULL: "{RED}{BOLD}{ISLAND_NAME}'s{RESET}{WHITE} Info:{NEW_LINE}{GREEN}Created By: {WHITE}{ISLAND_CREATOR}{NEW_LINE}{GREEN}Members: {WHITE}{MEMBERS}{NEW_LINE}{GREEN}Value: {WHITE}{ISLAND_VALUE}{NEW_LINE}{GREEN}Lock Status: {WHITE}{LOCK_STATUS}{NEW_LINE}{GREEN}Island Spawn: {WHITE}{SPAWN_POINT}{NEW_LINE}{GREEN}Size: {WHITE}{ISLAND_SIZE}x{ISLAND_SIZE}{NEW_LINE}{GREEN}Banned: {WHITE}{BANNED}{NEW_LINE}{GREEN}Island Settings: {WHITE}{ISLAND_SETTINGS}{NEW_LINE}{GREEN}Island Stats: {WHITE}{ISLAND_STATS}"
+
+# Message format for the limited SkyBlock info command:
+# Available Parameters:
+# {ISLAND_NAME}, {ISLAND_CREATOR}, {SPAWN_POINT}, {ISLAND_VALUE}, {LOCK_STATUS}, {ISLAND_STATS}
+ISLAND_INFO_LIMITED: "{RED}{BOLD}{ISLAND_NAME}'s{RESET}{WHITE} Info:{NEW_LINE}{GREEN}Created By: {WHITE}{ISLAND_CREATOR}{NEW_LINE}{GREEN}Value: {WHITE}{ISLAND_VALUE}{NEW_LINE}{GREEN}Lock Status: {WHITE}{LOCK_STATUS}{NEW_LINE}{GREEN}Island Spawn: {WHITE}{SPAWN_POINT}{NEW_LINE}{GREEN}Island Stats: {WHITE}{ISLAND_STATS}"

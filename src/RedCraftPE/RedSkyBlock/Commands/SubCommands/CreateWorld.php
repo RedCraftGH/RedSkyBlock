@@ -34,20 +34,10 @@ class CreateWorld extends SBSubCommand {
 
         $plugin->getServer()->getWorldManager()->generateWorld($name, $creationOptions);
 
-        if ($plugin->cfg->get("Nether Islands")) {
+        $message = $this->getMShop()->construct("CW");
+        $message = str_replace("{WORLD}", $name, $message);
+        $sender->sendMessage($message);
 
-          $plugin->getServer()->getWorldManager()->generateWorld($name . "-Nether", $creationOptions);
-          $message = $this->getMShop()->construct("CW_NETHER");
-          $message = str_replace("{WORLD}", $name, $message);
-          $sender->sendMessage($message);
-          return;
-        } else {
-
-          $message = $this->getMShop()->construct("CW");
-          $message = str_replace("{WORLD}", $name, $message);
-          $sender->sendMessage($message);
-          return;
-        }
       } else {
 
         $message = $this->getMShop()->construct("CW_EXISTS");

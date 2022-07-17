@@ -11,11 +11,13 @@ use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 use RedCraftPE\RedSkyBlock\Island;
 
 use CortexPE\Commando\args\TextArgument;
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
 
 class Visit extends SBSubCommand {
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.island");
     $this->registerArgument(0, new TextArgument("target", false));
   }

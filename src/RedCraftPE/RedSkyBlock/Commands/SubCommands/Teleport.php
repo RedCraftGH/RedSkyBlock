@@ -8,10 +8,13 @@ use pocketmine\world\Position;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
+use CortexPE\Commando\constraint\InGameRequiredConstraint;
+
 class Teleport extends SBSubCommand {
 
   public function prepare(): void {
 
+    $this->addConstraint(new InGameRequiredConstraint($this));
     $this->setPermission("redskyblock.island");
   }
 
