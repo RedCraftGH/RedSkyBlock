@@ -123,7 +123,7 @@ class Island {
     $this->spawnPoint = $spawnPoint;
   }
 
-  public function getMembers(): array {
+  public function getMembers(){
 
     return $this->members;
   }
