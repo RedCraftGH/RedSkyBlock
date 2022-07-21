@@ -125,7 +125,7 @@ class Island {
 
   public function getMembers(): array {
 
-    return $this->members;
+    return (array) $this->members;
   }
 
   public function addMember(string $name): bool {
