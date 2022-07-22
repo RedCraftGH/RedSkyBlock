@@ -6,10 +6,13 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use pocketmine\item\StringToItemParser;
 use pocketmine\world\Position;
+use pocketmine\world\format\Chunk;
+use pocketmine\math\Vector3;
+use pocketmine\block\VanillaBlocks;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 use RedCraftPE\RedSkyBlock\Island;
-use RedCraftPE\RedSkyBlock\Tasks\IslandGenerator;
+use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 
 use CortexPE\Commando\constraint\InGameRequiredConstraint;
 
@@ -48,6 +51,7 @@ class Create extends SBSubCommand {
             $initialSize = $plugin->cfg->get("Island Size");
             $islandSpawnY = $plugin->cfg->get("Island Spawn Y");
             $resetCooldown = $plugin->cfg->get("Reset Cooldown");
+            $startingItems = $plugin->cfg->get("Starting Items", []);
             $senderName = $sender->getName();
             $masterWorld = $plugin->getServer()->getWorldManager()->getWorldByName($masterWorldName);
 
@@ -100,13 +104,11 @@ class Create extends SBSubCommand {
             $cSpawnVals = $plugin->skyblock->get("CSpawnVals", []);
             $initialSpawnPoint = [$lastX + $cSpawnVals[0], $islandSpawnY + $cSpawnVals[1], $lastZ + $cSpawnVals[2]];
 
-            $sender->teleport(new Position($initialSpawnPoint[0], $initialSpawnPoint[1], $initialSpawnPoint[2], $masterWorld));
-            $sender->setImmobile(true);
-            $plugin->getScheduler()->scheduleDelayedTask(new IslandGenerator($plugin, $sender, $lastX, $lastZ, $masterWorld), 60);
+            //$sender->teleport(new Position($initialSpawnPoint[0], $initialSpawnPoint[1], $initialSpawnPoint[2], $masterWorld));
 
             $islandData = [
-              "creator" => $sender->getName(),
-              "name" => $sender->getName() . "'s island",
+              "creator" => $senderName,
+              "name" => $senderName . "'s island",
               "size" => $initialSize,
               "value" => 0,
               "initialspawnpoint" => $initialSpawnPoint,
@@ -119,7 +121,67 @@ class Create extends SBSubCommand {
               "stats" => []
             ];
 
-            $island = $plugin->islandManager->constructIsland($islandData);
+            $zone = ZoneManager::getZone();
+            $zoneStartPosition = ZoneManager::getZoneStartPosition();
+            $zoneSize = ZoneManager::getZoneSize();
+
+            $chunkX = $lastX >> Chunk::COORD_BIT_SIZE;
+            $chunkZ = $lastZ >> Chunk::COORD_BIT_SIZE;
+
+            $adjacentChunks = [[$chunkX, $chunkZ], [$chunkX + 1, $chunkZ + 1], [$chunkX, $chunkZ + 1], [$chunkX - 1, $chunkZ + 1], [$chunkX - 1, $chunkZ], [$chunkX - 1, $chunkZ - 1], [$chunkX, $chunkZ - 1], [$chunkX + 1, $chunkZ - 1], [$chunkX + 1, $chunkZ]];
+
+            foreach($adjacentChunks as $chunk) {
+
+              if ($chunk === end($adjacentChunks)) {
+
+                $masterWorld->orderChunkPopulation($chunk[0], $chunk[1], null)->onCompletion(function(Chunk $chunk) use ($lastX, $lastZ, $islandSpawnY, $masterWorld, $plugin, $sender, $islandData, $zone, $zoneSize, $initialSpawnPoint, $startingItems): void {
+
+                  $counter = 0;
+
+                  for ($x = $lastX; $x <= $lastX + $zoneSize[0]; $x++) {
+
+                    for ($y = $islandSpawnY; $y <= $islandSpawnY + $zoneSize[1]; $y++) {
+
+                      for ($z = $lastZ; $z <= $lastZ + $zoneSize[2]; $z++) {
+
+                        $blockName = $zone[$counter];
+                        $block = StringToItemParser::getInstance()->parse($blockName)->getBlock();
+                        $masterWorld->setBlock(new Vector3($x, $y, $z), $block);
+                        $counter++;
+                      }
+                    }
+                  }
+
+                  $plugin->islandManager->constructIsland($islandData);
+
+                  $masterWorld->setBlock(new Vector3($initialSpawnPoint[0], $initialSpawnPoint[1] - 1, $initialSpawnPoint[2] + 1), VanillaBlocks::CHEST());
+                  $startingChest = $masterWorld->getTileAt($initialSpawnPoint[0], $initialSpawnPoint[1] - 1, $initialSpawnPoint[2] + 1);
+                  if (count($startingItems) !== 0) {
+
+                    foreach ($startingItems as $itemName => $count) {
+
+                      $item = StringToItemParser::getInstance()->parse($itemName);
+                      $item->setCount(intval($count));
+                      $startingChest->getInventory()->addItem($item);
+                    }
+                  }
+
+                  $senderName = $sender->getName();
+                  if (file_put_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $senderName . ".json", json_encode($islandData)) !== false) {
+
+                    $message = $this->getMShop()->construct("ISLAND_CREATED");
+                    $sender->sendMessage($message);
+                  } else {
+
+                    $message = $this->getMShop()->construct("FILE_CREATION_ERROR");
+                    $sender->sendMessage($message);
+                  }
+                }, static fn() => null);
+              } else {
+
+                $masterWorld->orderChunkPopulation($chunk[0], $chunk[1], null);
+              }
+            }
 
             $plugin->skyblock->set("Steps", $steps);
             $plugin->skyblock->set("Turns", $turns);
@@ -128,15 +190,6 @@ class Create extends SBSubCommand {
             $plugin->skyblock->set("Last Z", $lastZ);
             $plugin->skyblock->save();
 
-            if (file_put_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $senderName . ".json", json_encode($islandData)) !== false) {
-
-              $message = $this->getMShop()->construct("ISLAND_CREATED");
-              $sender->sendMessage($message);
-            } else {
-
-              $message = $this->getMShop()->construct("FILE_CREATION_ERROR");
-              $sender->sendMessage($message);
-            }
           } else {
 
             $message = $this->getMShop()->construct("ALREADY_CREATED_ISLAND");

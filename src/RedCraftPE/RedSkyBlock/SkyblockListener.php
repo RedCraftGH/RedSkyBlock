@@ -26,6 +26,9 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\player\PlayerChatEvent;
+use pocketmine\event\player\PlayerBucketEvent;
 //entity events:
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -34,6 +37,7 @@ use pocketmine\event\entity\EntityItemPickupEvent;
 
 use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 use RedCraftPE\RedSkyBlock\Island;
+use RedCraftPE\RedSkyBlock\Tasks\RefreshDisplayName;
 
 class SkyBlockListener implements Listener {
 
@@ -161,6 +165,19 @@ class SkyBlockListener implements Listener {
         $message = str_replace("{ZWORLD}", $zoneWorld->getFolderName(), $message);
         $player->sendMessage($message);
         return;
+      }
+    }
+    //check if interacting with a block on an island and if yes cancel if not a part of that island:
+    $masterWorld = $plugin->islandManager->getMasterWorld();
+    if ($masterWorld === $blockWorld) {
+
+      $island = $plugin->islandManager->getIslandAtBlock($block);
+      if ($island instanceof Island) {
+
+        if (!(array_key_exists(strtolower($player->getName()), $island->getMembers()) || $player->getName() === $island->getCreator() || $player->hasPermission("redskyblock.bypass"))) {
+
+          $event->cancel();
+        }
       }
     }
   }
@@ -338,6 +355,7 @@ class SkyBlockListener implements Listener {
 
     $plugin = $this->plugin;
     $entity = $event->getEntity();
+    $masterWorld = $plugin->islandManager->getMasterWorld();
     if ($entity instanceof Player) {
 
       $cause = $event->getCause();
@@ -352,8 +370,17 @@ class SkyBlockListener implements Listener {
             $event->cancel();
 
             $islandSpawn = $island->getSpawnPoint();
-            $masterWorld = $plugin->islandManager->getMasterWorld();
             $entity->teleport(new Position($islandSpawn[0], $islandSpawn[1], $islandSpawn[2], $masterWorld));
+          }
+        }
+      } elseif ($cause === EntityDamageEvent::CAUSE_FALL) {
+
+        $playerWorld = $entity->getWorld();
+        if ($playerWorld === $masterWorld) {
+
+          if (!$plugin->cfg->get("Fall Damage")) {
+
+            $event->cancel();
           }
         }
       }
@@ -432,6 +459,70 @@ class SkyBlockListener implements Listener {
     if ($playerWorld === $masterWorld && $keepInventory) {
 
       $event->setKeepInventory(true);
+    }
+  }
+
+  public function onMove(PlayerMoveEvent $event) {
+
+    $player = $event->getPlayer();
+    $playerWorld = $player->getWorld();
+    $masterWorld = $this->plugin->islandManager->getMasterWorld();
+
+    if ($this->plugin->cfg->get("Island Boundaries")) {
+
+      if ($playerWorld === $masterWorld) {
+
+        $island = $this->plugin->islandManager->getIslandAtPlayer($player);
+        if (!$island instanceof Island && !$player->hasPermission("redskyblock.bypass")) {
+
+          $event->cancel();
+        }
+      }
+    }
+  }
+
+  public function onChat(PlayerChatEvent $event) {
+
+    $player = $event->getPlayer();
+    $message = $event->getMessage();
+    $channel = $this->plugin->islandManager->searchIslandChannels($player->getName());
+
+    if ($channel instanceof Island) {
+
+      $recipients = [];
+      foreach($channel->getChatters() as $playerName) {
+
+        $recipient = $this->plugin->getServer()->getPlayerExact($playerName);
+        $recipients[] = $recipient;
+      }
+
+      $playerDisplayName = $player->getDisplayName();
+      $player->setDisplayName(TextFormat::RED . TextFormat::BOLD . $channel->getName() . TextFormat::RESET . ": " . $playerDisplayName);
+      $this->plugin->getScheduler()->scheduleTask(new RefreshDisplayName($player, $playerDisplayName));
+
+      $event->setRecipients($recipients);
+    } else {
+
+      $notInMainChat = $this->plugin->islandManager->getNotInMainChat();
+      $inMainChat = array_diff($this->plugin->getServer()->getOnlinePlayers(), $notInMainChat);
+      $event->setRecipients($inMainChat);
+    }
+  }
+
+  public function onBucket(PlayerBucketEvent $event) {
+
+    $player = $event->getPlayer();
+    $block = $event->getBlockClicked();
+    $playerWorld = $player->getWorld();
+    $masterWorld = $this->plugin->islandManager->getMasterWorld();
+
+    $island = $this->plugin->islandManager->getIslandAtBlock($block);
+    if ($island instanceof Island) {
+
+      if (!(array_key_exists(strtolower($player->getName()), $island->getMembers()) || $player->getName() === $island->getCreator() || $player->hasPermission("redskyblock.bypass"))) {
+
+        $event->cancel();
+      }
     }
   }
 }

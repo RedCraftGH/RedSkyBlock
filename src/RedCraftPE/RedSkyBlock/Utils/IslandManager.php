@@ -17,6 +17,8 @@ class IslandManager {
 
   private $inviteTracker = [];
 
+  private $excludeFromMainChat = [];
+
   public function __construct(SkyBlock $plugin) {
 
     $this->plugin = $plugin;
@@ -339,8 +341,72 @@ class IslandManager {
     return $topIslands;
   }
 
+  public function checkRepeatIslandName(string $name): bool {
+
+    $name = strtolower($name);
+    foreach($this->islands as $island) {
+
+      if ($name === strtolower($island->getName())) {
+
+        return true;
+      } else {
+
+        return false;
+      }
+    }
+  }
+
   public function getIslandsEmployedAt(string $playerName): array {
 
+    $employedAt = [];
+    foreach ($this->islands as $owner => $island) {
 
+      if (strtolower($playerName) === strtolower($owner) || in_array(strtolower($playerName), $island->getMembers())) {
+
+        $employedAt[] = $island;
+      }
+    }
+    return $employedAt;
+  }
+
+  public function searchIslandChannels(string $playerName): ?Island {
+
+    $playerName = strtolower($playerName);
+    $possibleChannels = $this->getIslandsEmployedAt($playerName);
+    $tuneToChannel = null;
+    foreach ($possibleChannels as $channel) {
+
+      if (in_array($playerName, $channel->getChatters())) {
+
+        $tuneToChannel = $channel;
+      }
+    }
+    return $tuneToChannel;
+  }
+
+  public function getNotInMainChat(): array {
+
+    return $this->excludeFromMainChat;
+  }
+
+  public function addToMainChat(Player $player): void {
+
+    if (in_array($player, $this->excludeFromMainChat)) {
+
+      $index = array_search($player, $this->excludeFromMainChat);
+      unset($this->excludeFromMainChat[$index]);
+    }
+    var_dump("exclude from main array:");
+    var_dump($this->excludeFromMainChat);
+  }
+
+  public function removeFromMainChat(Player $player): void {
+
+    if (!in_array($player, $this->excludeFromMainChat)) {
+
+      $this->excludeFromMainChat[] = $player;
+    }
+    var_dump("exclude from main array:");
+    var_dump($this->excludeFromMainChat);
   }
 }

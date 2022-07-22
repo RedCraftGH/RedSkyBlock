@@ -8,6 +8,7 @@ use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Accept;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Ban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Banned;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Chat;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\DecreaseSize;
@@ -39,11 +40,11 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\UpdateZone;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Value;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Visit;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\ZoneTools;
-//todo: get rid of calls to getSafeSpawn (maybe), island boundaries config (heavy performance),
+//todo: get rid of calls to getSafeSpawn (maybe),
 //todo (cont'd): garbage collector to remove island objects not being used from memory, better island generation technique, nether islands (maybe),
 //todo (cont'd): island quests, island leveling system, island permissions for members based on island rank, island chat, minions,
 //todo (cont'd): skyblock based custom enchants, multiple custom islands, skyblock inventory GUIs, add scoreboard support
-//todo (cont'd): add more configurable options in config
+//todo (cont'd): add more configurable options in config, obsidian scooping?
 
 use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\args\RawStringArgument;
@@ -80,6 +81,12 @@ class SBCommand extends BaseCommand {
       "banned",
       "View the players banned from your SkyBlock island",
       ["banished"]
+    ));
+
+    $this->registerSubCommand(new Chat(
+      $this->plugin,
+      "chat",
+      "Chat with the members of a SkyBlock island."
     ));
 
     $this->registerSubCommand(new Create(

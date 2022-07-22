@@ -35,6 +35,7 @@ class Reset extends SBSubCommand {
           $player = $this->plugin->getServer()->getPlayerExact($playerName);
           $message = $this->getMShop()->construct("ISLAND_ON_DELETED");
           $player->sendMessage($message);
+          $spawn = $this->plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
           $player->teleport($spawn);
         }
       } else {

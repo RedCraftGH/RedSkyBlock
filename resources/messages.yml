@@ -57,6 +57,8 @@ GO_HOME: "{GREEN}You have been teleported to your island."
 
 # Message sent upon changing island name: Available Parameters: {NAME}
 NAME_CHANGE: "{GREEN}Your island has been renamed {WHITE}{NAME}."
+# Message sent if a player attempts to rename their island but the name is already taken: Available Paramaters: {ISLAND_NAME}
+ISLAND_NAME_EXISTS: "{RED}The name {WHITE}{ISLAND_NAME}{RED} is already in use."
 
 # Message sent if a player is not on their island but a command requires them to be:
 NOT_ON_OWN_ISLAND: "{RED}You must be on your island to use this command!"
@@ -216,3 +218,8 @@ ISLAND_INFO_FULL: "{RED}{BOLD}{ISLAND_NAME}'s{RESET}{WHITE} Info:{NEW_LINE}{GREE
 # Available Parameters:
 # {ISLAND_NAME}, {ISLAND_CREATOR}, {SPAWN_POINT}, {ISLAND_VALUE}, {LOCK_STATUS}, {ISLAND_STATS}
 ISLAND_INFO_LIMITED: "{RED}{BOLD}{ISLAND_NAME}'s{RESET}{WHITE} Info:{NEW_LINE}{GREEN}Created By: {WHITE}{ISLAND_CREATOR}{NEW_LINE}{GREEN}Value: {WHITE}{ISLAND_VALUE}{NEW_LINE}{GREEN}Lock Status: {WHITE}{LOCK_STATUS}{NEW_LINE}{GREEN}Island Spawn: {WHITE}{SPAWN_POINT}{NEW_LINE}{GREEN}Island Stats: {WHITE}{ISLAND_STATS}"
+
+# Message sent upon joining an island chat channel: Available Paramaters: {ISLAND_NAME}
+JOIN_ISLAND_CHAT: "{GREEN}You have joined the {WHITE}{ISLAND_NAME}{GREEN} chat."
+# Message sent upon leaving an island chat channel: Available Paramaters: {ISLAND_NAME}
+LEAVE_ISLAND_CHAT: "{GREEN}You have left the {WHITE}{ISLAND_NAME}{GREEN} chat."

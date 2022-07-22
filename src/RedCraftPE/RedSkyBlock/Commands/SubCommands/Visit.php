@@ -39,7 +39,7 @@ class Visit extends SBSubCommand {
 
         if (!in_array(strtolower($sender->getName()), $banned)) {
 
-          if (!$lockStatus || in_array(strtolower($sender->getName), $members) || $sender->hasPermission("redskyblock.bypass") || $islandCreator === $sender->getName()) {
+          if (!$lockStatus || in_array(strtolower($sender->getName()), $members) || $sender->hasPermission("redskyblock.bypass") || $islandCreator === $sender->getName()) {
 
             $masterWorld = $this->plugin->islandManager->getMasterWorld();
             $islandSpawn = $island->getSpawnPoint();

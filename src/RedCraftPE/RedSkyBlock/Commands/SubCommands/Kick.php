@@ -33,7 +33,7 @@ class Kick extends SBSubCommand {
 
           if ($this->plugin->islandManager->isOnIsland($player, $island)) {
 
-            if ($island->getCreator() !== $sender->getName()) {
+            if ($island->getCreator() !== $player->getName()) {
 
               $message = $this->getMShop()->construct("KICKED_PLAYER");
               $message = str_replace("{NAME}", $player->getName(), $message);

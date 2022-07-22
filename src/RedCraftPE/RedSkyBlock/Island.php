@@ -30,6 +30,7 @@ class Island {
   );
 
   private $invited = [];
+  private $islandChat = [];
 
   public function __construct(array $islandData) {
 
@@ -37,10 +38,10 @@ class Island {
     $this->name = $islandData["name"];
     $this->size = $islandData["size"];
     $this->value = $islandData["value"];
-    $this->initialSpawnPoint = $islandData["initialspawnpoint"];
-    $this->spawnPoint = $islandData["spawnpoint"];
-    $this->members = $islandData["members"];
-    $this->banned = $islandData["banned"];
+    $this->initialSpawnPoint = (array) $islandData["initialspawnpoint"];
+    $this->spawnPoint = (array) $islandData["spawnpoint"];
+    $this->members = (array) $islandData["members"];
+    $this->banned = (array) $islandData["banned"];
     $this->resetCooldown = $islandData["resetcooldown"];
     $this->lockStatus = $islandData["lockstatus"];
     $this->settings = (array) $islandData["settings"];
@@ -125,7 +126,7 @@ class Island {
 
   public function getMembers(): array {
 
-    return (array) $this->members;
+    return $this->members;
   }
 
   public function addMember(string $name): bool {
@@ -232,7 +233,6 @@ class Island {
   public function acceptInvite(Player $player): bool {
 
     $playerName = strtolower($player->getName());
-    $memberCount = count($this->members);
     if (in_array($playerName, $this->invited)) {
 
       $this->addMember($playerName);
@@ -273,5 +273,33 @@ class Island {
   public function removeFromStat(string $stat, int $amount): void {
 
     $this->stats[$stat] -= $amount;
+  }
+
+  public function getChatters(): array {
+
+    return $this->islandChat;
+  }
+
+  public function addChatter(string $playerName): void {
+
+    $playerName = strtolower($playerName);
+    if (!in_array($playerName, $this->islandChat)) {
+
+      $this->islandChat[] = $playerName;
+    }
+    var_dump("Island Chatters Array:");
+    var_dump($this->islandChat);
+  }
+
+  public function removeChatter(string $playerName): void {
+
+    $playerName = strtolower($playerName);
+    if (in_array($playerName, $this->islandChat)) {
+
+      $index = array_search($playerName, $this->islandChat);
+      unset($this->islandChat[$index]);
+    }
+    var_dump("Island Chatters Array:");
+    var_dump($this->islandChat);
   }
 }

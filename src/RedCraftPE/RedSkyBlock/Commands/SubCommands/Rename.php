@@ -27,12 +27,20 @@ class Rename extends SBSubCommand {
 
       if ($this->checkIsland($sender)) {
 
-        $island = $this->plugin->islandManager->getIsland($sender);
-        $island->setName($name);
+        if (!$this->plugin->islandManager->checkRepeatIslandName($name)) {
 
-        $message = $this->getMShop()->construct("NAME_CHANGE");
-        $message = str_replace("{NAME}", $name, $message);
-        $sender->sendMessage($message);
+          $island = $this->plugin->islandManager->getIsland($sender);
+          $island->setName($name);
+
+          $message = $this->getMShop()->construct("NAME_CHANGE");
+          $message = str_replace("{NAME}", $name, $message);
+          $sender->sendMessage($message);
+        } else {
+
+          $message = $this->getMShop()->construct("ISLAND_NAME_EXISTS");
+          $message = str_replace("{ISLAND_NAME}", $name, $message);
+          $sender->sendMessage($message);
+        }
       } else {
 
         $message = $this->getMShop()->construct("NO_ISLAND");

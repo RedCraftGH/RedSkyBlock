@@ -43,6 +43,7 @@ Island Max Size: 300
 Island Spawn Y: 26
 
 Island Hunger: true #Turn off if you do not want players to lose hunger in the SkyBlock world.
+Fall Damage: true #Turn off if you do not want fall damage in the SkyBlock world.
 
 Keep Inventory: false #Turn on if you do not want players to lose their inventory upon death.
 
