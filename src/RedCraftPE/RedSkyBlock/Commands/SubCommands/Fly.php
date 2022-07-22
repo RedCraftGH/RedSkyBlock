@@ -4,6 +4,7 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
+use pocketmine\player\Player;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 use RedCraftPE\RedSkyBlock\Island;
@@ -19,6 +20,9 @@ class Fly extends SBSubCommand {
   }
 
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
+    if ($sender instanceof Player) {
+        return true;
+    }
 
     $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
     if ($island instanceof Island) {
