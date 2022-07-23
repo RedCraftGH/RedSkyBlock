@@ -120,9 +120,6 @@ class IslandManager {
     if (file_exists($this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $islandData["creator"] . ".json")) {
 
       file_put_contents($this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $islandData["creator"] . ".json", json_encode($islandData));
-    } else {
-
-
     }
   }
 

@@ -37,7 +37,6 @@ use pocketmine\event\entity\EntityItemPickupEvent;
 
 use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 use RedCraftPE\RedSkyBlock\Island;
-use RedCraftPE\RedSkyBlock\Tasks\RefreshDisplayName;
 
 class SkyblockListener implements Listener {
 
@@ -514,10 +513,7 @@ class SkyblockListener implements Listener {
         $recipients[] = $recipient;
       }
 
-      $playerDisplayName = $player->getDisplayName();
-      $player->setDisplayName(TextFormat::RED . TextFormat::BOLD . $channel->getName() . TextFormat::RESET . ": " . $playerDisplayName);
-      $this->plugin->getScheduler()->scheduleTask(new RefreshDisplayName($player, $playerDisplayName));
-
+      $event->setMessage(TextFormat::RED . TextFormat::BOLD . $channel->getName() . TextFormat::RESET . ": " . $message);
       $event->setRecipients($recipients);
     }
   }
