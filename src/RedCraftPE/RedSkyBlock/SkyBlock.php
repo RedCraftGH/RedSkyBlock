@@ -18,6 +18,8 @@ use RedCraftPE\RedSkyBlock\Tasks\AutoSaveIslands;
 
 class SkyBlock extends PluginBase {
 
+  public static $instance;
+
   public $listener;
   public $mShop;
   public $cfg;
@@ -89,6 +91,8 @@ class SkyBlock extends PluginBase {
       ["is", "sb", "island", "isle"]
     ));
 
+    self::$instance = $this;
+
     //Determine if a skyblock world is being used: -- from older RedSkyBlock will probably be udpated
 
     if ($this->skyblock->get("Master World") === false) {
@@ -125,6 +129,11 @@ class SkyBlock extends PluginBase {
         $this->getLogger()->info($message);
       }
     }
+  }
+
+  public function getInstance() {
+
+    return self::$instance;
   }
 
   public function onDisable(): void {

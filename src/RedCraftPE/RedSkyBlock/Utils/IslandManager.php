@@ -437,7 +437,7 @@ class IslandManager {
 
     if (self::$instance === null) {
 
-      self::$instance = new self($this->plugin);
+      self::$instance = new self(SkyBlock::getInstance());
     }
     return self::$instance;
   }
