@@ -131,7 +131,7 @@ class SkyBlock extends PluginBase {
     }
   }
 
-  public function getInstance() {
+  public static function getInstance() {
 
     return self::$instance;
   }
