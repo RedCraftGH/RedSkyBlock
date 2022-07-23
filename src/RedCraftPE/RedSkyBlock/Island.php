@@ -4,7 +4,11 @@ namespace RedCraftPE\RedSkyBlock;
 
 use pocketmine\player\Player;
 
+use RedCraftPE\RedSkyBlock\Utils\IslandManager;
+
 class Island {
+
+  public const MEMBER_RANKS = ["member", "helper", "moderator", "admin"];
 
   private $creator;
   private $name;
@@ -34,26 +38,50 @@ class Island {
 
   public function __construct(array $islandData) {
 
-    $this->creator = $islandData["creator"];
-    $this->name = $islandData["name"];
-    $this->size = $islandData["size"];
-    $this->value = $islandData["value"];
+    $this->creator = (string) $islandData["creator"];
+    $this->name = (string) $islandData["name"];
+    if ($this->name === "") {
+
+      $this->name = $this->creator . "'s Island";
+    }
+    $this->size = (int) $islandData["size"];
+    $this->value = (int) $islandData["value"];
     $this->initialSpawnPoint = (array) $islandData["initialspawnpoint"];
+    if ($this->initialSpawnPoint === []) {
+
+      IslandManager::getInstance()->deleteIsland($this);
+    }
     $this->spawnPoint = (array) $islandData["spawnpoint"];
+    if ($this->spawnPoint === []) {
+
+      $this->spawnPoint = $this->initialSpawnPoint;
+    }
     $this->members = (array) $islandData["members"];
     $this->banned = (array) $islandData["banned"];
-    $this->resetCooldown = $islandData["resetcooldown"];
-    $this->lockStatus = $islandData["lockstatus"];
+    $this->resetCooldown = (int) $islandData["resetcooldown"];
+    $this->lockStatus = (bool) $islandData["lockstatus"];
     $this->settings = (array) $islandData["settings"];
     $this->stats = (array) $islandData["stats"];
 
-    if ($this->settings === []) {
+    if (count($this->settings) < count($this->defaultSettings)) {
 
-      $this->settings = $this->defaultSettings;
+      $defaultSettings = array_keys($this->defaultSettings);
+      $savedSettings = array_keys($this->settings);
+      $compare = array_diff($defaultSettings, $savedSettings);
+      foreach ($compare as $setting) {
+
+        $this->settings[$setting] = $this->defaultSettings[$setting];
+      }
     }
-    if ($this->stats === []) {
+    if (count($this->stats) < count($this->defaultStats)) {
 
-      $this->stats = $this->defaultStats;
+      $defaultStats = array_keys($this->defaultStats);
+      $savedStats = array_keys($this->stats);
+      $compare = array_diff($defaultStats, $savedStats);
+      foreach ($compare as $stat) {
+
+        $this->stats[$stat] = $this->defaultStats[$stat];
+      }
     }
   }
 
@@ -153,6 +181,11 @@ class Island {
     }
   }
 
+  public function setRank(string $name, string $rank): void {
+
+    $this->members[$name] = $rank;
+  }
+
   public function getBanned(): array {
 
     return $this->banned;
@@ -248,6 +281,11 @@ class Island {
   public function getSettings(): array {
 
     return $this->settings;
+  }
+
+  public function getDefaultSettings(): array {
+
+    return $this->defaultSettings;
   }
 
   public function changeSetting(string $setting, bool $bias): void {

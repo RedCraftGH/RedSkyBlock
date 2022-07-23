@@ -19,9 +19,12 @@ class IslandManager {
 
   private $excludeFromMainChat = [];
 
+  public static $instance;
+
   public function __construct(SkyBlock $plugin) {
 
     $this->plugin = $plugin;
+    self::$instance = $this;
   }
 
   public function getIslandData(Player $player): ?array {
@@ -39,12 +42,47 @@ class IslandManager {
     }
   }
 
-  public function constructIsland(array $islandData): Island {
+  public function constructIsland(array $islandData, string $playerName): Island {
 
+    $islandData = $this->verifyIslandDataIntegrity($islandData, $playerName);
     $island = new Island($islandData);
     $this->addIsland($island);
+    $this->saveIsland($island);
 
     return $island;
+  }
+
+  public function verifyIslandDataIntegrity(array $islandData, string $playerName): array {
+
+    $requiredKeys = [
+      "creator",
+      "name",
+      "size",
+      "value",
+      "initialspawnpoint",
+      "spawnpoint",
+      "members",
+      "banned",
+      "resetcooldown",
+      "lockstatus",
+      "settings",
+      "stats"
+    ];
+
+    foreach ($requiredKeys as $key) {
+
+      if (!isset($islandData[$key]) || $islandData[$key] === "") {
+
+        if ($key === "creator") {
+
+          $islandData[$key] = $playerName;
+        } else {
+
+          $islandData[$key] = null;
+        }
+      }
+    }
+    return $islandData;
   }
 
   public function constructAllIslands(): void {
@@ -54,10 +92,11 @@ class IslandManager {
 
     foreach($playerFiles as $fileName) {
 
+      $playerName = substr($fileName, 0, -5); // removes the .json from the file name
       if (is_file($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $fileName)) {
 
         $islandData = (array) json_decode(file_get_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $fileName));
-        $this->constructIsland($islandData);
+        $this->constructIsland($islandData, $playerName);
       }
     }
   }
@@ -85,9 +124,12 @@ class IslandManager {
   public function saveIsland(Island $island): void {
 
     $islandData = $this->deconstructIsland($island);
-    if (is_file($this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $islandData["creator"] . ".json")) {
+    if (file_exists($this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $islandData["creator"] . ".json")) {
 
       file_put_contents($this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $islandData["creator"] . ".json", json_encode($islandData));
+    } else {
+
+
     }
   }
 
@@ -165,8 +207,16 @@ class IslandManager {
 
     unset($this->islands[$island->getCreator()]);
 
+
     $filePath = $this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $island->getCreator() . ".json";
-    unlink($filePath);
+    if (file_exists($filePath)) {
+
+      unlink($filePath);
+      unset($island);
+    } else {
+
+      unset($island);
+    }
   }
 
   public function getMasterWorld(): ?world {
@@ -396,8 +446,6 @@ class IslandManager {
       $index = array_search($player, $this->excludeFromMainChat);
       unset($this->excludeFromMainChat[$index]);
     }
-    var_dump("exclude from main array:");
-    var_dump($this->excludeFromMainChat);
   }
 
   public function removeFromMainChat(Player $player): void {
@@ -406,7 +454,10 @@ class IslandManager {
 
       $this->excludeFromMainChat[] = $player;
     }
-    var_dump("exclude from main array:");
-    var_dump($this->excludeFromMainChat);
+  }
+
+  public static function getInstance(): self {
+
+    return self::$instance;
   }
 }

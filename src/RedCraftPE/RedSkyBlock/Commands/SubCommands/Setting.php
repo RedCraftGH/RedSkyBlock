@@ -26,9 +26,9 @@ class Setting extends SBSubCommand {
     if ($this->checkIsland($sender)) {
 
       $island = $this->plugin->islandManager->getIsland($sender);
-      $islandSettings = $island->getSettings();
+      $defaultSettings = $island->getDefaultSettings();
       $setting = $args["setting"];
-      if (array_key_exists($setting, $islandSettings)) {
+      if (array_key_exists($setting, $defaultSettings)) {
 
         $bias = $args["value"];
         $biasStringVal;

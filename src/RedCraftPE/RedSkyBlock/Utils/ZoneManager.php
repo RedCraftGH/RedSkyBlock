@@ -111,10 +111,9 @@ class ZoneManager {
 
           $block = $zoneWorld->getBlockAt((int) $x, (int) $y, (int) $z, true, false);
           $blockName = str_replace(" ", "_", strtolower($block->getName()));
-          $blockID = $block->getID();
           $blockMeta = $block->getMeta();
-
-          array_push($zone, $blockName);
+          $blockData = "{$blockName}:{$blockMeta}";
+          array_push($zone, $blockData);
         }
       }
     }

@@ -223,3 +223,18 @@ ISLAND_INFO_LIMITED: "{RED}{BOLD}{ISLAND_NAME}'s{RESET}{WHITE} Info:{NEW_LINE}{G
 JOIN_ISLAND_CHAT: "{GREEN}You have joined the {WHITE}{ISLAND_NAME}{GREEN} chat."
 # Message sent upon leaving an island chat channel: Available Paramaters: {ISLAND_NAME}
 LEAVE_ISLAND_CHAT: "{GREEN}You have left the {WHITE}{ISLAND_NAME}{GREEN} chat."
+
+# Message sent if trying to demote a player that is already the lowest rank on an Island: Available Paramaters: {NAME}
+CANT_DEMOTE: "{WHITE}{NAME}{RED} can't be demoted any further."
+# Message sent if trying to promote a player that is already the highest rank on an Island: Available Paramaters: {NAME}
+CANT_PROMOTE: "{WHITE}{NAME}{RED} can't be promoted any more."
+
+# Message sent if you promote a player on your island: Available Paramaters: {RANK}, {NAME}
+PROMOTED_OTHER: "{WHITE}{NAME}{GREEN} has been promoted to Island {WHITE}{RANK}{GREEN}."
+# Message sent if you were promoted on another island: Available Paramaters: {RANK}, {ISLAND_NAME}
+PROMOTED_SELF: "{GREEN}You have been promoted to Island {WHITE}{RANK}{GREEN} on {WHITE}{ISLAND_NAME}{GREEN}."
+
+# Message sent if you demote a player on your island: Available Paramaters: {RANK}, {NAME}
+DEMOTED_OTHER: "{WHITE}{NAME}{GREEN} has been demoted to Island {WHITE}{RANK}{GREEN}."
+# Message sent if you were demoted on another island: Available Paramaters: {RANK}, {ISLAND_NAME}
+DEMOTED_SELF: "{RED}You have been demoted to Island {WHITE}{RANK}{RED} on {WHITE}{ISLAND_NAME}{RED}."

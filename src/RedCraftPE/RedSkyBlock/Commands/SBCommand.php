@@ -13,6 +13,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Create;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\CreateWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\DecreaseSize;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Delete;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Demote;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Fly;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Help;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\IncreaseSize;
@@ -23,6 +24,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Members;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Name;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\OnIsland;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Promote;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Rank;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reload;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Remove;
@@ -41,9 +43,9 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Value;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Visit;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\ZoneTools;
 //todo: get rid of calls to getSafeSpawn (maybe),
-//todo (cont'd): garbage collector to remove island objects not being used from memory, better island generation technique, nether islands (maybe),
-//todo (cont'd): island quests, island leveling system, island permissions for members based on island rank, island chat, minions,
-//todo (cont'd): skyblock based custom enchants, multiple custom islands, skyblock inventory GUIs, add scoreboard support
+//todo (cont'd): garbage collector to remove island objects not being used from memory, nether islands (maybe),
+//todo (cont'd): island quests, island leveling system, island permissions for members based on island rank, minions,
+//todo (cont'd): skyblock based custom enchants, multiple custom islands, skyblock GUIs, add scoreboard support
 //todo (cont'd): add more configurable options in config, obsidian scooping?
 
 use CortexPE\Commando\BaseCommand;
@@ -116,6 +118,12 @@ class SBCommand extends BaseCommand {
       ["disband", "kill", "eridicate", "expunge", "cancel"]
     ));
 
+    $this->registerSubCommand(new Demote(
+      $this->plugin,
+      "demote",
+      "Demote a player on your SkyBlock island."
+    ));
+
     $this->registerSubCommand(new Fly(
       $this->plugin,
       "fly",
@@ -178,6 +186,12 @@ class SBCommand extends BaseCommand {
       "onisland",
       "View the players on your island.",
       ["on"]
+    ));
+
+    $this->registerSubCommand(new Promote(
+      $this->plugin,
+      "promote",
+      "Promote a player on your SkyBlock island."
     ));
 
     $this->registerSubCommand(new Rank(

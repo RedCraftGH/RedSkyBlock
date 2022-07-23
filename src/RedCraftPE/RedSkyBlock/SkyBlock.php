@@ -11,6 +11,7 @@ use CortexPE\Commando\PacketHooker;
 
 use RedCraftPE\RedSkyBlock\Commands\SBCommand;
 use RedCraftPE\RedSkyBlock\Utils\MessageConstructor;
+use RedCraftPE\RedSkyBlock\Utils\ConfigManager;
 use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 use RedCraftPE\RedSkyBlock\Utils\IslandManager;
 use RedCraftPE\RedSkyBlock\Tasks\AutoSaveIslands;
@@ -57,6 +58,8 @@ class SkyBlock extends PluginBase {
 
     //register message constructor:
     $this->mShop = new MessageConstructor($this);
+    //register config manager:
+    $this->configmanager = new ConfigManager($this);
     //register zone manager:
     $this->zoneManager = new ZoneManager($this);
     //register island manager:

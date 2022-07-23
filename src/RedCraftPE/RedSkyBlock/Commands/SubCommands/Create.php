@@ -9,6 +9,7 @@ use pocketmine\world\Position;
 use pocketmine\world\format\Chunk;
 use pocketmine\math\Vector3;
 use pocketmine\block\VanillaBlocks;
+use pocketmine\block\BlockFactory;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 use RedCraftPE\RedSkyBlock\Island;
@@ -144,15 +145,17 @@ class Create extends SBSubCommand {
 
                       for ($z = $lastZ; $z <= $lastZ + $zoneSize[2]; $z++) {
 
-                        $blockName = $zone[$counter];
+                        $blockData = explode(":", $zone[$counter]);
+                        $blockName = $blockData[0];
+                        $blockMeta = $blockData[1];
                         $block = StringToItemParser::getInstance()->parse($blockName)->getBlock();
-                        $masterWorld->setBlock(new Vector3($x, $y, $z), $block);
+                        $masterWorld->setBlock(new Vector3($x, $y, $z), BlockFactory::getInstance()->get($block->getID(), $blockMeta), false);
                         $counter++;
                       }
                     }
                   }
 
-                  $plugin->islandManager->constructIsland($islandData);
+                  $plugin->islandManager->constructIsland($islandData, $sender->getName());
 
                   $masterWorld->setBlock(new Vector3($initialSpawnPoint[0], $initialSpawnPoint[1] - 1, $initialSpawnPoint[2] + 1), VanillaBlocks::CHEST());
                   $startingChest = $masterWorld->getTileAt($initialSpawnPoint[0], $initialSpawnPoint[1] - 1, $initialSpawnPoint[2] + 1);

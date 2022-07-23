@@ -75,9 +75,9 @@ class MessageConstructor {
 
       foreach ($compare as $key) {
 
-        $realString .= $key . ": " . "\"" . $reference[$key] . "\"\n";
+        $realString .= "\n" . $key . ": " . "\"" . $reference[$key] . "\"";
       }
-      $realString .= "\n---";
+      $realString .= "\n\n---";
 
       file_put_contents($this->plugin->getDataFolder() . "../RedSkyBlock/messages.yml", $realString);
       $this->plugin->messages->reload();
