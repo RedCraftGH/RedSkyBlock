@@ -37,7 +37,7 @@ class Island {
   private $defaultPermissions = array(
     "member" => ["island.place", "island.break", "island.interact"],
     "helper" => ["island.place", "island.break", "island.interact", "island.kick"],
-    "moderator" => ["island.place", "island.break", "island.interact", "island.kick", "island.ban", "island.lock"],
+    "moderator" => ["island.place", "island.break", "island.interact", "island.kick", "island.ban"],
     "admin" => ["island.place", "island.break", "island.interact", "island.kick", "island.ban", "island.lock", "island.spawn", "island.name"]
   );
 
