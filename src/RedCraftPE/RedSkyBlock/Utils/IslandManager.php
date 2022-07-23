@@ -25,7 +25,6 @@ class IslandManager {
 
   public function getIslandData(string $playerName): ?array {
 
-    $playerName = $player->getName();
     $playerNameLower = strtolower($playerName);
 
     if (in_array($playerNameLower . ".json", array_map('strtolower', scandir($this->plugin->getDataFolder() . "../RedSkyBlock/Players")))) {
@@ -438,7 +437,7 @@ class IslandManager {
 
     if (self::$instance === null) {
 
-      self::$instance = new self();
+      self::$instance = new self($this->plugin);
     }
     return self::$instance;
   }

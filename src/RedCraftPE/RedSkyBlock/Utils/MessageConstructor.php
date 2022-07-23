@@ -10,6 +10,7 @@ class MessageConstructor {
 
   public static $instance;
   public $plugin;
+  private $messages;
 
   public function __construct(SkyBlock $plugin) {
 
