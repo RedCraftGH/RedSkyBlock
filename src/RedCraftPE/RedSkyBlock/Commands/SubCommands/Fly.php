@@ -23,7 +23,7 @@ class Fly extends SBSubCommand {
     $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
     if ($island instanceof Island) {
 
-      if (in_array(strtolower($sender->getName()), $island->getMembers()) || $sender->getName() === $island->getCreator()) {
+      if (array_key_exists(strtolower($sender->getName()), $island->getMembers()) || $sender->getName() === $island->getCreator()) {
 
         if ($sender->getAllowFlight()) {
 
@@ -44,7 +44,7 @@ class Fly extends SBSubCommand {
 
         $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
         $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-        $sender->sendMessage();
+        $sender->sendMessage($message);
       }
     } else {
 

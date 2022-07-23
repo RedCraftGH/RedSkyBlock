@@ -119,7 +119,8 @@ class Create extends SBSubCommand {
               "resetcooldown" => Time() + $resetCooldown,
               "lockstatus" => false,
               "settings" => [],
-              "stats" => []
+              "stats" => [],
+              "permissions" => []
             ];
 
             $zone = ZoneManager::getZone();

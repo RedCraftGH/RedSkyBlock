@@ -15,8 +15,6 @@ class IslandManager {
 
   private $islands = [];
 
-  private $excludeFromMainChat = [];
-
   public static $instance;
 
   public function __construct(SkyBlock $plugin) {
@@ -64,7 +62,8 @@ class IslandManager {
       "resetcooldown",
       "lockstatus",
       "settings",
-      "stats"
+      "stats",
+      "permissions"
     ];
 
     foreach ($requiredKeys as $key) {
@@ -113,7 +112,8 @@ class IslandManager {
       "resetcooldown" => $island->getResetCooldown(),
       "lockstatus" => $island->getLockStatus(),
       "settings" => $island->getSettings(),
-      "stats" => $island->getStats()
+      "stats" => $island->getStats(),
+      "permissions" => $island->getPermissions()
     ];
 
     return $islandData;
@@ -413,7 +413,7 @@ class IslandManager {
     $employedAt = [];
     foreach ($this->islands as $owner => $island) {
 
-      if (strtolower($playerName) === strtolower($owner) || in_array(strtolower($playerName), $island->getMembers())) {
+      if (strtolower($playerName) === strtolower($owner) || array_key_exists(strtolower($playerName), $island->getMembers())) {
 
         $employedAt[] = $island;
       }
@@ -434,28 +434,6 @@ class IslandManager {
       }
     }
     return $tuneToChannel;
-  }
-
-  public function getNotInMainChat(): array {
-
-    return $this->excludeFromMainChat;
-  }
-
-  public function addToMainChat(Player $player): void {
-
-    if (in_array($player, $this->excludeFromMainChat)) {
-
-      $index = array_search($player, $this->excludeFromMainChat);
-      unset($this->excludeFromMainChat[$index]);
-    }
-  }
-
-  public function removeFromMainChat(Player $player): void {
-
-    if (!in_array($player, $this->excludeFromMainChat)) {
-
-      $this->excludeFromMainChat[] = $player;
-    }
   }
 
   public static function getInstance(): self {

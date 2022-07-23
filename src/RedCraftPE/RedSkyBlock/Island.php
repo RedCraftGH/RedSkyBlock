@@ -9,6 +9,7 @@ use RedCraftPE\RedSkyBlock\Utils\IslandManager;
 class Island {
 
   public const MEMBER_RANKS = ["member", "helper", "moderator", "admin"];
+  public const MEMBER_PERMISSIONS = ["island.place", "island.break", "island.interact", "island.kick", "island.ban", "island.spawn", "island.lock", "island.name"];
 
   private $creator;
   private $name;
@@ -22,6 +23,7 @@ class Island {
   private $lockStatus;
   private $settings;
   private $stats;
+  private $permissions;
 
   private $defaultSettings = array(
     "pvp" => false,
@@ -31,6 +33,12 @@ class Island {
   private $defaultStats = array(
     "blocks_broken" => 0,
     "blocks_placed" => 0
+  );
+  private $defaultPermissions = array(
+    "member" => ["island.place", "island.break", "island.interact"],
+    "helper" => ["island.place", "island.break", "island.interact", "island.kick"],
+    "moderator" => ["island.place", "island.break", "island.interact", "island.kick", "island.ban", "island.lock"],
+    "admin" => ["island.place", "island.break", "island.interact", "island.kick", "island.ban", "island.lock", "island.spawn", "island.name"]
   );
 
   private $invited = [];
@@ -62,6 +70,7 @@ class Island {
     $this->lockStatus = (bool) $islandData["lockstatus"];
     $this->settings = (array) $islandData["settings"];
     $this->stats = (array) $islandData["stats"];
+    $this->permissions = (array) $islandData["permissions"];
 
     if (count($this->settings) < count($this->defaultSettings)) {
 
@@ -81,6 +90,16 @@ class Island {
       foreach ($compare as $stat) {
 
         $this->stats[$stat] = $this->defaultStats[$stat];
+      }
+    }
+    if (count($this->permissions) < count($this->defaultPermissions)) {
+
+      $defaultPermissions = array_keys($this->defaultPermissions);
+      $savedPermissions = array_keys($this->permissions);
+      $compare = array_diff($defaultPermissions, $savedPermissions);
+      foreach ($compare as $permission) {
+
+        $this->permissions[$permission] = $this->defaultPermissions[$permission];
       }
     }
   }
@@ -325,8 +344,6 @@ class Island {
 
       $this->islandChat[] = $playerName;
     }
-    var_dump("Island Chatters Array:");
-    var_dump($this->islandChat);
   }
 
   public function removeChatter(string $playerName): void {
@@ -337,7 +354,59 @@ class Island {
       $index = array_search($playerName, $this->islandChat);
       unset($this->islandChat[$index]);
     }
-    var_dump("Island Chatters Array:");
-    var_dump($this->islandChat);
+  }
+
+  public function getPermissions(): array {
+
+    return $this->permissions;
+  }
+
+  public function removePermission(string $rank, string $permission): bool {
+
+    if (in_array($permission, self::MEMBER_PERMISSIONS)) {
+
+      if (array_key_exists($rank, $this->permissions)) {
+
+        if (in_array($permission, $this->permissions[$rank])) {
+
+          $index = array_search($permission, $this->permissions[$rank]);
+          unset($this->permissions[$rank][$index]);
+          return true;
+        } else {
+
+          return false;
+        }
+      } else {
+
+        return false;
+      }
+    } else {
+
+      return false;
+    }
+  }
+
+  public function addPermission(string $rank, string $permission): bool {
+
+    if (in_array($permission, self::MEMBER_PERMISSIONS)) {
+
+      if (array_key_exists($rank, $this->permissions)) {
+
+        if (!in_array($permission, $this->permissions[$rank])) {
+
+          $this->permissions[$rank][] = $permission;
+          return true;
+        } else {
+
+          return false;
+        }
+      } else {
+
+        return false;
+      }
+    } else {
+
+      return false;
+    }
   }
 }

@@ -168,16 +168,22 @@ class SkyblockListener implements Listener {
       }
     }
     //check if interacting with a block on an island and if yes cancel if not a part of that island:
-    $masterWorld = $plugin->islandManager->getMasterWorld();
-    if ($masterWorld === $blockWorld) {
 
-      $island = $plugin->islandManager->getIslandAtBlock($block);
-      if ($island instanceof Island) {
+    $island = $plugin->islandManager->getIslandAtBlock($block);
+    if ($island instanceof Island) {
 
-        if (!(array_key_exists(strtolower($player->getName()), $island->getMembers()) || $player->getName() === $island->getCreator() || $player->hasPermission("redskyblock.bypass"))) {
+      $members = $island->getMembers();
+      if (array_key_exists(strtolower($player->getName()), $members)) {
+
+        $islandPermissions = $island->getPermissions();
+        $playerRank = $members[strtolower($player->getName())];
+        if (!in_array("island.interact", $islandPermissions[$playerRank])) {
 
           $event->cancel();
         }
+      } elseif (!($player->getName() === $island->getCreator() || $player->hasPermission("redskyblock.bypass"))) {
+
+        $event->cancel();
       }
     }
   }
@@ -256,39 +262,43 @@ class SkyblockListener implements Listener {
     }
 
     // Check if allowed to break blocks or if island value should decrease if on an island:
-    $masterWorld = $plugin->islandManager->getMasterWorld();
 
-    if ($masterWorld === $blockWorld) {
+    $island = $plugin->islandManager->getIslandAtBlock($block);
+    if ($island instanceof Island) {
 
-      $island = $plugin->islandManager->getIslandAtBlock($block);
-      if ($island instanceof Island) {
+      $members = $island->getMembers();
+      $creator = $island->getCreator();
+      $playerName = $player->getName();
+      $playerNameLower = strtolower($playerName);
 
-        $members = $island->getMembers();
-        $creator = $island->getCreator();
-        $playerName = $player->getName();
-        $playerNameLower = strtolower($playerName);
+      if (array_key_exists($playerNameLower, $members) || $playerName === $creator || $player->hasPermission("redskyblock.bypass")) {
 
-        if (array_key_exists($playerNameLower, $members) || $playerName === $creator || $player->hasPermission("redskyblock.bypass")) {
+        if (array_key_exists($playerNameLower, $members)) {
 
-          $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
-          $blockName = str_replace(" ", "_", strtolower($block->getName()));
-          if (array_key_exists($blockName, $valuableArray)) {
+          $islandPermissions = $island->getPermissions();
+          $playerRank = $members[$playerNameLower];
+          if (!in_array("island.break", $islandPermissions[$playerRank])) {
 
-            $island->removeValue((int) $valuableArray[$blockName]);
+            $event->cancel();
+            return;
           }
+        }
+        $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
+        $blockName = str_replace(" ", "_", strtolower($block->getName()));
+        if (array_key_exists($blockName, $valuableArray)) {
 
-          $island->addToStat("blocks_broken", 1);
-        } else {
-
-          $event->cancel();
-          return;
+          $island->removeValue((int) $valuableArray[$blockName]);
         }
 
-      } elseif (!$player->hasPermission("redskyblock.bypass")) {
+        $island->addToStat("blocks_broken", 1);
+      } else {
 
         $event->cancel();
-        return;
       }
+
+    } elseif (!$player->hasPermission("redskyblock.bypass")) {
+
+      $event->cancel();
     }
   }
 
@@ -300,36 +310,44 @@ class SkyblockListener implements Listener {
     $blockWorld = $block->getPosition()->world;
     $player = $event->getPlayer();
 
-    if ($masterWorld === $blockWorld) {
+    $island = $plugin->islandManager->getIslandAtBlock($block);
+    if ($island instanceof Island) {
 
-      $island = $plugin->islandManager->getIslandAtBlock($block);
-      if ($island instanceof Island) {
+      $members = $island->getMembers();
+      $creator = $island->getCreator();
+      $playerName = $player->getName();
+      $playerNameLower = strtolower($playerName);
 
-        $members = $island->getMembers();
-        $creator = $island->getCreator();
-        $playerName = $player->getName();
-        $playerNameLower = strtolower($playerName);
+      if (array_key_exists($playerNameLower, $members) || $playerName === $creator || $player->hasPermission("redskyblock.bypass")) {
 
-        if (array_key_exists($playerNameLower, $members) || $playerName === $creator || $player->hasPermission("redskyblock.bypass")) {
+        if (array_key_exists($playerNameLower, $members)) {
 
-          $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
-          $blockName = str_replace(" ", "_", strtolower($block->getName()));
-          if (array_key_exists($blockName, $valuableArray)) {
+          $islandPermissions = $island->getPermissions();
+          $playerRank = $members[$playerNameLower];
+          if (!in_array("island.place", $islandPermissions[$playerRank])) {
 
-            $island->addValue((int) $valuableArray[$blockName]);
+            $event->cancel();
+            return;
           }
-
-          $island->addToStat("blocks_placed", 1);
-        } else {
-
-          $event->cancel();
-          return;
         }
-      } elseif (!$player->hasPermission("redskyblock.bypass")) {
+
+        $valuableArray = $plugin->cfg->get("Valuable Blocks", []);
+        $blockName = str_replace(" ", "_", strtolower($block->getName()));
+        if (array_key_exists($blockName, $valuableArray)) {
+
+          $island->addValue((int) $valuableArray[$blockName]);
+        }
+
+        $island->addToStat("blocks_placed", 1);
+      } else {
 
         $event->cancel();
         return;
       }
+    } elseif (!$player->hasPermission("redskyblock.bypass")) {
+
+      $event->cancel();
+      return;
     }
   }
 
@@ -501,11 +519,6 @@ class SkyblockListener implements Listener {
       $this->plugin->getScheduler()->scheduleTask(new RefreshDisplayName($player, $playerDisplayName));
 
       $event->setRecipients($recipients);
-    } else {
-
-      $notInMainChat = $this->plugin->islandManager->getNotInMainChat();
-      $inMainChat = array_diff($this->plugin->getServer()->getOnlinePlayers(), $notInMainChat);
-      $event->setRecipients($inMainChat);
     }
   }
 
@@ -513,13 +526,20 @@ class SkyblockListener implements Listener {
 
     $player = $event->getPlayer();
     $block = $event->getBlockClicked();
-    $playerWorld = $player->getWorld();
-    $masterWorld = $this->plugin->islandManager->getMasterWorld();
 
     $island = $this->plugin->islandManager->getIslandAtBlock($block);
     if ($island instanceof Island) {
 
-      if (!(array_key_exists(strtolower($player->getName()), $island->getMembers()) || $player->getName() === $island->getCreator() || $player->hasPermission("redskyblock.bypass"))) {
+      $members = $island->getMembers();
+      if (array_key_exists(strtolower($player->getName()), $members)) {
+
+        $islandPermissions = $island->getPermissions();
+        $playerRank = $members[strtolower($player->getName())];
+        if (!in_array("island.interact", $islandPermissions[$playerRank])) {
+
+          $event->cancel();
+        }
+      } elseif (!($player->getName() === $island->getCreator() || $player->hasPermission("redskyblock.bypass"))) {
 
         $event->cancel();
       }

@@ -46,7 +46,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\ZoneTools;
 //todo (cont'd): garbage collector to remove island objects not being used from memory, nether islands (maybe),
 //todo (cont'd): island quests, island leveling system, island permissions for members based on island rank, minions,
 //todo (cont'd): skyblock based custom enchants, multiple custom islands, skyblock GUIs, add scoreboard support
-//todo (cont'd): add more configurable options in config, obsidian scooping?
+//todo (cont'd): add more configurable options in config, obsidian scooping?, island banks (variable economy)
 
 use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\args\RawStringArgument;

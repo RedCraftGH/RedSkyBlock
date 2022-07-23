@@ -112,7 +112,7 @@ ALREADY_BANNED: "{WHITE}{NAME}{RED} has already been banned from your island."
 # Message sent if attempting to unban a player that is not banned from your island: Available Parameters: {NAME}
 NOT_BANNED: "{WHITE}{NAME}{RED} is not banned from your island."
 # Message sent if a player tries to ban themself from their island:
-CANT_BAN_SELF: "{RED}You cannot ban yourself from your island."
+CANT_BAN: "{RED}You cannot ban this player from this island."
 # Message sent when a player views the players that are banned from their island: Available Parameters: {BANNED_PLAYERS}
 BANNED_PLAYERS: "{GREEN}Players Banned From Your Island: {WHITE}{BANNED_PLAYERS}"
 
@@ -174,7 +174,7 @@ KICKED_PLAYER: "{GREEN}Kicked {WHITE}{NAME}{GREEN} off of your island."
 # Message sent if a player kicks you off of their island: Available Parameters: {ISLAND_NAME}
 KICKED_FROM_ISLAND: "{RED}You were kicked off of {WHITE}{ISLAND_NAME}{RED}."
 # Message sent if a player tries to kick themself off of their SkyBlock island:
-CANT_KICK_SELF: "{RED}You cannot kick yourself off of your island."
+CANT_KICK: "{RED}You cannot kick this player off of the island."
 
 # Top Islands Display Message:
 # Available Parameters: {POSITION_ONE}, {POSITION_TWO}, {POSITION_THREE}, {POSITION_FOUR}, {POSITION_FIVE}, {POSITION_SIX}
@@ -238,3 +238,6 @@ PROMOTED_SELF: "{GREEN}You have been promoted to Island {WHITE}{RANK}{GREEN} on 
 DEMOTED_OTHER: "{WHITE}{NAME}{GREEN} has been demoted to Island {WHITE}{RANK}{GREEN}."
 # Message sent if you were demoted on another island: Available Paramaters: {RANK}, {ISLAND_NAME}
 DEMOTED_SELF: "{RED}You have been demoted to Island {WHITE}{RANK}{RED} on {WHITE}{ISLAND_NAME}{RED}."
+
+# Message sent if trying to run a command on an island but rank is too low: Available Paramaters: {ISLAND_NAME}
+RANK_TOO_LOW: "{RED}You are not high enough rank on {WHITE}{ISLAND_NAME}{RED} to run this command here."

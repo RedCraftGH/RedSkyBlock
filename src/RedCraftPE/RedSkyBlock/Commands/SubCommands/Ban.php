@@ -7,6 +7,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\player\Player;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
+use RedCraftPE\RedSkyBlock\Island;
 
 use CortexPE\Commando\args\TextArgument;
 use CortexPE\Commando\constraint\InGameRequiredConstraint;
@@ -22,55 +23,159 @@ class Ban extends SBSubCommand {
 
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if (isset($args["name"])) {
+    $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
+    $name = $args["name"];
 
-      if ($this->checkIsland($sender)) {
+    if ($island instanceof Island) {
 
-        $name = $args["name"];
-        $island = $this->plugin->islandManager->getIsland($sender);
-        $creator = $island->getCreator();
-        $island->removeMember($name);
+      $creator = $island->getCreator();
+      $members = $island->getMembers();
 
-        if (strtolower($name) !== strtolower($creator)) {
+      if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
 
-          if ($island->ban($name)) {
+        if (array_key_exists(strtolower($sender->getName()), $members)) {
 
-            $message = $this->getMShop()->construct("BANNED_PLAYER");
-            $message = str_replace("{NAME}", $name, $message);
-            $sender->sendMessage($message);
+          $islandPermissions = $island->getPermissions();
+          $senderRank = $members[strtolower($sender->getName())];
 
-            $player = $this->plugin->getServer()->getPlayerExact($name);
-            if ($player instanceof Player && !$player->hasPermission("redskyblock.admin")) {
+          if (in_array("island.ban", $islandPermissions[$senderRank])) {
 
-              if ($this->plugin->islandManager->isOnIsland($player, $island)) {
+            if (array_key_exists(strtolower($name), $members)) {
 
-                $spawn = $this->plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
-                $player->teleport($spawn);
+              $nameRank = $members[strtolower($name)];
+              $memberRanks = Island::MEMBER_RANKS;
+              $namePos = array_search($nameRank, $memberRanks);
+              $senderPos = array_search($senderRank, $memberRanks);
+              if ($namePos >= $senderPos) {
+
+                $message = $this->getMShop()->construct("CANT_BAN");
+                $sender->sendMessage($message);
+                return;
               }
-              $message = $this->getMShop()->construct("BANNED");
-              $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-              $player->sendMessage($message);
+            }
+
+            $island->removeMember($name);
+
+            if (!(strtolower($name) === strtolower($creator) || strtolower($name) === strtolower($sender->getName()))) {
+
+              if ($island->ban($name)) {
+
+                $message = $this->getMShop()->construct("BANNED_PLAYER");
+                $message = str_replace("{NAME}", $name, $message);
+                $sender->sendMessage($message);
+
+                $player = $this->plugin->getServer()->getPlayerExact($name);
+                if ($player instanceof Player && !$player->hasPermission("redskyblock.admin")) {
+
+                  if ($this->plugin->islandManager->isOnIsland($player, $island)) {
+
+                    $spawn = $this->plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
+                    $player->teleport($spawn);
+                  }
+                  $message = $this->getMShop()->construct("BANNED");
+                  $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+                  $player->sendMessage($message);
+                }
+              } else {
+
+                $message = $this->getMShop()->construct("ALREADY_BANNED");
+                $message = str_replace("{NAME}", $name, $message);
+                $sender->sendMessage($message);
+              }
+            } else {
+
+              $message = $this->getMShop()->construct("CANT_BAN");
+              $sender->sendMessage($message);
             }
           } else {
 
-            $message = $this->getMShop()->construct("ALREADY_BANNED");
-            $message = str_replace("{NAME}", $name, $message);
+            $message = $this->getMShop()->construct("RANK_TOO_LOW");
+            $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
             $sender->sendMessage($message);
           }
         } else {
 
-          $message = $this->getMShop()->construct("CANT_BAN_SELF");
+          $island->removeMember($name);
+
+          if (!(strtolower($name) === strtolower($creator) || strtolower($name) === strtolower($sender->getName()))) {
+
+            if ($island->ban($name)) {
+
+              $message = $this->getMShop()->construct("BANNED_PLAYER");
+              $message = str_replace("{NAME}", $name, $message);
+              $sender->sendMessage($message);
+
+              $player = $this->plugin->getServer()->getPlayerExact($name);
+              if ($player instanceof Player && !$player->hasPermission("redskyblock.admin")) {
+
+                if ($this->plugin->islandManager->isOnIsland($player, $island)) {
+
+                  $spawn = $this->plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
+                  $player->teleport($spawn);
+                }
+                $message = $this->getMShop()->construct("BANNED");
+                $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+                $player->sendMessage($message);
+              }
+            } else {
+
+              $message = $this->getMShop()->construct("ALREADY_BANNED");
+              $message = str_replace("{NAME}", $name, $message);
+              $sender->sendMessage($message);
+            }
+          } else {
+
+            $message = $this->getMShop()->construct("CANT_BAN");
+            $sender->sendMessage($message);
+          }
+        }
+      } else {
+
+        $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+        $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+        $sender->sendMessage($message);
+      }
+    } elseif ($this->checkIsland($sender)) {
+
+      $island = $this->plugin->islandManager->getIsland($sender);
+      $creator = $island->getCreator();
+      $island->removeMember($name);
+
+      if (strtolower($name) !== strtolower($creator)) {
+
+        if ($island->ban($name)) {
+
+          $message = $this->getMShop()->construct("BANNED_PLAYER");
+          $message = str_replace("{NAME}", $name, $message);
+          $sender->sendMessage($message);
+
+          $player = $this->plugin->getServer()->getPlayerExact($name);
+          if ($player instanceof Player && !$player->hasPermission("redskyblock.admin")) {
+
+            if ($this->plugin->islandManager->isOnIsland($player, $island)) {
+
+              $spawn = $this->plugin->getServer()->getWorldManager()->getDefaultWorld()->getSafeSpawn();
+              $player->teleport($spawn);
+            }
+            $message = $this->getMShop()->construct("BANNED");
+            $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+            $player->sendMessage($message);
+          }
+        } else {
+
+          $message = $this->getMShop()->construct("ALREADY_BANNED");
+          $message = str_replace("{NAME}", $name, $message);
           $sender->sendMessage($message);
         }
       } else {
 
-        $message = $this->getMShop()->construct("NO_ISLAND");
+        $message = $this->getMShop()->construct("CANT_BAN");
         $sender->sendMessage($message);
       }
     } else {
 
-      $this->sendUsage();
-      return;
+      $message = $this->getMShop()->construct("NO_ISLAND");
+      $sender->sendMessage($message);
     }
   }
 }

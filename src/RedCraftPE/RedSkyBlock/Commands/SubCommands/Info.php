@@ -73,7 +73,7 @@ class Info extends SBSubCommand {
   public function getIslandInfoFUll(Island $island): string {
 
     $islandName = $island->getName();
-    $islandMembers = implode(", ", $island->getMembers());
+    $islandMembers = implode(", ", array_keys($island->getMembers()));
     if ($islandMembers === "") $islandMembers = "N/A";
     $islandBanned = implode(", ", $island->getBanned());
     if ($islandBanned === "") $islandBanned = "N/A";

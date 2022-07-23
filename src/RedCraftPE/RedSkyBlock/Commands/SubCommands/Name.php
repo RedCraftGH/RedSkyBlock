@@ -28,9 +28,7 @@ class Name extends SBSubCommand {
       $message = $this->getMShop()->construct("ISLAND_NAME_OTHER");
       $message = str_replace("{ISLAND_NAME}", $islandName, $message);
       $sender->sendMessage($message);
-    } else {
-
-      if ($this->checkIsland($sender)) {
+    } elseif ($this->checkIsland($sender)) {
 
         $island = $this->plugin->islandManager->getIsland($sender);
         $islandName = $island->getName();
@@ -38,11 +36,10 @@ class Name extends SBSubCommand {
         $message = $this->getMShop()->construct("ISLAND_NAME_SELF");
         $message = str_replace("{ISLAND_NAME}", $islandName, $message);
         $sender->sendMessage($message);
-      } else {
+    } else {
 
-        $message = $this->getMShop()->construct("NO_ISLAND");
-        $sender->sendMessage($message);
-      }
+      $message = $this->getMShop()->construct("NO_ISLAND");
+      $sender->sendMessage($message);
     }
   }
 }

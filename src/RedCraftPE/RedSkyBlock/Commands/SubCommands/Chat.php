@@ -35,7 +35,6 @@ class Chat extends SBSubCommand {
 
             //if already in island chat be removed from it
             $island->removeChatter($sender->getName());
-            $this->plugin->islandManager->addToMainChat($sender);
 
             $message = $this->getMShop()->construct("LEAVE_ISLAND_CHAT");
             $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
@@ -48,7 +47,6 @@ class Chat extends SBSubCommand {
             if ($currentChannel instanceof Island) {
 
               $currentChannel->removeChatter($sender->getName());
-              $this->plugin->islandManager->addToMainChat($sender);
 
               $message = $this->getMShop()->construct("LEAVE_ISLAND_CHAT");
               $message = str_replace("{ISLAND_NAME}", $currentChannel->getName(), $message);
@@ -56,7 +54,6 @@ class Chat extends SBSubCommand {
             }
 
             $island->addChatter($sender->getName());
-            $this->plugin->islandManager->removeFromMainChat($sender);
 
             $message = $this->getMShop()->construct("JOIN_ISLAND_CHAT");
             $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
@@ -81,7 +78,6 @@ class Chat extends SBSubCommand {
       if ($currentChannel instanceof Island) {
 
         $currentChannel->removeChatter($sender->getName());
-        $this->plugin->islandManager->addToMainChat($sender);
 
         $message = $this->getMShop()->construct("LEAVE_ISLAND_CHAT");
         $message = str_replace("{ISLAND_NAME}", $currentChannel->getName(), $message);
@@ -92,7 +88,6 @@ class Chat extends SBSubCommand {
 
           $island = $this->plugin->islandManager->getIsland($sender);
           $island->addChatter($sender->getName());
-          $this->plugin->islandManager->removeFromMainChat($sender);
 
           $message = $this->getMShop()->construct("JOIN_ISLAND_CHAT");
           $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);

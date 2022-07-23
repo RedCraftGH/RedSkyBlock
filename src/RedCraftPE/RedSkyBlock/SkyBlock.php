@@ -129,6 +129,6 @@ class SkyBlock extends PluginBase {
 
   public function onDisable(): void {
 
-    $this->islandManager->saveAllIslands();
+    IslandManager::getInstance()->saveAllIslands();
   }
 }
