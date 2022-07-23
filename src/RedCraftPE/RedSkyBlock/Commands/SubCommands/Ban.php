@@ -33,7 +33,7 @@ class Ban extends SBSubCommand {
 
       if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
 
-        if (array_key_exists(strtolower($sender->getName()), $members)) {
+        if (array_key_exists(strtolower($sender->getName()), $members) && !$sender->hasPermission("redskyblock.admin")) {
 
           $islandPermissions = $island->getPermissions();
           $senderRank = $members[strtolower($sender->getName())];

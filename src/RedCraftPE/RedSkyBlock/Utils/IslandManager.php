@@ -23,14 +23,14 @@ class IslandManager {
     self::$instance = $this;
   }
 
-  public function getIslandData(Player $player): ?array {
+  public function getIslandData(string $playerName): ?array {
 
-    $plugin = $this->plugin;
     $playerName = $player->getName();
+    $playerNameLower = strtolower($playerName);
 
-    if (in_array($playerName . ".json", scandir($plugin->getDataFolder() . "../RedSkyBlock/Players"))) {
+    if (in_array($playerNameLower . ".json", array_map('strtolower', scandir($this->plugin->getDataFolder() . "../RedSkyBlock/Players")))) {
 
-      $islandData = (array) json_decode(file_get_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $playerName . ".json"), true);
+      $islandData = (array) json_decode(file_get_contents($this->plugin->getDataFolder() . "../RedSkyBlock/Players/" . $playerName . ".json"), true);
       return $islandData;
     } else {
 
@@ -68,17 +68,13 @@ class IslandManager {
 
     foreach ($requiredKeys as $key) {
 
-      if (!isset($islandData[$key]) || $islandData[$key] === "") {
-
-        if ($key === "creator") {
-
-          $islandData[$key] = $playerName;
-        } else {
+      if (!isset($islandData[$key])) {
 
           $islandData[$key] = null;
-        }
       }
     }
+    if ($islandData["creator"] !== $playerName) $islandData["creator"] = $playerName;
+
     return $islandData;
   }
 
@@ -194,6 +190,8 @@ class IslandManager {
   public function removeIsland(Island $island): void {
 
     unset($this->islands[$island->getCreator()]);
+    $this->saveIsland($island);
+    unset($island);
   }
 
   public function removeAllIslands(): void {
@@ -438,6 +436,10 @@ class IslandManager {
 
   public static function getInstance(): self {
 
+    if (self::$instance === null) {
+
+      self::$instance = new self();
+    }
     return self::$instance;
   }
 }

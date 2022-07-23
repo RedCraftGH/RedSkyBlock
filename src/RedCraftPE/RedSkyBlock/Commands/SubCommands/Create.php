@@ -105,8 +105,6 @@ class Create extends SBSubCommand {
             $cSpawnVals = $plugin->skyblock->get("CSpawnVals", []);
             $initialSpawnPoint = [$lastX + $cSpawnVals[0], $islandSpawnY + $cSpawnVals[1], $lastZ + $cSpawnVals[2]];
 
-            //$sender->teleport(new Position($initialSpawnPoint[0], $initialSpawnPoint[1], $initialSpawnPoint[2], $masterWorld));
-
             $islandData = [
               "creator" => $senderName,
               "name" => $senderName . "'s island",
@@ -171,6 +169,9 @@ class Create extends SBSubCommand {
                   }
 
                   $senderName = $sender->getName();
+                  $doCreateTeleport = $plugin->cfg->get("Create Teleport");
+                  if ($doCreateTeleport) $sender->teleport(new Position($initialSpawnPoint[0], $initialSpawnPoint[1], $initialSpawnPoint[2], $masterWorld));
+                  
                   if (file_put_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $senderName . ".json", json_encode($islandData)) !== false) {
 
                     $message = $this->getMShop()->construct("ISLAND_CREATED");

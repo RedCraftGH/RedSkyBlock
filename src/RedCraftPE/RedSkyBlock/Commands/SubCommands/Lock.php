@@ -21,34 +21,29 @@ class Lock extends SBSubCommand {
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
     $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
-    if ($island instanceof Island) {
+    if (!($island instanceof Island)) {
 
-      $members = $island->getMembers();
-      if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
+      if ($this->checkIsland($sender)) {
 
-        if (array_key_exists(strtolower($sender->getName()), $members)) {
+          $island = $this->plugin->islandManager->getIsland($sender);
 
-          $islandPermissions = $island->getPermissions();
-          $senderRank = $members[strtolower($sender->getName())];
+      } else {
 
-          if (in_array("island.lock", $islandPermissions[$senderRank])) {
+        $message = $this->getMShop()->construct("NO_ISLAND");
+        $sender->sendMessage($message);
+        return;
+      }
+    }
 
-            if ($island->lock()) {
+    $members = $island->getMembers();
+    if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
 
-              $message = $this->getMShop()->construct("LOCKED");
-              $sender->sendMessage($message);
-            } else {
+      if (array_key_exists(strtolower($sender->getName()), $members) && !$sender->hasPermission("redskyblock.admin")) {
 
-              $message = $this->getMShop()->construct("ALREADY_LOCKED");
-              $sender->sendMessage($message);
-            }
-          } else {
+        $islandPermissions = $island->getPermissions();
+        $senderRank = $members[strtolower($sender->getName())];
 
-            $message = $this->getMShop()->construct("RANK_TOO_LOW");
-            $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-            $sender->sendMessage($message);
-          }
-        } else {
+        if (in_array("island.lock", $islandPermissions[$senderRank])) {
 
           if ($island->lock()) {
 
@@ -59,16 +54,13 @@ class Lock extends SBSubCommand {
             $message = $this->getMShop()->construct("ALREADY_LOCKED");
             $sender->sendMessage($message);
           }
+        } else {
+
+          $message = $this->getMShop()->construct("RANK_TOO_LOW");
+          $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+          $sender->sendMessage($message);
         }
       } else {
-
-        $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
-        $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-        $sender->sendMessage($message);
-      }
-    } elseif ($this->checkIsland($sender)) {
-
-        $island = $this->plugin->islandManager->getIsland($sender);
 
         if ($island->lock()) {
 
@@ -79,9 +71,11 @@ class Lock extends SBSubCommand {
           $message = $this->getMShop()->construct("ALREADY_LOCKED");
           $sender->sendMessage($message);
         }
+      }
     } else {
 
-      $message = $this->getMShop()->construct("NO_ISLAND");
+      $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+      $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
       $sender->sendMessage($message);
     }
   }

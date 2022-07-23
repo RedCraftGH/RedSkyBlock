@@ -23,40 +23,30 @@ class Rename extends SBSubCommand {
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
     $name = $args["name"];
-
     $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
-    if ($island instanceof Island) {
+    if (!($island instanceof Island)) {
 
-      $members = $island->getMembers();
-      if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
+      if ($this->checkIsland($sender)) {
 
-        if (array_key_exists(strtolower($sender->getName()), $members)) {
+          $island = $this->plugin->islandManager->getIsland($sender);
 
-          $islandPermissions = $island->getPermissions();
-          $senderRank = $members[strtolower($sender->getName())];
+      } else {
 
-          if (in_array("island.name", $islandPermissions[$senderRank])) {
+        $message = $this->getMShop()->construct("NO_ISLAND");
+        $sender->sendMessage($message);
+        return;
+      }
+    }
 
-            if (!$this->plugin->islandManager->checkRepeatIslandName($name)) {
+    $members = $island->getMembers();
+    if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
 
-              $island->setName($name);
+      if (array_key_exists(strtolower($sender->getName()), $members) && !$sender->hasPermission("redskyblock.admin")) {
 
-              $message = $this->getMShop()->construct("NAME_CHANGE");
-              $message = str_replace("{NAME}", $name, $message);
-              $sender->sendMessage($message);
-            } else {
+        $islandPermissions = $island->getPermissions();
+        $senderRank = $members[strtolower($sender->getName())];
 
-              $message = $this->getMShop()->construct("ISLAND_NAME_EXISTS");
-              $message = str_replace("{ISLAND_NAME}", $name, $message);
-              $sender->sendMessage($message);
-            }
-          } else {
-
-            $message = $this->getMShop()->construct("RANK_TOO_LOW");
-            $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-            $sender->sendMessage($message);
-          }
-        } else {
+        if (in_array("island.name", $islandPermissions[$senderRank])) {
 
           if (!$this->plugin->islandManager->checkRepeatIslandName($name)) {
 
@@ -71,32 +61,32 @@ class Rename extends SBSubCommand {
             $message = str_replace("{ISLAND_NAME}", $name, $message);
             $sender->sendMessage($message);
           }
+        } else {
+
+          $message = $this->getMShop()->construct("RANK_TOO_LOW");
+          $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+          $sender->sendMessage($message);
         }
       } else {
 
-        $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
-        $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-        $sender->sendMessage($message);
-      }
-    } elseif ($this->checkIsland($sender)) {
+        if (!$this->plugin->islandManager->checkRepeatIslandName($name)) {
 
-      if (!$this->plugin->islandManager->checkRepeatIslandName($name)) {
+          $island->setName($name);
 
-        $island = $this->plugin->islandManager->getIsland($sender);
-        $island->setName($name);
+          $message = $this->getMShop()->construct("NAME_CHANGE");
+          $message = str_replace("{NAME}", $name, $message);
+          $sender->sendMessage($message);
+        } else {
 
-        $message = $this->getMShop()->construct("NAME_CHANGE");
-        $message = str_replace("{NAME}", $name, $message);
-        $sender->sendMessage($message);
-      } else {
-
-        $message = $this->getMShop()->construct("ISLAND_NAME_EXISTS");
-        $message = str_replace("{ISLAND_NAME}", $name, $message);
-        $sender->sendMessage($message);
+          $message = $this->getMShop()->construct("ISLAND_NAME_EXISTS");
+          $message = str_replace("{ISLAND_NAME}", $name, $message);
+          $sender->sendMessage($message);
+        }
       }
     } else {
 
-      $message = $this->getMShop()->construct("NO_ISLAND");
+      $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+      $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
       $sender->sendMessage($message);
     }
   }

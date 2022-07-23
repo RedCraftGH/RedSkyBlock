@@ -23,49 +23,33 @@ class Unban extends SBSubCommand {
 
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
     $name = $args["name"];
+    $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
+    if (!($island instanceof Island)) {
 
-    if ($island instanceof Island) {
+      if ($this->checkIsland($sender)) {
 
-      $creator = $island->getCreator();
-      $members = $island->getMembers();
+          $island = $this->plugin->islandManager->getIsland($sender);
 
-      if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
+      } else {
 
-        if (array_key_exists(strtolower($sender->getName()), $members)) {
+        $message = $this->getMShop()->construct("NO_ISLAND");
+        $sender->sendMessage($message);
+        return;
+      }
+    }
 
-          $islandPermissions = $island->getPermissions();
-          $senderRank = $members[strtolower($sender->getName())];
+    $creator = $island->getCreator();
+    $members = $island->getMembers();
 
-          if (in_array("island.ban", $islandPermissions[$senderRank])) {
+    if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
 
-            if ($island->unban($name)) {
+      if (array_key_exists(strtolower($sender->getName()), $members) && !$sender->hasPermission("redskyblock.admin")) {
 
-              $message = $this->getMShop()->construct("UNBANNED");
-              $message = str_replace("{NAME}", $name, $message);
-              $sender->sendMessage($message);
+        $islandPermissions = $island->getPermissions();
+        $senderRank = $members[strtolower($sender->getName())];
 
-              $player = $this->plugin->getServer()->getPlayerExact($name);
-              if ($player instanceof Player) {
-
-                $message = $this->getMShop()->construct("NO_LONGER_BANNED");
-                $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-                $player->sendMessage($message);
-              }
-            } else {
-
-              $message = $this->getMShop()->construct("NOT_BANNED");
-              $message = str_replace("{NAME}", $name, $message);
-              $sender->sendMessage($message);
-            }
-          } else {
-
-            $message = $this->getMShop()->construct("RANK_TOO_LOW");
-            $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-            $sender->sendMessage($message);
-          }
-        } else {
+        if (in_array("island.ban", $islandPermissions[$senderRank])) {
 
           if ($island->unban($name)) {
 
@@ -86,40 +70,38 @@ class Unban extends SBSubCommand {
             $message = str_replace("{NAME}", $name, $message);
             $sender->sendMessage($message);
           }
-        }
-      } else {
+        } else {
 
-        $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
-        $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-        $sender->sendMessage($message);
-      }
-    } elseif ($this->checkIsland($sender)) {
-
-      $island = $this->plugin->islandManager->getIsland($sender);
-      $creator = $island->getCreator();
-
-      if ($island->unban($name)) {
-
-        $message = $this->getMShop()->construct("UNBANNED");
-        $message = str_replace("{NAME}", $name, $message);
-        $sender->sendMessage($message);
-
-        $player = $this->plugin->getServer()->getPlayerExact($name);
-        if ($player instanceof Player) {
-
-          $message = $this->getMShop()->construct("NO_LONGER_BANNED");
+          $message = $this->getMShop()->construct("RANK_TOO_LOW");
           $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
-          $player->sendMessage($message);
+          $sender->sendMessage($message);
         }
       } else {
 
-        $message = $this->getMShop()->construct("NOT_BANNED");
-        $message = str_replace("{NAME}", $name, $message);
-        $sender->sendMessage($message);
+        if ($island->unban($name)) {
+
+          $message = $this->getMShop()->construct("UNBANNED");
+          $message = str_replace("{NAME}", $name, $message);
+          $sender->sendMessage($message);
+
+          $player = $this->plugin->getServer()->getPlayerExact($name);
+          if ($player instanceof Player) {
+
+            $message = $this->getMShop()->construct("NO_LONGER_BANNED");
+            $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+            $player->sendMessage($message);
+          }
+        } else {
+
+          $message = $this->getMShop()->construct("NOT_BANNED");
+          $message = str_replace("{NAME}", $name, $message);
+          $sender->sendMessage($message);
+        }
       }
     } else {
 
-      $message = $this->getMShop()->construct("NO_ISLAND");
+      $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+      $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
       $sender->sendMessage($message);
     }
   }

@@ -23,74 +23,63 @@ class Kick extends SBSubCommand {
 
   public function onRun(CommandSender $sender, string $aliasUsed, array $args): void {
 
-    if (isset($args["name"])) {
+    $name = $args["name"];
+    $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
+    if (!($island instanceof Island)) {
 
-      $island = $this->plugin->islandManager->getIslandAtPlayer($sender);
-      $name = $args["name"];
+      if ($this->checkIsland($sender)) {
 
-      if ($island instanceof Island) {
+          $island = $this->plugin->islandManager->getIsland($sender);
 
-        $members = $island->getMembers();
-        if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
+      } else {
 
-          if (array_key_exists(strtolower($sender->getName()), $members)) {
+        $message = $this->getMShop()->construct("NO_ISLAND");
+        $sender->sendMessage($message);
+        return;
+      }
+    }
 
-            $islandPermissions = $island->getPermissions();
-            $senderRank = $members[strtolower($sender->getName())];
-            if (in_array("island.kick", $islandPermissions[$senderRank])) {
+    $members = $island->getMembers();
+    if (array_key_exists(strtolower($sender->getName()), $members) || $sender->getName() === $island->getCreator() || $sender->hasPermission("redskyblock.admin")) {
 
-              if (array_key_exists(strtolower($name), $members)) {
+      if (array_key_exists(strtolower($sender->getName()), $members) && !$sender->hasPermission("redskyblock.admin")) {
 
-                $nameRank = $members[strtolower($name)];
-                $memberRanks = Island::MEMBER_RANKS;
-                $namePos = array_search($nameRank, $memberRanks);
-                $senderPos = array_search($senderRank, $memberRanks);
-                if ($namePos >= $senderPos) {
+        $islandPermissions = $island->getPermissions();
+        $senderRank = $members[strtolower($sender->getName())];
+        if (in_array("island.kick", $islandPermissions[$senderRank])) {
 
-                  $message = $this->getMShop()->construct("CANT_KICK");
-                  $sender->sendMessage($message);
-                  return;
-                }
-              }
+          if (array_key_exists(strtolower($name), $members)) {
 
-              $player = $this->plugin->getServer()->getPlayerByPrefix($name);
-              if ($player instanceof Player) {
+            $nameRank = $members[strtolower($name)];
+            $memberRanks = Island::MEMBER_RANKS;
+            $namePos = array_search($nameRank, $memberRanks);
+            $senderPos = array_search($senderRank, $memberRanks);
+            if ($namePos >= $senderPos) {
 
-                $this->kickPlayer($island, $player, $sender);
-              } else {
-
-                $message = $this->getMShop()->construct("TARGET_NOT_FOUND");
-                $message = str_replace("{NAME}", $name, $message);
-                $sender->sendMessage($message);
-              }
-            } else {
-
-              $message = $this->getMShop()->construct("RANK_TOO_LOW");
-              $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+              $message = $this->getMShop()->construct("CANT_KICK");
               $sender->sendMessage($message);
+              return;
             }
+          }
+
+          $player = $this->plugin->getServer()->getPlayerByPrefix($name);
+          if ($player instanceof Player) {
+
+            $this->kickPlayer($island, $player, $sender);
           } else {
 
-            $player = $this->plugin->getServer()->getPlayerByPrefix($name);
-            if ($player instanceof Player) {
-
-              $this->kickPlayer($island, $player, $sender);
-            } else {
-
-              $message = $this->getMShop()->construct("TARGET_NOT_FOUND");
-              $message = str_replace("{NAME}", $name, $message);
-              $sender->sendMessage($message);
-            }
+            $message = $this->getMShop()->construct("TARGET_NOT_FOUND");
+            $message = str_replace("{NAME}", $name, $message);
+            $sender->sendMessage($message);
           }
         } else {
 
-          $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+          $message = $this->getMShop()->construct("RANK_TOO_LOW");
           $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
           $sender->sendMessage($message);
         }
-      } elseif ($this->checkIsland($sender)) {
+      } else {
 
-        $island = $this->plugin->islandManager->getIsland($sender);
         $player = $this->plugin->getServer()->getPlayerByPrefix($name);
         if ($player instanceof Player) {
 
@@ -101,15 +90,12 @@ class Kick extends SBSubCommand {
           $message = str_replace("{NAME}", $name, $message);
           $sender->sendMessage($message);
         }
-      } else {
-
-        $message = $this->getMShop()->construct("NO_ISLAND");
-        $sender->sendMessage($message);
       }
     } else {
 
-      $this->sendUsage();
-      return;
+      $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
+      $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
+      $sender->sendMessage($message);
     }
   }
 

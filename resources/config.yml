@@ -52,3 +52,5 @@ Reset Cooldown: 86400 #The time in seconds a player must wait before being able 
 Autosave Timer: 5 # Every x minutes all islands will autosave. Default: 5 minutes. Server restart required for changes to take effect.
 
 Member Limit: 3
+
+Create Teleport: true
