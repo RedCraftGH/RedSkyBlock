@@ -60,8 +60,6 @@ class SkyBlock extends PluginBase {
     $this->cfg->reload();
     $this->messages->reload();
 
-    //register message constructor:
-    $this->mShop = new MessageConstructor($this);
     //register config manager:
     $this->configManager = new ConfigManager($this);
     //register zone manager:
@@ -69,6 +67,8 @@ class SkyBlock extends PluginBase {
     //register island manager:
     $this->islandManager = new IslandManager($this);
     $this->islandManager->constructAllIslands();
+    //register message constructor:
+    $this->mShop = new MessageConstructor($this);
     //register listener for RedSkyBlock:
     $this->listener = new SkyblockListener($this);
 

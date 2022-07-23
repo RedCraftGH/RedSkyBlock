@@ -154,7 +154,7 @@ class IslandManager {
     $island = null;
     foreach ($this->islands as $owner => $isle) {
 
-      if (strtolower($owner) === strtolower($name)) {
+      if (strtolower($isle->getCreator()) === strtolower($name)) {
 
         $island = $isle;
       }

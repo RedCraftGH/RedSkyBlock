@@ -6,6 +6,7 @@ use pocketmine\command\CommandSender;
 
 use RedCraftPE\RedSkyBlock\SkyBlock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Accept;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\AddPermission;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Ban;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Banned;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Chat;
@@ -28,6 +29,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Promote;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Rank;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reload;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Remove;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\RemovePermission;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Rename;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reset;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSize;
@@ -47,6 +49,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\ZoneTools;
 //todo (cont'd): island quests, island leveling system, island permissions for members based on island rank, minions,
 //todo (cont'd): skyblock based custom enchants, multiple custom islands, skyblock GUIs, add scoreboard support
 //todo (cont'd): add more configurable options in config, obsidian scooping?, island banks (variable economy)
+//todo (cont'd): change island identifiers to UUID (maintain backwards compatibility)
 
 use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\args\RawStringArgument;
@@ -69,6 +72,13 @@ class SBCommand extends BaseCommand {
       $this->plugin,
       "accept",
       "Accept an invite to another SkyBlock Island."
+    ));
+
+    $this->registerSubCommand(new AddPermission(
+      $this->plugin,
+      "addpermission",
+      "Add a permission to an island rank on your SkyBlock Island.",
+      ["addperm", "setpermission", "setperm"]
     ));
 
     $this->registerSubCommand(new Ban(
@@ -210,6 +220,13 @@ class SBCommand extends BaseCommand {
       $this->plugin,
       "remove",
       "Remove a member from your SkyBlock island."
+    ));
+
+    $this->registerSubCommand(new RemovePermission(
+      $this->plugin,
+      "removepermission",
+      "Remove a permission from an island rank on your SkyBlock Island.",
+      ["removeperm", "unsetpermission", "deletepermission", "deleteperm", "unsetperm"]
     ));
 
     $this->registerSubCommand(new Rename(

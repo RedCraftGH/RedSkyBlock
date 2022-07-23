@@ -59,10 +59,10 @@ class MessageConstructor {
 
   public function updateMessages(): void {
 
-    $realString = file_get_contents($this->plugin->getDataFolder() . "../RedSkyBlock/messages.yml");
+    $realString = (string) file_get_contents($this->plugin->getDataFolder() . "../RedSkyBlock/messages.yml");
     $realArray = yaml_parse($realString);
-    $realString = substr($realString, 0, -3);
     $realKeys = array_keys($realArray);
+    if (substr($realString, -1) === "." || substr($realString, -1) === "-") $realString = substr($realString, 0, -3);
 
     $reference = yaml_parse(stream_get_contents($this->plugin->getResource("messages.yml")));
     $referenceKeys = array_keys($reference);

@@ -241,3 +241,13 @@ DEMOTED_SELF: "{RED}You have been demoted to Island {WHITE}{RANK}{RED} on {WHITE
 
 # Message sent if trying to run a command on an island but rank is too low: Available Paramaters: {ISLAND_NAME}
 RANK_TOO_LOW: "{RED}You are not high enough rank on {WHITE}{ISLAND_NAME}{RED} to run this command here."
+
+# Message sent upon adding a new permission to an island rank: Available Paramaters: {PERMISSION}, {RANK}
+PERMISSION_ADDED: "{GREEN}Added permission: {WHITE}{PERMISSION}{GREEN} to Island {WHITE}{RANK}s{GREEN}."
+# Message sent if unable to add a permission to an island rank: Available Paramaters: {PERMISSION}, {RANK}
+PERMISSION_NOT_ADDED: "{RED}Could not add permission: {WHITE}{PERMISSION}{RED} to Island {WHITE}{RANK}s{RED}."
+
+# Message sent upon removing a permission from an island rank: Available Paramaters: {PERMISSION}, {RANK}
+PERMISSION_REMOVED: "{GREEN}Removed permission: {WHITE}{PERMISSION}{GREEN} from Island {WHITE}{RANK}s{GREEN}."
+# Message sent if unable to remove a permission from an island rank: Available Paramaters: {PERMISSION}, {RANK}
+PERMISSION_NOT_REMOVED: "{RED}Could not remove permission: {WHITE}{PERMISSION}{RED} from Island {WHITE}{RANK}s{RED}."
