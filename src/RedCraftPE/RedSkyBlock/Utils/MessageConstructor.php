@@ -8,11 +8,8 @@ use RedCraftPE\RedSkyBlock\SkyBlock;
 
 class MessageConstructor {
 
-  private $messages;
   public static $instance;
   public $plugin;
-
-  private $messageIds = [];
 
   public function __construct(SkyBlock $plugin) {
 

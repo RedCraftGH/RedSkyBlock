@@ -18,12 +18,14 @@ use RedCraftPE\RedSkyBlock\Tasks\AutoSaveIslands;
 
 class SkyBlock extends PluginBase {
 
-  private $listener;
+  public $listener;
   public $mShop;
   public $cfg;
   public $skyblock;
   public $messages;
   public $zoneManager;
+  public $configManager;
+  public $islandManager;
 
   public function onEnable(): void {
 
@@ -59,7 +61,7 @@ class SkyBlock extends PluginBase {
     //register message constructor:
     $this->mShop = new MessageConstructor($this);
     //register config manager:
-    $this->configmanager = new ConfigManager($this);
+    $this->configManager = new ConfigManager($this);
     //register zone manager:
     $this->zoneManager = new ZoneManager($this);
     //register island manager:

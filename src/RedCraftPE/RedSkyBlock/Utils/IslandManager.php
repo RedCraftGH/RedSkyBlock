@@ -15,8 +15,6 @@ class IslandManager {
 
   private $islands = [];
 
-  private $inviteTracker = [];
-
   private $excludeFromMainChat = [];
 
   public static $instance;
@@ -34,7 +32,7 @@ class IslandManager {
 
     if (in_array($playerName . ".json", scandir($plugin->getDataFolder() . "../RedSkyBlock/Players"))) {
 
-      $islandData = (array) json_decode(file_get_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $senderName . ".json"), true);
+      $islandData = (array) json_decode(file_get_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $playerName . ".json"), true);
       return $islandData;
     } else {
 
@@ -394,16 +392,20 @@ class IslandManager {
   public function checkRepeatIslandName(string $name): bool {
 
     $name = strtolower($name);
+    $bias = null;
     foreach($this->islands as $island) {
 
       if ($name === strtolower($island->getName())) {
 
-        return true;
+        $bias = true;
+        break;
       } else {
 
-        return false;
+        $bias = false;
+        break;
       }
     }
+    return $bias;
   }
 
   public function getIslandsEmployedAt(string $playerName): array {

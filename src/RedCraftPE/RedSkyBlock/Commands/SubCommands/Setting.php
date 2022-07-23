@@ -31,7 +31,7 @@ class Setting extends SBSubCommand {
       if (array_key_exists($setting, $defaultSettings)) {
 
         $bias = $args["value"];
-        $biasStringVal;
+        $biasStringVal = "off";
 
         if ($bias) {
 

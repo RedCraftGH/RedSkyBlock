@@ -39,7 +39,7 @@ use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 use RedCraftPE\RedSkyBlock\Island;
 use RedCraftPE\RedSkyBlock\Tasks\RefreshDisplayName;
 
-class SkyBlockListener implements Listener {
+class SkyblockListener implements Listener {
 
   private $plugin;
 

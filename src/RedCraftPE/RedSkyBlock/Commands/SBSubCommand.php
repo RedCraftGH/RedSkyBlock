@@ -15,7 +15,6 @@ use CortexPE\Commando\BaseSubCommand;
 abstract class SBSubCommand extends BaseSubCommand {
 
   protected $plugin;
-  private $sender;
 
   public function __construct(SkyBlock $plugin, string $name, string $description = "", array $aliases = []) {
 

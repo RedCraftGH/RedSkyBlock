@@ -65,7 +65,7 @@ class Chat extends SBSubCommand {
         } else {
 
           $message = $this->getMShop()->construct("NOT_A_MEMBER_SELF");
-          $message = str_replace("{ISLAND_NAME}", $island->getName());
+          $message = str_replace("{ISLAND_NAME}", $island->getName(), $message);
           $sender->sendMessage($message);
         }
       } else {
