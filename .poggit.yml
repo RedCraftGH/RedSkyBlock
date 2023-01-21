@@ -10,4 +10,7 @@ projects:
         branch: PM4
       - src: Muqsit/SimplePacketHandler/SimplePacketHandler
         version: ^0.1.0
+      - src: Muqsit/InvMenu/InvMenu
+        version: ^4.4.0
+        branch: "4.0"
 ...
