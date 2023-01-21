@@ -6,8 +6,10 @@ projects:
     path: ""
     libs:
       - src: CortexPE/Commando/Commando
-        version: ^3.0.0
-        branch: PM4
+        version: ^3.1.0
       - src: Muqsit/SimplePacketHandler/SimplePacketHandler
         version: ^0.1.0
+      - src: muqsit/InvMenu/InvMenu
+        version: ^4.4.0
+        branch: "4.0"
 ...

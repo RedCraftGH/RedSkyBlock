@@ -28,11 +28,11 @@ class CreateWorld extends SBSubCommand {
 
       if (!$plugin->getServer()->getWorldManager()->loadWorld($name)) {
 
-        $generator = GeneratorManager::getInstance()->getGenerator("void")->getGeneratorClass();
-        $creationOptions = WorldCreationOptions::create();
-        $creationOptions->setGeneratorClass($generator);
+        $generator = GeneratorManager::getInstance()->getGenerator("flat")->getGeneratorClass();
+        $worldCreator = WorldCreationOptions::create()->setGeneratorOptions("3;minecraft:air");
+        $worldCreator->setGeneratorClass($generator);
 
-        $plugin->getServer()->getWorldManager()->generateWorld($name, $creationOptions);
+        $plugin->getServer()->getWorldManager()->generateWorld($name, $worldCreator);
 
         $message = $this->getMShop()->construct("CW");
         $message = str_replace("{WORLD}", $name, $message);

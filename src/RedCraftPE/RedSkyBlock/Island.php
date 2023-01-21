@@ -5,6 +5,7 @@ namespace RedCraftPE\RedSkyBlock;
 use pocketmine\player\Player;
 
 use RedCraftPE\RedSkyBlock\Utils\IslandManager;
+use RedCraftPE\RedSkyBlock\SkyBlock;
 
 class Island {
 
@@ -24,6 +25,7 @@ class Island {
   private $settings;
   private $stats;
   private $permissions;
+  private $experience;
 
   private $defaultSettings = array(
     "pvp" => false,
@@ -71,6 +73,7 @@ class Island {
     $this->settings = (array) $islandData["settings"];
     $this->stats = (array) $islandData["stats"];
     $this->permissions = (array) $islandData["permissions"];
+    $this->experience = (int) $islandData["experience"];
 
     if (count($this->settings) < count($this->defaultSettings)) {
 
@@ -408,5 +411,67 @@ class Island {
 
       return false;
     }
+  }
+
+  public function getXP(): int {
+
+    return $this->experience;
+  }
+
+  public function addXP(int $amount): void {
+
+    $this->experience += $amount;
+  }
+
+  public function subtractXP(int $amount): void {
+
+    if ($this->experience - $amount < 0) {
+
+      $this->experience = 0;
+    } else {
+
+      $this->experience -= $amount;
+    }
+  }
+
+  public function setXP(int $amount): void {
+
+    if ($amount < 0) {
+
+      $this->experience = 0;
+    } else {
+
+      $this->experience = $amount;
+    }
+  }
+
+  public function calculateLevel(int $experience): int {
+    //formula for getting level from xp = x * ysqrt(xp)
+    //formula for getting xp required for a level = (level/x)^y
+
+    $xpGap = SkyBlock::getInstance()->cfg->get("XP Gap");
+    if ($xpGap <= 0) $xpGap = 0.01;
+    $difficulty = SkyBlock::getInstance()->cfg->get("LevelUp Difficulty");
+    if ($difficulty <= 0) $difficulty = 0.01;
+
+    $currentLevel = floor($xpGap * exp(log($experience) / $difficulty));
+    $unroundedLevel = (float) $xpGap * exp(log($experience) / $difficulty);
+    if (abs($unroundedLevel - round($unroundedLevel)) < 0.0001) $currentLevel = round($unroundedLevel);
+
+    return $currentLevel;
+  }
+
+  public function getXPNeeded(int $experience): int {
+
+    $xpGap = SkyBlock::getInstance()->cfg->get("XP Gap");
+    if ($xpGap <= 0) $xpGap = 0.01;
+    $difficulty = SkyBlock::getInstance()->cfg->get("LevelUp Difficulty");
+    if ($difficulty <= 0) $difficulty = 0.01;
+
+    $currentLevel = $this->calculateLevel($experience);
+    $nextLevel = $currentLevel + 1;
+
+    $xpNeeded = ceil(($nextLevel/$xpGap)**$difficulty - $experience);
+    return $xpNeeded;
   }
 }

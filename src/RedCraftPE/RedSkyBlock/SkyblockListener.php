@@ -37,6 +37,7 @@ use pocketmine\event\entity\EntityItemPickupEvent;
 
 use RedCraftPE\RedSkyBlock\Utils\ZoneManager;
 use RedCraftPE\RedSkyBlock\Island;
+use RedCraftPE\RedSkyBlock\Utils\HeadManager;
 
 class SkyblockListener implements Listener {
 

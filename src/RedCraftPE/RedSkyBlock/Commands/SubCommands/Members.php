@@ -4,10 +4,13 @@ namespace RedCraftPE\RedSkyBlock\Commands\SubCommands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
+use pocketmine\item\VanillaItems;
 
 use RedCraftPE\RedSkyBlock\Commands\SBSubCommand;
 
 use CortexPE\Commando\constraint\InGameRequiredConstraint;
+
+use muqsit\invmenu\InvMenu;
 
 class Members extends SBSubCommand {
 
@@ -23,11 +26,19 @@ class Members extends SBSubCommand {
 
       $island = $this->plugin->islandManager->getIsland($sender);
       $members = $island->getMembers();
-      $members = implode(", ", array_keys($members));
+      $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
+      $menu->setName(TextFormat::RED . TextFormat::BOLD . $island->getName() . TextFormat::RESET . " Members");
 
-      $message = $this->getMShop()->construct("ISLAND_MEMBERS");
-      $message = str_replace("{MEMBERS}", $members, $message);
-      $sender->sendMessage($message);
+      foreach($members as $member => $rank) {
+
+        $item = VanillaItems::PLAYER_HEAD();
+        $item->setCustomName($member);
+        $item->setLore([$rank]);
+        $menu->getInventory()->addItem($item);
+      }
+
+      $menu->setListener(InvMenu::readonly());
+      $menu->send($sender);
     } else {
 
       $message = $this->getMShop()->construct("NO_ISLAND");

@@ -109,16 +109,9 @@ class Create extends SBSubCommand {
               "creator" => $senderName,
               "name" => $senderName . "'s island",
               "size" => $initialSize,
-              "value" => 0,
               "initialspawnpoint" => $initialSpawnPoint,
               "spawnpoint" => $initialSpawnPoint,
-              "members" => [],
-              "banned" => [],
-              "resetcooldown" => Time() + $resetCooldown,
-              "lockstatus" => false,
-              "settings" => [],
-              "stats" => [],
-              "permissions" => []
+              "resetcooldown" => Time() + $resetCooldown
             ];
 
             $zone = ZoneManager::getZone();
@@ -171,7 +164,7 @@ class Create extends SBSubCommand {
                   $senderName = $sender->getName();
                   $doCreateTeleport = $plugin->cfg->get("Create Teleport");
                   if ($doCreateTeleport) $sender->teleport(new Position($initialSpawnPoint[0], $initialSpawnPoint[1], $initialSpawnPoint[2], $masterWorld));
-                  
+
                   if (file_put_contents($plugin->getDataFolder() . "../RedSkyBlock/Players/" . $senderName . ".json", json_encode($islandData)) !== false) {
 
                     $message = $this->getMShop()->construct("ISLAND_CREATED");

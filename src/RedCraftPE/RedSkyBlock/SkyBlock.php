@@ -9,6 +9,8 @@ use pocketmine\world\World;
 
 use CortexPE\Commando\PacketHooker;
 
+use muqsit\invmenu\InvMenuHandler;
+
 use RedCraftPE\RedSkyBlock\Commands\SBCommand;
 use RedCraftPE\RedSkyBlock\Utils\MessageConstructor;
 use RedCraftPE\RedSkyBlock\Utils\ConfigManager;
@@ -81,6 +83,10 @@ class SkyBlock extends PluginBase {
     if (!PacketHooker::isRegistered()) {
 
       PacketHooker::register($this);
+    }
+    if(!InvMenuHandler::isRegistered()){
+
+      InvMenuHandler::register($this);
     }
 
     //register SB Base command:

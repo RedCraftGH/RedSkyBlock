@@ -62,7 +62,8 @@ class IslandManager {
       "lockstatus",
       "settings",
       "stats",
-      "permissions"
+      "permissions",
+      "experience"
     ];
 
     foreach ($requiredKeys as $key) {
@@ -108,7 +109,8 @@ class IslandManager {
       "lockstatus" => $island->getLockStatus(),
       "settings" => $island->getSettings(),
       "stats" => $island->getStats(),
-      "permissions" => $island->getPermissions()
+      "permissions" => $island->getPermissions(),
+      "experience" => $island->getXP()
     ];
 
     return $islandData;

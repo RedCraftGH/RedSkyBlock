@@ -21,6 +21,8 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\IncreaseSize;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Info;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Invite;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Kick;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Leave;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Level;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Lock;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Members;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Name;
@@ -35,6 +37,7 @@ use RedCraftPE\RedSkyBlock\Commands\SubCommands\Reset;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSize;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetSpawn;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Setting;
+use RedCraftPE\RedSkyBlock\Commands\SubCommands\Settings;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\SetWorld;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\Teleport;
 use RedCraftPE\RedSkyBlock\Commands\SubCommands\TopIslands;
@@ -172,6 +175,20 @@ class SBCommand extends BaseCommand {
       "Kick a player off of your SkyBlock island."
     ));
 
+    $this->registerSubCommand(new Leave(
+      $this->plugin,
+      "leave",
+      "Resign from a player's SkyBlock island.",
+      ["quit"]
+    ));
+
+    $this->registerSubCommand(new Level(
+      $this->plugin,
+      "level",
+      "View a SkyBlock island's level.",
+      ["xp"]
+    ));
+
     $this->registerSubCommand(new Lock(
       $this->plugin,
       "lock",
@@ -258,6 +275,12 @@ class SBCommand extends BaseCommand {
       $this->plugin,
       "setting",
       "Edit an Island Setting on your SkyBlock island."
+    ));
+
+    $this->registerSubCommand(new Settings(
+      $this->plugin,
+      "settings",
+      "View and Change settings on your SkyBlock Island."
     ));
 
     $this->registerSubCommand(new SetWorld(

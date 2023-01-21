@@ -51,6 +51,9 @@ Reset Cooldown: 86400 #The time in seconds a player must wait before being able 
 
 Autosave Timer: 5 # Every x minutes all islands will autosave. Default: 5 minutes. Server restart required for changes to take effect.
 
-Member Limit: 3
+Member Limit: 3 # The maximum amount of members a player can have on their SkyBlock island without the redskyblock.members permission
 
-Create Teleport: true
+Create Teleport: true # If true players will teleport to their island as soon as it is created.
+
+XP Gap: 0.07 # How quickly the xp gap between levels increases. Lower values will increase the gap faster. CANNOT BE 0
+LevelUp Difficulty: 2 # How hard it is to levelup. Higher values will increase difficulty. CANNOT BE 0

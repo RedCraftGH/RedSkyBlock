@@ -146,8 +146,7 @@ INVITED_TO_ISLAND: "{GREEN}You have been invited to join {ISLAND_NAME}. To accep
 CANT_INVITE_BANNED: "{RED}You cannot invite {WHITE}{NAME}{RED} because they've been banned from your island."
 
 # Messages for the name command: Available Parameters: {ISLAND_NAME}
-ISLAND_NAME_SELF: "{GREEN}Your island's name is {WHITE}{ISLAND_NAME}{GREEN}."
-ISLAND_NAME_OTHER: "{GREEN}The island you are on is named {WHITE}{ISLAND_NAME}{GREEN}."
+ISLAND_NAME: "{GREEN}Island: {WHITE}{ISLAND_NAME}{GREEN}."
 
 # Message sent if a player tries to remove themself from their island.
 CANT_REMOVE_SELF: "{RED}You cannot remove yourself from your island."
@@ -251,3 +250,8 @@ PERMISSION_NOT_ADDED: "{RED}Could not add permission: {WHITE}{PERMISSION}{RED} t
 PERMISSION_REMOVED: "{GREEN}Removed permission: {WHITE}{PERMISSION}{GREEN} from Island {WHITE}{RANK}s{GREEN}."
 # Message sent if unable to remove a permission from an island rank: Available Paramaters: {PERMISSION}, {RANK}
 PERMISSION_NOT_REMOVED: "{RED}Could not remove permission: {WHITE}{PERMISSION}{RED} from Island {WHITE}{RANK}s{RED}."
+
+# Message sent if looking at the level of another player's SkyBlock island: Available Paramaters: {ISLAND_NAME}, {LEVEL}, {XP}, {XP_NEEDED}
+ISLAND_LEVEL_OTHER: "{WHITE}{ISLAND_NAME}{GREEN} is level {WHITE}{LEVEL}{GREEN}.{NEW_LINE}XP: {WHITE}{XP}{GREEN} / {WHITE}{XP_NEEDED}"
+# Message sent if looking at your own SkyBlock island's level: Available Paramaters: {LEVEL}, {XP}, {XP_NEEDED}
+ISLAND_LEVEL_SELF: "Your island is level {WHITE}{LEVEL}{GREEN}.{NEW_LINE}XP: {WHITE}{XP}{GREEN} / {WHITE}{XP_NEEDED}"

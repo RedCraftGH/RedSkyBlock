@@ -32,6 +32,7 @@ class ConfigManager {
       }
       $updated = yaml_emit($real);
       file_put_contents($this->plugin->getDataFolder() . "../RedSkyBlock/config.yml", $updated);
+      $this->plugin->cfg->reload();
     }
   }
 }
